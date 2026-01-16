@@ -11,46 +11,61 @@
 
       <form [formGroup]="registerForm">
         <div class="name-row">
-          <div class="field">
+          <div class="field float-field">
             <input
               type="text"
-              placeholder="First name"
               formControlName="firstName"
+              placeholder=" "
+              required
             />
+            <label>First name</label>
           </div>
-          <div class="field">
+
+          <div class="field float-field">
             <input
               type="text"
-              placeholder="Last name"
               formControlName="lastName"
+              placeholder=" "
+              required
             />
+            <label>Last name</label>
           </div>
         </div>
 
-        <div class="field">
-          <input
-            type="text"
-            placeholder="Username"
-            formControlName="username"
-          />
+        <div class="username-group">
+            <div class="field float-field">
+                <input
+                type="text"
+                formControlName="username"
+                placeholder=" "
+                required
+                />
+                <label>Username</label>
+            </div>
+
           <p class="hint">You can use letters, numbers & periods</p>
           <a class="link">Use my current email instead</a>
         </div>
 
-        <div class="name-row">
-          <div class="field">
+        <div class="name-row password-row">
+          <div class="field float-field">
             <input
               [type]="showPassword ? 'text' : 'password'"
-              placeholder="Password"
               formControlName="password"
+              placeholder=" "
+              required
             />
+            <label>Password</label>
           </div>
-          <div class="field">
+
+          <div class="field float-field">
             <input
               [type]="showPassword ? 'text' : 'password'"
-              placeholder="Confirm"
               formControlName="confirmPassword"
+              placeholder=" "
+              required
             />
+            <label>Confirm</label>
           </div>
         </div>
 
@@ -59,12 +74,12 @@
         </p>
 
         <div class="show-password">
-            <input
-                type="checkbox"
-                id="showPassword"
-                (change)="togglePasswordVisibility()"
-            />
-            <label for="showPassword">Show password</label>
+          <input
+            type="checkbox"
+            id="showPassword"
+            (change)="togglePasswordVisibility()"
+          />
+          <label for="showPassword">Show password</label>
         </div>
 
         <div class="actions">

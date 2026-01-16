@@ -37,24 +37,61 @@ h1 {
   margin-bottom: 12px;
 }
 
+.password-row {
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .field {
   width: 100%;
   flex: 1;
 }
 
-input {
+.float-field {
+  position: relative;
+}
+
+.float-field input {
   width: 100%;
   height: 56px;
-  padding: 0 14px;
+  padding: 20px 14px 6px;
   font-size: 16px;
   border: 1px solid #dadce0;
   border-radius: 4px;
   box-sizing: border-box;
 }
 
-input:focus {
+.float-field input:focus {
   outline: none;
-  border: 2px solid #1a73e8;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
+}
+
+.float-field label {
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  font-size: 16px;
+  color: #5f6368;
+  background: #ffffff;
+  padding: 0 4px;
+  pointer-events: none;
+  cursor: text;
+  transition: all 0.15s ease;
+}
+
+.float-field input:focus + label,
+.float-field input:not(:placeholder-shown) + label {
+  top: 6px;
+  font-size: 12px;
+}
+
+.float-field input:focus + label {
+  color: #1a73e8;
+}
+
+.float-field input:not(:focus):not(:placeholder-shown) + label {
+  color: #5f6368;
 }
 
 .hint {
@@ -69,6 +106,7 @@ input:focus {
   color: #1a73e8;
   cursor: pointer;
   margin-top: 4px;
+  text-decoration: none;
 }
 
 .show-password {
@@ -129,6 +167,10 @@ button {
   margin-top: 16px;
   font-size: 14px;
   color: #5f6368;
+}
+
+.username-group {
+  margin-bottom: 16px;
 }
 
 @media (max-width: 768px) {

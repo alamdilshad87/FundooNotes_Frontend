@@ -10,20 +10,24 @@
     <p class="subtitle">Use your Google Account</p>
 
     <form [formGroup]="loginForm">
-      <div class="field">
+      <div class="float-field">
         <input
-          type="email"
-          formControlName="email"
-          placeholder="Email or phone"
+            type="email"
+            formControlName="email"
+            placeholder=" "
+            required
         />
+        <label>Email or phone</label>
       </div>
 
-      <div class="field">
+      <div class="float-field">
         <input
-          type="password"
-          formControlName="password"
-          placeholder="Password"
+            type="password"
+            formControlName="password"
+            placeholder=" "
+            required
         />
+        <label>Password</label>
       </div>
 
       <a class="link">Forgot password?</a>
