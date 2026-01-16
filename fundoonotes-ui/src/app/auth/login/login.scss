@@ -1,7 +1,117 @@
-.login-wrapper {
-  height: 100vh;
+/* Page container */
+.login-page {
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 16px;
+  background: #ffffff;
+}
+
+/* Card */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Logo */
+.logo {
+  margin-bottom: 16px;
+}
+
+/* Heading (Google exact override of browser h1) */
+h1 {
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 0;
+  word-break: break-word;
+  color: #1f1f1f;
+}
+
+/* Subtitle */
+.subtitle {
+  margin-top: 8px;
+  margin-bottom: 32px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #5f6368;
+}
+
+/* Input field wrapper */
+.field {
+  margin-bottom: 12px;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  height: 56px;
+  padding: 0 14px;
+  font-size: 16px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border: 2px solid #1a73e8;
+}
+
+/* Links */
+.link {
+  display: block;
+  text-align: left;
+  color: #1a73e8;
+  font-size: 14px;
+  margin: 8px 0 0;
+  cursor: pointer;
+}
+
+/* Actions row */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+
+/* Login button (Material spec) */
+button {
+  min-width: 88px;
+  height: 36px;
+  padding: 0 24px;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Responsive (mobile) */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 24px;
+    border: none;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  button {
+    align-self: flex-end;
+  }
 }

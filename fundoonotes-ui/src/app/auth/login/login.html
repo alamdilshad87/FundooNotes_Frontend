@@ -1,4 +1,37 @@
-<div class="login-wrapper">
-  <h1>Login</h1>
-  <p>FundooNotes</p>
+<div class="login-page">
+  <div class="login-card">
+    <img
+      src="https://www.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_74x24dp.png"
+      alt="Google"
+      class="logo"
+    />
+
+    <h1>Login</h1>
+    <p class="subtitle">Use your Google Account</p>
+
+    <form [formGroup]="loginForm">
+      <div class="field">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Email or phone"
+        />
+      </div>
+
+      <div class="field">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Password"
+        />
+      </div>
+
+      <a class="link">Forgot password?</a>
+
+      <div class="actions">
+        <a class="link">Create account</a>
+        <button type="button">Login</button>
+      </div>
+    </form>
+  </div>
 </div>
