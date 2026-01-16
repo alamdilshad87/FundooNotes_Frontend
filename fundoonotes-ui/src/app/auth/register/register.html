@@ -1,0 +1,85 @@
+<div class="register-page">
+  <div class="register-container">
+    <div class="register-form">
+      <img
+        src="https://www.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_74x24dp.png"
+        alt="Google"
+        class="logo"
+      />
+
+      <h1>Create your Google Account</h1>
+
+      <form [formGroup]="registerForm">
+        <div class="name-row">
+          <div class="field">
+            <input
+              type="text"
+              placeholder="First name"
+              formControlName="firstName"
+            />
+          </div>
+          <div class="field">
+            <input
+              type="text"
+              placeholder="Last name"
+              formControlName="lastName"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <input
+            type="text"
+            placeholder="Username"
+            formControlName="username"
+          />
+          <p class="hint">You can use letters, numbers & periods</p>
+          <a class="link">Use my current email instead</a>
+        </div>
+
+        <div class="name-row">
+          <div class="field">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Password"
+              formControlName="password"
+            />
+          </div>
+          <div class="field">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Confirm"
+              formControlName="confirmPassword"
+            />
+          </div>
+        </div>
+
+        <p class="hint">
+          Use 8 or more characters with a mix of letters, numbers & symbols
+        </p>
+
+        <div class="show-password">
+            <input
+                type="checkbox"
+                id="showPassword"
+                (change)="togglePasswordVisibility()"
+            />
+            <label for="showPassword">Show password</label>
+        </div>
+
+        <div class="actions">
+          <a routerLink="/login" class="link">Sign in instead</a>
+          <button type="button">Next</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="register-illustration">
+      <img
+        src="https://ssl.gstatic.com/accounts/signup/glif/account.svg"
+        alt="Account illustration"
+      />
+      <p>One account. All of Google working for you.</p>
+    </div>
+  </div>
+</div>
