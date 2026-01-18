@@ -78,4 +78,16 @@ clearOtpSession(): void {
   storeToken(token: string): void {
     localStorage.setItem('auth_token', token);
   }
+
+  isAuthenticated(): boolean {
+  return !!localStorage.getItem('auth_token');
+}
+
+logout(): void {
+  localStorage.removeItem('auth_token');
+  sessionStorage.removeItem('otpSessionId');
+  sessionStorage.removeItem('otpEmail');
+  sessionStorage.removeItem('otpType');
+}
+
 }
