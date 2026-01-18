@@ -6,35 +6,60 @@
       class="logo"
     />
 
-    <h1>Login</h1>
+    <h1>Sign in</h1>
     <p class="subtitle">Use your Google Account</p>
 
     <form [formGroup]="loginForm">
-      <div class="float-field">
+      <div class="field float-field">
         <input
-            type="email"
-            formControlName="email"
-            placeholder=" "
-            required
+          type="email"
+          formControlName="email"
+          placeholder=" "
+          required
         />
         <label>Email or phone</label>
       </div>
 
-      <div class="float-field">
+      @if (
+        loginForm.get('email')?.touched &&
+        loginForm.get('email')?.invalid
+      ) {
+        <p class="error">Enter a valid email</p>
+      }
+
+      <div class="field float-field">
         <input
-            type="password"
-            formControlName="password"
-            placeholder=" "
-            required
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder=" "
+          required
         />
         <label>Password</label>
+      </div>
+
+      @if (
+        loginForm.get('password')?.touched &&
+        loginForm.get('password')?.invalid
+      ) {
+        <p class="error">Enter your password</p>
+      }
+
+      <div class="show-password">
+        <input
+          type="checkbox"
+          id="showLoginPassword"
+          (change)="togglePasswordVisibility()"
+        />
+        <label for="showLoginPassword">Show password</label>
       </div>
 
       <a class="link">Forgot password?</a>
 
       <div class="actions">
         <a routerLink="/register" class="link">Create account</a>
-        <button type="button">Login</button>
+        <button type="button" (click)="submit()" [disabled]="loginForm.invalid">
+          Next
+        </button>
       </div>
     </form>
   </div>

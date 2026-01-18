@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login';
-import { RegisterComponent } from './auth/register/register';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'login', loadComponent: () => import('./auth/login/login').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./auth/register/register').then(m => m.RegisterComponent) },
+  { path: 'otp', loadComponent: () => import('./auth/otp-verify/otp-verify').then(m => m.OtpVerifyComponent) },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];

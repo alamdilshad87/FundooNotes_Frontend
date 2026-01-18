@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LoginComponent } from './login';
+import { OtpVerifyComponent } from './otp-verify';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+describe('OtpVerifyComponent', () => {
+  let component: OtpVerifyComponent;
+  let fixture: ComponentFixture<OtpVerifyComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginComponent]
+      imports: [OtpVerifyComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(OtpVerifyComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

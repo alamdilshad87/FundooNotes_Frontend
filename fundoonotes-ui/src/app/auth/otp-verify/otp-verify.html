@@ -1,0 +1,30 @@
+<div class="otp-container">
+  <h2>Verify OTP</h2>
+  <p>OTP sent to {{ email }}</p>
+
+  <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+
+    <div class="field">
+      <input
+        type="text"
+        maxlength="6"
+        formControlName="otp"
+        required
+      />
+      <label>Enter OTP</label>
+    </div>
+
+    <div class="error" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <button type="submit" [disabled]="loading || otpForm.invalid">
+      {{ loading ? 'Verifying...' : 'Verify' }}
+    </button>
+
+  </form>
+
+  <button class="link" disabled>
+    Resend OTP
+  </button>
+</div>
