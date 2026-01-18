@@ -1,0 +1,26 @@
+<nav class="sidebar">
+  <a
+    routerLink="/notes"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="item"
+  >
+    <span class="icon">📝</span>
+    <span class="label">Notes</span>
+  </a>
+
+  <a routerLink="/reminders" class="item disabled">
+    <span class="icon">⏰</span>
+    <span class="label">Reminders</span>
+  </a>
+
+  <a routerLink="/archive" class="item disabled">
+    <span class="icon">📦</span>
+    <span class="label">Archive</span>
+  </a>
+
+  <a routerLink="/trash" class="item disabled">
+    <span class="icon">🗑</span>
+    <span class="label">Trash</span>
+  </a>
+</nav>

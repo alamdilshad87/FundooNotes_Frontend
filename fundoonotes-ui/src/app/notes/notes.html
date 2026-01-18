@@ -1,4 +1,9 @@
-<div class="notes-container">
-  <h1>Notes</h1>
-  <button (click)="logout()">Logout</button>
+<app-header></app-header>
+
+<div class="notes-body">
+  <app-sidebar></app-sidebar>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
 </div>

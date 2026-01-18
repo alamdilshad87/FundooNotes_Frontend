@@ -1,0 +1,35 @@
+.sidebar {
+  width: 280px;
+  padding-top: 8px;
+}
+
+.item {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px;
+  border-radius: 0 24px 24px 0;
+  color: #202124;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.item:hover {
+  background: #f1f3f4;
+}
+
+.item.active {
+  background: #feefc3;
+  font-weight: 500;
+}
+
+.icon {
+  width: 24px;
+  text-align: center;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
