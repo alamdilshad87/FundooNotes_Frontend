@@ -31,7 +31,10 @@ export class RegisterComponent {
       {
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
-        username: ['', [Validators.required, Validators.minLength(3)]],
+        email: [ '', [
+            Validators.required,
+            Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+          ]],
         password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', Validators.required],
       },
@@ -43,7 +46,7 @@ export class RegisterComponent {
     this.showPassword = !this.showPassword;
   }
 
-    submit(): void {
+  submit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
@@ -52,22 +55,18 @@ export class RegisterComponent {
     const payload = {
       firstName: this.registerForm.value.firstName!,
       lastName: this.registerForm.value.lastName!,
-      email: this.registerForm.value.username!,
+      email: this.registerForm.value.email!,
       password: this.registerForm.value.password!
     };
 
     this.authService.register(payload).subscribe({
       next: (res) => {
-        this.authService.setOtpSession(
-          res.otpSessionId,
-          payload.email,
-          'REGISTER'
-        );
-
+        this.authService.setOtpSession({
+          otpSessionId: res.otpSessionId,
+          email: payload.email,
+          type: 'REGISTER'
+        });
         this.router.navigate(['/otp']);
-      },
-      error: (err) => {
-        console.error('Register failed', err);
       }
     });
   }

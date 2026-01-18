@@ -17,31 +17,35 @@ export class AuthService {
 
   private readonly BASE_URL = 'https://localhost:7204/api/auth';
 
-  private otpSessionId: string | null = null;
-  private otpEmail: string | null = null;
-  private otpType: 'LOGIN' | 'REGISTER' | null = null;
-
   constructor(private http: HttpClient) {}
 
-  setOtpSession(id: string, email: string, type: 'LOGIN' | 'REGISTER'): void {
-  sessionStorage.setItem('otpSessionId', id);
-  sessionStorage.setItem('otpEmail', email);
-  sessionStorage.setItem('otpType', type);
-}
+  setOtpSession(data: {
+    otpSessionId: string;
+    email: string;
+    type: 'LOGIN' | 'REGISTER';
+  }): void {
+    sessionStorage.setItem('otpSessionId', data.otpSessionId);
+    sessionStorage.setItem('otpEmail', data.email);
+    sessionStorage.setItem('otpType', data.type);
+  }
 
-getOtpSession() {
-  return {
-    otpSessionId: sessionStorage.getItem('otpSessionId'),
-    email: sessionStorage.getItem('otpEmail'),
-    type: sessionStorage.getItem('otpType') as 'LOGIN' | 'REGISTER' | null
-  };
-}
+  getOtpSession(): {
+    otpSessionId: string | null;
+    email: string | null;
+    type: 'LOGIN' | 'REGISTER' | null;
+  } {
+    return {
+      otpSessionId: sessionStorage.getItem('otpSessionId'),
+      email: sessionStorage.getItem('otpEmail'),
+      type: sessionStorage.getItem('otpType') as 'LOGIN' | 'REGISTER' | null
+    };
+  }
 
-clearOtpSession(): void {
-  sessionStorage.removeItem('otpSessionId');
-  sessionStorage.removeItem('otpEmail');
-  sessionStorage.removeItem('otpType');
-}
+  clearOtpSession(): void {
+    sessionStorage.removeItem('otpSessionId');
+    sessionStorage.removeItem('otpEmail');
+    sessionStorage.removeItem('otpType');
+  }
 
   register(data: {
     firstName: string;
@@ -70,9 +74,19 @@ clearOtpSession(): void {
     otpSessionId: string;
     email: string;
     purpose: 'verify' | 'login' | 'reset';
-  }) {
-    return this.http.post<{ token: string }>(
+  }): Observable<VerifyOtpResponse> {
+    return this.http.post<VerifyOtpResponse>(
       `${this.BASE_URL}/verify-otp`,
+      data
+    );
+  }
+
+  resendOtp(data: {
+    email: string;
+    purpose: 'verify' | 'login' | 'reset';
+  }): Observable<{ otpSessionId: string }> {
+    return this.http.post<{ otpSessionId: string }>(
+      `${this.BASE_URL}/resend-otp`,
       data
     );
   }
@@ -81,15 +95,16 @@ clearOtpSession(): void {
     localStorage.setItem('auth_token', token);
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
+  }
+
   isAuthenticated(): boolean {
-  return !!localStorage.getItem('auth_token');
-}
+    return !!this.getToken();
+  }
 
-logout(): void {
-  localStorage.removeItem('auth_token');
-  sessionStorage.removeItem('otpSessionId');
-  sessionStorage.removeItem('otpEmail');
-  sessionStorage.removeItem('otpType');
-}
-
+  logout(): void {
+    localStorage.removeItem('auth_token');
+    this.clearOtpSession();
+  }
 }

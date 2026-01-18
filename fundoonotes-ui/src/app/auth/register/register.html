@@ -3,67 +3,44 @@
     <div class="register-form">
       <img
         src="https://www.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_74x24dp.png"
-        alt="Google"
         class="logo"
       />
 
       <h1>Create your Google Account</h1>
 
       <form [formGroup]="registerForm">
-        <!-- First & Last Name -->
         <div class="name-row">
           <div class="field float-field">
-            <input
-              type="text"
-              formControlName="firstName"
-              placeholder=" "
-              required
-            />
+            <input type="text" formControlName="firstName" placeholder=" " />
             <label>First name</label>
           </div>
 
           <div class="field float-field">
-            <input
-              type="text"
-              formControlName="lastName"
-              placeholder=" "
-              required
-            />
+            <input type="text" formControlName="lastName" placeholder=" " />
             <label>Last name</label>
           </div>
         </div>
 
-        <!-- Username -->
         <div class="username-group">
           <div class="field float-field">
-            <input
-              type="text"
-              formControlName="username"
-              placeholder=" "
-              required
-            />
-            <label>Username</label>
+            <input type="email" formControlName="email" placeholder=" " />
+            <label>Email address</label>
           </div>
 
-          <p class="hint">You can use letters, numbers & periods</p>
-          <a class="link">Use my current email instead</a>
-
           @if (
-            registerForm.get('username')?.touched &&
-            registerForm.get('username')?.invalid
+            registerForm.get('email')?.touched &&
+            registerForm.get('email')?.invalid
           ) {
-            <p class="error">Enter a valid username</p>
+            <p class="error">Enter a valid Gmail address</p>
           }
         </div>
 
-        <!-- Password & Confirm -->
         <div class="name-row password-row">
           <div class="field float-field">
             <input
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
               placeholder=" "
-              required
             />
             <label>Password</label>
           </div>
@@ -73,7 +50,6 @@
               [type]="showPassword ? 'text' : 'password'"
               formControlName="confirmPassword"
               placeholder=" "
-              required
             />
             <label>Confirm</label>
           </div>
@@ -97,32 +73,22 @@
           <p class="error">Passwords do not match</p>
         }
 
-        <!-- Show password -->
         <div class="show-password">
-          <input
-            type="checkbox"
-            id="showPassword"
-            (change)="togglePasswordVisibility()"
-          />
-          <label for="showPassword">Show password</label>
+          <input type="checkbox" (change)="togglePasswordVisibility()" />
+          <label>Show password</label>
         </div>
 
-        <!-- Actions -->
         <div class="actions">
           <a routerLink="/login" class="link">Sign in instead</a>
-          <button type="button" (click)="submit()" [disabled]="registerForm.invalid">
+          <button type="button" (click)="submit()">
             Next
           </button>
         </div>
       </form>
     </div>
 
-    <!-- Illustration -->
     <div class="register-illustration">
-      <img
-        src="https://ssl.gstatic.com/accounts/signup/glif/account.svg"
-        alt="Account illustration"
-      />
+      <img src="https://ssl.gstatic.com/accounts/signup/glif/account.svg" />
       <p>One account. All of Google working for you.</p>
     </div>
   </div>

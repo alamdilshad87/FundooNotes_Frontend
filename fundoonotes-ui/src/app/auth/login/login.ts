@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 
@@ -22,7 +22,11 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [ '', [
+              Validators.required,
+              Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+            ]
+          ],
       password: ['', Validators.required],
     });
   }
@@ -37,13 +41,18 @@ export class LoginComponent {
       return;
     }
 
-    this.authService.login(this.loginForm.value).subscribe({
+    const payload = {
+      email: this.loginForm.value.email!,
+      password: this.loginForm.value.password!
+    };
+
+    this.authService.login(payload).subscribe({
       next: (res) => {
-        this.authService.setOtpSession(
-          res.otpSessionId,
-          this.loginForm.value.email,
-          'LOGIN'
-        );
+        this.authService.setOtpSession({
+          otpSessionId: res.otpSessionId,
+          email: payload.email,
+          type: 'LOGIN'
+        });
         this.router.navigate(['/otp']);
       }
     });

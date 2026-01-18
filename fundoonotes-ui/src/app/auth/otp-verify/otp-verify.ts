@@ -19,6 +19,9 @@ export class OtpVerifyComponent {
 
   loading = false;
   error = '';
+  resendDisabled = true;
+  timer = 30;
+  intervalId: any;
 
   otpForm = new FormGroup({
     otp: new FormControl('', {
@@ -37,14 +40,15 @@ export class OtpVerifyComponent {
   ) {
     const session = this.authService.getOtpSession();
 
-    if (!session.otpSessionId || !session.type) {
+    if (!session.otpSessionId || !session.type || !session.email) {
       this.router.navigate(['/login']);
       return;
     }
 
     this.otpSessionId = session.otpSessionId;
     this.type = session.type;
-    this.email = session.email!;
+    this.email = session.email;
+    this.startResendTimer();
   }
 
   verifyOtp(): void {
@@ -65,9 +69,50 @@ export class OtpVerifyComponent {
         this.authService.storeToken(res.token);
         this.router.navigate(['/']);
       },
-      error: (err) => {
+      error: () => {
         this.error = 'Invalid or expired OTP';
         this.loading = false;
+      }
+    });
+  }
+
+  startResendTimer(): void {
+    this.resendDisabled = true;
+    this.timer = 30;
+
+    this.intervalId = setInterval(() => {
+      this.timer--;
+      if (this.timer === 0) {
+        this.resendDisabled = false;
+        clearInterval(this.intervalId);
+      }
+    }, 1000);
+  }
+
+  resendOtp(): void {
+    if (this.resendDisabled) return;
+
+    this.resendDisabled = true;
+    this.error = '';
+
+    const session = this.authService.getOtpSession();
+
+    this.authService.resendOtp({
+      email: session.email!,
+      purpose: session.type === 'REGISTER' ? 'verify' : 'login'
+    }).subscribe({
+      next: (res) => {
+        this.authService.setOtpSession({
+          otpSessionId: res.otpSessionId,
+          email: session.email!,
+          type: session.type!
+        });
+
+        this.startResendTimer();
+      },
+      error: () => {
+        this.error = 'Failed to resend OTP';
+        this.resendDisabled = false;
       }
     });
   }
