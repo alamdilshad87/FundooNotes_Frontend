@@ -46,7 +46,7 @@ clearOtpSession(): void {
   register(data: {
     firstName: string;
     lastName: string;
-    username: string;
+    email: string;
     password: string;
   }): Observable<OtpInitResponse> {
     return this.http.post<OtpInitResponse>(
@@ -68,8 +68,10 @@ clearOtpSession(): void {
   verifyOtp(data: {
     otp: string;
     otpSessionId: string;
-  }): Observable<VerifyOtpResponse> {
-    return this.http.post<VerifyOtpResponse>(
+    email: string;
+    purpose: 'verify' | 'login' | 'reset';
+  }) {
+    return this.http.post<{ token: string }>(
       `${this.BASE_URL}/verify-otp`,
       data
     );

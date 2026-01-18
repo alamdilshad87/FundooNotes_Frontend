@@ -51,20 +51,25 @@ export class OtpVerifyComponent {
     if (this.otpForm.invalid) return;
 
     this.loading = true;
+    this.error = '';
+
+    const session = this.authService.getOtpSession();
 
     this.authService.verifyOtp({
       otp: this.otpForm.value.otp!,
-      otpSessionId: this.otpSessionId
+      otpSessionId: session.otpSessionId!,
+      email: session.email!,
+      purpose: session.type === 'REGISTER' ? 'verify' : 'login'
     }).subscribe({
       next: (res) => {
         this.authService.storeToken(res.token);
-        this.authService.clearOtpSession();
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
       },
-      error: () => {
+      error: (err) => {
         this.error = 'Invalid or expired OTP';
         this.loading = false;
       }
     });
   }
+
 }
