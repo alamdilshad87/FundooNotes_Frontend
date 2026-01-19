@@ -1,7 +1,27 @@
 .note-card {
-  width: 240px;
-  background: #fff;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,.15);
+  break-inside: avoid;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(60,64,67,.15);
+  transition: box-shadow .15s ease;
+  line-height: 1.6;
+
+  h4 {
+    margin: 0 0 6px;
+    font-weight: 500;
+    font-size: 15px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(60,64,67,.2);
+  }
 }

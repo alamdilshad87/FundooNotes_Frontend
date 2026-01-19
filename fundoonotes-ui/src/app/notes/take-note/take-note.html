@@ -1,20 +1,11 @@
-<div class="take-note">
+<div class="take-note" (click)="expand()">
 
-  @if (expanded) {
-    <input
-      type="text"
-      placeholder="Title"
-      [(ngModel)]="title"
-      (input)="onInput()"
-      (blur)="onBlur()"
-    />
-  }
+  <input *ngIf="expanded"
+         placeholder="Title"
+         [(ngModel)]="title" />
 
-  <textarea
-    placeholder="Take a note..."
-    [(ngModel)]="description"
-    (input)="onInput()"
-    (blur)="onBlur()">
-  </textarea>
+  <textarea placeholder="Take a note..."
+            [(ngModel)]="content"
+            (blur)="collapse()"></textarea>
 
 </div>

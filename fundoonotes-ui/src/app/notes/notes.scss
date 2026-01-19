@@ -1,11 +1,14 @@
-.notes-layout {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.notes-body {
-  display: flex;
-  flex: 1;
-  background: #f1f3f4;
+/* FORCE Material Icons Outlined – DO NOT REMOVE */
+.material-icons-outlined {
+  font-family: 'Material Icons Outlined' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 22px;
+  line-height: 1;
+  display: inline-block;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
 }

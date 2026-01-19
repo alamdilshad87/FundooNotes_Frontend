@@ -1,26 +1,23 @@
-<nav class="sidebar">
-  <a
-    routerLink="/notes"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }"
-    class="item"
-  >
-    <span class="icon">📝</span>
+<aside class="sidebar" [class.collapsed]="collapsed">
+
+  <div class="item active">
+    <span class="material-icons-outlined">lightbulb_outline</span>
     <span class="label">Notes</span>
-  </a>
+  </div>
 
-  <a routerLink="/reminders" class="item disabled">
-    <span class="icon">⏰</span>
+  <div class="item">
+    <span class="material-icons-outlined">notifications_none</span>
     <span class="label">Reminders</span>
-  </a>
+  </div>
 
-  <a routerLink="/archive" class="item disabled">
-    <span class="icon">📦</span>
+  <div class="item">
+    <span class="material-icons-outlined">archive</span>
     <span class="label">Archive</span>
-  </a>
+  </div>
 
-  <a routerLink="/trash" class="item disabled">
-    <span class="icon">🗑</span>
+  <div class="item">
+    <span class="material-icons-outlined">delete_outline</span>
     <span class="label">Trash</span>
-  </a>
-</nav>
+  </div>
+
+</aside>

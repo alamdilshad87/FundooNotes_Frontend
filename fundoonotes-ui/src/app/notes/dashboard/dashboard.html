@@ -1,7 +1,8 @@
-<app-take-note (noteSaved)="addNote($event)"></app-take-note>
+<app-take-note (save)="addNote($event)"></app-take-note>
 
-<div class="grid">
-  @for (note of notes; track note.id) {
-    <app-note-card [note]="note"></app-note-card>
-  }
+<div class="notes-grid">
+  <div class="note-card" *ngFor="let note of notes">
+    <h4>{{ note.title }}</h4>
+    <p>{{ note.content }}</p>
+  </div>
 </div>
