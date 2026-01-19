@@ -1,34 +1,65 @@
 <header class="keep-header">
-  <div class="header-left">
-    <button class="icon-btn" (click)="toggleSidebar.emit()">
+  <!-- LEFT SECTION -->
+  <div class="left">
+    <button class="icon-btn menu-btn" (click)="toggleSidebar.emit()" aria-label="Main menu">
       <span class="material-icons-outlined">menu</span>
     </button>
-    <img class="logo" src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep">
+    
+    <img 
+      class="logo" 
+      src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" 
+      alt="Keep"
+    />
+    
     <span class="title">Keep</span>
   </div>
 
-  <div class="header-center">
-    <div class="search-box">
-      <button class="icon-btn search-btn">
+  <!-- CENTER SEARCH -->
+  <div class="search-container">
+    <div class="search">
+      <button class="search-icon" aria-label="Search">
         <span class="material-icons-outlined">search</span>
       </button>
-      <input type="text" placeholder="Search">
+      
+      <input 
+        type="text" 
+        placeholder="Search"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+        aria-label="Search"
+      />
+      
+      <button 
+        class="clear-icon" 
+        *ngIf="searchQuery" 
+        (click)="clearSearch()"
+        aria-label="Clear search"
+      >
+        <span class="material-icons-outlined">close</span>
+      </button>
     </div>
   </div>
 
-  <div class="header-right">
-    <button class="icon-btn">
+  <!-- RIGHT SECTION -->
+  <div class="right">
+    <button class="icon-btn" aria-label="Refresh">
       <span class="material-icons-outlined">refresh</span>
     </button>
-    <button class="icon-btn">
+    
+    <button class="icon-btn" aria-label="List view">
       <span class="material-icons-outlined">view_agenda</span>
     </button>
-    <button class="icon-btn">
+    
+    <button class="icon-btn" aria-label="Settings">
       <span class="material-icons-outlined">settings</span>
     </button>
-    <button class="icon-btn">
+
+    <button class="icon-btn apps-btn" aria-label="Google apps">
       <span class="material-icons-outlined">apps</span>
     </button>
-    <div class="avatar">M</div>
+    
+    <button class="avatar" aria-label="Google Account">
+      {{ getInitials() }}
+    </button>
   </div>
 </header>

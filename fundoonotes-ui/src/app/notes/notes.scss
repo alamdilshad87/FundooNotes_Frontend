@@ -1,5 +1,28 @@
+// FORCE Material Icons Outlined (DO NOT REMOVE)
+.material-icons-outlined {
+  font-family: 'Material Icons Outlined' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
 .notes-layout {
   display: flex;
   min-height: calc(100vh - 64px);
+  background: #fff;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
   background: #fff;
 }
