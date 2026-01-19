@@ -1,28 +1,34 @@
 <header class="keep-header">
-
-  <!-- LEFT -->
-  <div class="left">
-    <span class="material-icons-outlined icon"
-          (click)="toggleSidebar.emit()">menu</span>
-
-    <img class="logo"
-      src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" />
-
+  <div class="header-left">
+    <button class="icon-btn" (click)="toggleSidebar.emit()">
+      <span class="material-icons-outlined">menu</span>
+    </button>
+    <img class="logo" src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep">
     <span class="title">Keep</span>
   </div>
 
-  <!-- CENTER -->
-  <div class="search">
-    <span class="material-icons-outlined">search</span>
-    <input placeholder="Search" />
+  <div class="header-center">
+    <div class="search-box">
+      <button class="icon-btn search-btn">
+        <span class="material-icons-outlined">search</span>
+      </button>
+      <input type="text" placeholder="Search">
+    </div>
   </div>
 
-  <!-- RIGHT -->
-  <div class="right">
-    <span class="material-icons-outlined icon">refresh</span>
-    <span class="material-icons-outlined icon">view_agenda</span>
-    <span class="material-icons-outlined icon">settings</span>
+  <div class="header-right">
+    <button class="icon-btn">
+      <span class="material-icons-outlined">refresh</span>
+    </button>
+    <button class="icon-btn">
+      <span class="material-icons-outlined">view_agenda</span>
+    </button>
+    <button class="icon-btn">
+      <span class="material-icons-outlined">settings</span>
+    </button>
+    <button class="icon-btn">
+      <span class="material-icons-outlined">apps</span>
+    </button>
     <div class="avatar">M</div>
   </div>
-
 </header>

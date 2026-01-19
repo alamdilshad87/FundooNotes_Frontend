@@ -1,8 +1,19 @@
-<app-take-note (save)="addNote($event)"></app-take-note>
+<main class="dashboard-main">
+  <app-take-note (save)="addNote($event)"></app-take-note>
 
-<div class="notes-grid">
-  <div class="note-card" *ngFor="let note of notes">
-    <h4>{{ note.title }}</h4>
-    <p>{{ note.content }}</p>
+  <div class="notes-container" *ngIf="notes.length > 0">
+    <div class="notes-grid">
+      <app-note-card 
+        *ngFor="let note of notes" 
+        [note]="note"
+        (delete)="deleteNote($event)"
+        (update)="updateNote($event)">
+      </app-note-card>
+    </div>
   </div>
-</div>
+
+  <div class="empty-state" *ngIf="notes.length === 0">
+    <span class="material-icons-outlined empty-icon">lightbulb</span>
+    <p class="empty-text">Notes you add appear here</p>
+  </div>
+</main>

@@ -1,11 +1,52 @@
-<div class="take-note" (click)="expand()">
+<div class="take-note-container">
+  <div class="take-note-box" #noteBox [class.expanded]="expanded" (click)="expand()">
+    
+    <input 
+      *ngIf="expanded"
+      class="note-title-input" 
+      type="text" 
+      placeholder="Title" 
+      [(ngModel)]="title"
+      (click)="$event.stopPropagation()">
 
-  <input *ngIf="expanded"
-         placeholder="Title"
-         [(ngModel)]="title" />
+    <textarea 
+      class="note-content-input" 
+      [placeholder]="expanded ? 'Take a note...' : 'Take a note...'" 
+      [(ngModel)]="content"
+      [rows]="expanded ? 3 : 1"
+      (click)="$event.stopPropagation()"></textarea>
 
-  <textarea placeholder="Take a note..."
-            [(ngModel)]="content"
-            (blur)="collapse()"></textarea>
+    <div class="note-actions" *ngIf="expanded">
+      <div class="action-buttons">
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">add_alert</span>
+        </button>
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">person_add</span>
+        </button>
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">palette</span>
+        </button>
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">image</span>
+        </button>
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">archive</span>
+        </button>
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">more_vert</span>
+        </button>
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">undo</span>
+        </button>
+        <button class="action-btn" type="button">
+          <span class="material-icons-outlined">redo</span>
+        </button>
+      </div>
+      <button class="close-btn" type="button" (click)="close(); $event.stopPropagation()">
+        Close
+      </button>
+    </div>
 
+  </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,30 +10,37 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./take-note.scss']
 })
 export class TakeNoteComponent {
+  @Output() save = new EventEmitter<any>();
+  @ViewChild('noteBox') noteBox!: ElementRef;
 
   expanded = false;
   title = '';
   content = '';
 
-  @Output() save = new EventEmitter<any>();
-
   expand(): void {
     this.expanded = true;
   }
 
-  collapse(): void {
-    if (!this.title.trim() && !this.content.trim()) {
-      this.expanded = false;
-      return;
+  close(): void {
+    if (this.title.trim() || this.content.trim()) {
+      this.save.emit({
+        title: this.title.trim(),
+        content: this.content.trim()
+      });
     }
+    this.reset();
+  }
 
-    this.save.emit({
-      title: this.title,
-      content: this.content
-    });
-
+  reset(): void {
     this.title = '';
     this.content = '';
     this.expanded = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event): void {
+    if (this.expanded && this.noteBox && !this.noteBox.nativeElement.contains(event.target)) {
+      this.close();
+    }
   }
 }

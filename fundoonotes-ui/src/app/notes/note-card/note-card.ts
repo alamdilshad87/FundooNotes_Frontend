@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,4 +10,10 @@ import { CommonModule } from '@angular/common';
 })
 export class NoteCardComponent {
   @Input() note: any;
+  @Output() delete = new EventEmitter<number>();
+  @Output() update = new EventEmitter<any>();
+
+  onDelete(): void {
+    this.delete.emit(this.note.id);
+  }
 }
