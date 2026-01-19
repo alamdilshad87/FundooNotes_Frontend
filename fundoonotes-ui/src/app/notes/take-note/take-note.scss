@@ -1,112 +1,198 @@
-.take-note-container {
-  max-width: 600px;
-  margin: 32px auto 16px;
-  padding: 0 16px;
+.take-note-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 32px;
+  margin: 0;
 }
 
-.take-note-box {
+.take-note {
+  width: 100%;
+  max-width: 600px;
   background: #fff;
-  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  padding: 12px 16px;
-  cursor: text;
-  transition: box-shadow 0.2s;
+  box-shadow: 
+    0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  margin: 0 auto;
 
   &:hover {
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+    box-shadow: 
+      0 1px 2px 0 rgba(60, 64, 67, 0.302),
+      0 2px 6px 2px rgba(60, 64, 67, 0.149);
   }
 
   &.expanded {
-    cursor: default;
+    box-shadow: 
+      0 3px 5px rgba(0, 0, 0, 0.2),
+      0 5px 8px rgba(0, 0, 0, 0.14);
   }
 }
 
-.note-title-input {
-  width: 100%;
+// COLLAPSED VIEW
+.collapsed-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: text;
+  min-height: 46px;
+}
+
+.placeholder {
+  color: #5f6368;
+  font-size: 16px;
+  font-weight: 500;
+  user-select: none;
+  flex: 1;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 0;
+  margin-left: auto;
+}
+
+// EXPANDED VIEW
+.expanded-view {
+  padding: 12px 16px 16px;
+}
+
+.note-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.title-input {
+  flex: 1;
   border: none;
   outline: none;
-  background: transparent;
   font-size: 16px;
   font-weight: 500;
   color: #202124;
-  padding: 0 0 10px 0;
+  padding: 0;
   font-family: 'Roboto', Arial, sans-serif;
+  line-height: 24px;
 
   &::placeholder {
     color: #5f6368;
-    font-weight: 400;
   }
 }
 
-.note-content-input {
+.pin-btn {
+  flex-shrink: 0;
+  opacity: 0.87;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.content-input {
   width: 100%;
   border: none;
   outline: none;
-  background: transparent;
   resize: none;
   font-size: 14px;
-  color: #202124;
   line-height: 20px;
-  padding: 0;
+  color: #202124;
   font-family: 'Roboto', Arial, sans-serif;
-  overflow-y: hidden;
+  padding: 0;
+  margin-bottom: 12px;
+  min-height: 46px;
 
   &::placeholder {
     color: #5f6368;
   }
 }
 
-.note-actions {
+// FOOTER
+.note-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 12px;
-  padding-top: 4px;
+  gap: 8px;
 }
 
-.action-buttons {
+.toolbar {
   display: flex;
-  gap: 4px;
+  gap: 0;
   flex: 1;
+  flex-wrap: nowrap;
 }
 
-.action-btn {
+// BUTTONS
+.icon-btn {
   width: 32px;
   height: 32px;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
+  min-width: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: none;
+  background: transparent;
   cursor: pointer;
+  border-radius: 50%;
   color: #5f6368;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
   padding: 0;
-  transition: background-color 0.15s;
+
+  &:hover {
+    background: rgba(95, 99, 104, 0.157);
+  }
+
+  &:active {
+    background: rgba(95, 99, 104, 0.22);
+  }
 
   .material-icons-outlined {
     font-size: 18px;
   }
-
-  &:hover {
-    background: rgba(95, 99, 104, 0.08);
-  }
 }
 
 .close-btn {
+  height: 36px;
+  padding: 0 24px;
   border: none;
   background: transparent;
-  color: #202124;
+  color: #5f6368;
   font-size: 14px;
   font-weight: 500;
-  padding: 8px 24px;
-  border-radius: 4px;
+  letter-spacing: 0.25px;
   cursor: pointer;
-  font-family: 'Roboto', Arial, sans-serif;
-  transition: background-color 0.15s;
+  border-radius: 4px;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover {
-    background: rgba(95, 99, 104, 0.08);
+    background: rgba(95, 99, 104, 0.039);
+  }
+
+  &:active {
+    background: rgba(95, 99, 104, 0.102);
+  }
+}
+
+// RESPONSIVE
+@media (max-width: 768px) {
+  .take-note-wrapper {
+    padding-top: 16px;
+  }
+
+  .toolbar {
+    overflow-x: auto;
+    scrollbar-width: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }

@@ -1,19 +1,21 @@
-<main class="dashboard-main">
-  <app-take-note (save)="addNote($event)"></app-take-note>
-
-  <div class="notes-container" *ngIf="notes.length > 0">
-    <div class="notes-grid">
-      <app-note-card 
-        *ngFor="let note of notes" 
-        [note]="note"
-        (delete)="deleteNote($event)"
-        (update)="updateNote($event)">
-      </app-note-card>
+<div class="dashboard-container">
+  <div class="dashboard-content">
+    <app-take-note (save)="addNote($event)"></app-take-note>
+    
+    <div class="notes-section">
+      <div class="empty-state" *ngIf="notes.length === 0">
+        <svg class="lightbulb-icon" width="120" height="120" viewBox="0 0 24 24">
+          <path fill="#e8eaed" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 017 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/>
+        </svg>
+        <p class="empty-text">Notes you add appear here</p>
+      </div>
+      
+      <div class="notes-grid" *ngIf="notes.length > 0">
+        <div class="note-card" *ngFor="let note of notes">
+          <h4 *ngIf="note.title">{{ note.title }}</h4>
+          <p>{{ note.content }}</p>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="empty-state" *ngIf="notes.length === 0">
-    <span class="material-icons-outlined empty-icon">lightbulb</span>
-    <p class="empty-text">Notes you add appear here</p>
-  </div>
-</main>
+</div>

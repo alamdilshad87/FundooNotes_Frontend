@@ -6,7 +6,7 @@ import { NoteCardComponent } from '../note-card/note-card';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, TakeNoteComponent, NoteCardComponent],
+  imports: [CommonModule, TakeNoteComponent],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
