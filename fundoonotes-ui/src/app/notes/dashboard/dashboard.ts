@@ -1,28 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NoteInputComponent, NoteDraft } from '../note-input/note-input';
-import { NoteCardComponent, Note } from '../note-card/note-card';
+
+import { TakeNoteComponent } from '../take-note/take-note';
+import { NoteCardComponent } from '../note-card/note-card';
+import { NotesService } from '../../core/services/notes';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    NoteInputComponent,
+    TakeNoteComponent,
     NoteCardComponent
   ],
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss'],
+  styleUrls: ['./dashboard.scss']
 })
-export class DashboardComponent {
-  notes: Note[] = [];
-  private nextId = 1;
+export class DashboardComponent implements OnInit {
 
-  addNote(draft: NoteDraft): void {
-    this.notes.unshift({
-      id: this.nextId++,
-      title: draft.title,
-      content: draft.content,
+  notes: any[] = [];
+
+  constructor(private notesService: NotesService) {}
+
+  ngOnInit(): void {
+    this.notesService.getNotes().subscribe({
+      next: (res) => this.notes = res,
+      error: (err) => console.error('Failed to load notes', err)
     });
+  }
+
+  addNote(note: any): void {
+    this.notes.unshift(note);
   }
 }

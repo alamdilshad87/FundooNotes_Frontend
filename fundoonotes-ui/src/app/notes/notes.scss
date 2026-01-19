@@ -1,10 +1,11 @@
+.notes-layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .notes-body {
   display: flex;
   flex: 1;
-}
-
-.content {
-  flex: 1;
-  padding: 16px;
-  background: #ffffff;
+  background: #f1f3f4;
 }

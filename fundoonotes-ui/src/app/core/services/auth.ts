@@ -19,6 +19,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  // ================= OTP SESSION =================
+
   setOtpSession(data: {
     otpSessionId: string;
     email: string;
@@ -46,6 +48,8 @@ export class AuthService {
     sessionStorage.removeItem('otpEmail');
     sessionStorage.removeItem('otpType');
   }
+
+  // ================= AUTH APIs =================
 
   register(data: {
     firstName: string;
@@ -91,12 +95,15 @@ export class AuthService {
     );
   }
 
+  // ================= TOKEN (FIXED) =================
+
   storeToken(token: string): void {
-    localStorage.setItem('auth_token', token);
+    // ✅ MUST BE "token"
+    localStorage.setItem('token', token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem('token');
   }
 
   isAuthenticated(): boolean {
@@ -104,7 +111,7 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('token');
     this.clearOtpSession();
   }
 }

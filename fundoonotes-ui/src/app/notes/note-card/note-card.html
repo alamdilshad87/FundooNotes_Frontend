@@ -1,4 +1,10 @@
 <div class="note-card">
-  <h3 *ngIf="note.title">{{ note.title }}</h3>
-  <p>{{ note.content }}</p>
+  <h4>{{ note.title }}</h4>
+  <p>{{ note.description }}</p>
+
+  <div class="icons">
+    <span class="material-icons-outlined">notifications</span>
+    <span class="material-icons-outlined">palette</span>
+    <span class="material-icons-outlined">delete</span>
+  </div>
 </div>

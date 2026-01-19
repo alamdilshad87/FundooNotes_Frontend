@@ -1,27 +1,27 @@
 <div class="note-input" [class.expanded]="expanded" (click)="expand()">
-  <input
-    *ngIf="expanded"
-    type="text"
-    placeholder="Title"
-    [(ngModel)]="title"
-    class="title"
-  />
+  @if (expanded) {
+    <input
+      class="title"
+      type="text"
+      placeholder="Title"
+      [(ngModel)]="title"
+    />
+  }
 
   <textarea
     placeholder="Take a note..."
     [(ngModel)]="content"
-    rows="1"
   ></textarea>
 
-  <div class="actions" *ngIf="expanded">
-    <div class="icons">
-      <button>⏰</button>
-      <button>👤</button>
-      <button>🎨</button>
-      <button>🖼</button>
-      <button>📦</button>
+  @if (expanded) {
+    <div class="actions">
+      <div class="icons">
+        <button>⏰</button>
+        <button>🎨</button>
+        <button>🖼</button>
+        <button>📦</button>
+      </div>
+      <button class="close" (click)="close()">Close</button>
     </div>
-
-    <button class="close" (click)="close()">Close</button>
-  </div>
+  }
 </div>

@@ -1,18 +1,7 @@
-<app-note-input (create)="addNote($event)"></app-note-input>
+<app-take-note (noteSaved)="addNote($event)"></app-take-note>
 
-<!-- EMPTY STATE -->
-<div class="empty-state" *ngIf="notes.length === 0">
-  <img
-    src="https://www.gstatic.com/images/icons/material/system_gm/1x/lightbulb_outline_black_48dp.png"
-    alt="Empty"
-  />
-  <p>Notes you add appear here</p>
-</div>
-
-<!-- NOTES GRID -->
-<div class="notes-grid" *ngIf="notes.length > 0">
-  <app-note-card
-    *ngFor="let note of notes"
-    [note]="note">
-  </app-note-card>
+<div class="grid">
+  @for (note of notes; track note.id) {
+    <app-note-card [note]="note"></app-note-card>
+  }
 </div>

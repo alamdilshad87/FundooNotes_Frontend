@@ -1,0 +1,20 @@
+<div class="take-note">
+
+  @if (expanded) {
+    <input
+      type="text"
+      placeholder="Title"
+      [(ngModel)]="title"
+      (input)="onInput()"
+      (blur)="onBlur()"
+    />
+  }
+
+  <textarea
+    placeholder="Take a note..."
+    [(ngModel)]="description"
+    (input)="onInput()"
+    (blur)="onBlur()">
+  </textarea>
+
+</div>

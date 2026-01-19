@@ -1,0 +1,21 @@
+.take-note {
+  width: 600px;
+  margin: 32px auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+
+  input, textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+}
