@@ -46,16 +46,15 @@ export class TakeNoteComponent implements AfterViewInit {
   }
 
   applyFormat(format: string): void {
-    // TODO: Implement actual text formatting logic
     console.log('Apply format:', format);
-    // This is where you'd implement the formatting logic
-    // For now, it's a placeholder
   }
 
   close(): void {
+    // Only save if there's content (title OR content has text)
     if (this.title.trim() || this.content.trim()) {
+      console.log('Emitting note:', { title: this.title, content: this.content });
       this.save.emit({
-        title: this.title.trim(),
+        title: this.title.trim() || 'Untitled',
         content: this.content.trim()
       });
     }
@@ -64,7 +63,12 @@ export class TakeNoteComponent implements AfterViewInit {
   }
 
   onClickOutside(event: MouseEvent): void {
-    if (this.isExpanded && !this.elementRef.nativeElement.contains(event.target)) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    
+    console.log('Click detected - Inside:', clickedInside, 'Expanded:', this.isExpanded);
+    
+    if (this.isExpanded && !clickedInside) {
+      console.log('Closing note box due to outside click');
       this.close();
     }
   }

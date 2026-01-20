@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TakeNoteComponent } from '../take-note/take-note';
 import { NoteCardComponent } from '../note-card/note-card';
@@ -13,32 +13,43 @@ import { NotesService } from '../../core/services/notes';
 })
 export class DashboardComponent implements OnInit {
   notes: any[] = [];
+  isLoading = false;
 
-  constructor(private notesService: NotesService) {}
+  constructor(
+    private notesService: NotesService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadNotes();
   }
 
   loadNotes(): void {
+    this.isLoading = true;
     this.notesService.getNotes().subscribe({
-      next: (notes) => {
-        this.notes = notes;
+      next: (response) => {
+        console.log('Notes loaded:', response);
+        this.notes = response;
+        this.isLoading = false;
+        // Force Angular to detect changes
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error loading notes:', error);
+        this.isLoading = false;
       }
     });
   }
 
-  addNote(note: any): void {
-    this.notesService.createNote(note).subscribe({
-      next: (createdNote) => {
-        this.notes.unshift(createdNote);
-        console.log('Note created successfully:', createdNote);
+  addNote(noteData: any): void {
+    this.notesService.createNote(noteData).subscribe({
+      next: (response) => {
+        console.log('Note created successfully:', response.message);
+        this.loadNotes();
       },
       error: (error) => {
         console.error('Error creating note:', error);
+        alert('Failed to create note. Please try again.');
       }
     });
   }
@@ -51,21 +62,20 @@ export class DashboardComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting note:', error);
+        alert('Failed to delete note. Please try again.');
       }
     });
   }
 
   updateNote(updatedNote: any): void {
     this.notesService.updateNote(updatedNote.id, updatedNote).subscribe({
-      next: (note) => {
-        const index = this.notes.findIndex(n => n.id === updatedNote.id);
-        if (index !== -1) {
-          this.notes[index] = note;
-        }
-        console.log('Note updated successfully:', note);
+      next: (response) => {
+        console.log('Note updated successfully');
+        this.loadNotes();
       },
       error: (error) => {
         console.error('Error updating note:', error);
+        alert('Failed to update note. Please try again.');
       }
     });
   }
