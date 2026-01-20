@@ -1,193 +1,325 @@
 .take-note-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-top: 32px;
-  margin: 0;
+  max-width: 600px;
+  margin: 32px auto 0;
+  padding: 0 16px;
 }
 
-.take-note {
+.take-note-box {
   width: 100%;
-  max-width: 600px;
   background: #fff;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 
-    0 1px 2px 0 rgba(60, 64, 67, 0.3),
-    0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  margin: 0 auto;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+              0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  transition: box-shadow 0.218s ease-in-out;
 
-  &:hover {
-    box-shadow: 
-      0 1px 2px 0 rgba(60, 64, 67, 0.302),
-      0 2px 6px 2px rgba(60, 64, 67, 0.149);
+  &:hover:not(.expanded) {
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302),
+                0 4px 8px 3px rgba(60, 64, 67, 0.149);
   }
 
   &.expanded {
-    box-shadow: 
-      0 3px 5px rgba(0, 0, 0, 0.2),
-      0 5px 8px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   }
 }
 
-// COLLAPSED VIEW
+// ==================== COLLAPSED STATE ====================
 .collapsed-view {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  cursor: text;
+  padding: 11px 16px;
   min-height: 46px;
+  cursor: text;
+  gap: 16px;
 }
 
-.placeholder {
+.input-placeholder {
+  flex: 1;
   color: #5f6368;
   font-size: 16px;
   font-weight: 500;
+  font-family: 'Roboto', Arial, sans-serif;
+  letter-spacing: 0.00625em;
   user-select: none;
-  flex: 1;
+  line-height: 24px;
 }
 
-.quick-actions {
+.quick-icons {
   display: flex;
+  align-items: center;
   gap: 0;
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
-// EXPANDED VIEW
+// ==================== EXPANDED STATE ====================
 .expanded-view {
-  padding: 12px 16px 16px;
+  padding: 12px 16px;
 }
 
-.note-header {
+.input-row {
   display: flex;
   align-items: flex-start;
   gap: 8px;
   margin-bottom: 12px;
 }
 
-.title-input {
+.title-field {
   flex: 1;
   border: none;
   outline: none;
+  background: transparent;
   font-size: 16px;
   font-weight: 500;
   color: #202124;
-  padding: 0;
   font-family: 'Roboto', Arial, sans-serif;
+  letter-spacing: 0.00625em;
   line-height: 24px;
+  padding: 1px 0;
+  min-height: 24px;
 
   &::placeholder {
     color: #5f6368;
+    font-weight: 400;
   }
 }
 
-.pin-btn {
-  flex-shrink: 0;
-  opacity: 0.87;
+.pin-button {
+  margin-top: -4px;
+  opacity: 0.71;
 
   &:hover {
     opacity: 1;
   }
 }
 
-.content-input {
+.content-row {
+  margin-bottom: 8px;
+}
+
+.content-field {
   width: 100%;
   border: none;
   outline: none;
+  background: transparent;
   resize: none;
   font-size: 14px;
-  line-height: 20px;
+  font-weight: 400;
   color: #202124;
   font-family: 'Roboto', Arial, sans-serif;
-  padding: 0;
-  margin-bottom: 12px;
+  letter-spacing: 0.01428571em;
+  line-height: 20px;
+  padding: 4px 0;
   min-height: 46px;
+  overflow-y: hidden;
 
   &::placeholder {
     color: #5f6368;
   }
+
+  &:focus {
+    outline: none;
+  }
 }
 
-// FOOTER
-.note-footer {
+// ==================== FOOTER ====================
+.footer-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  gap: 8px;
+  margin-top: 8px;
+  gap: 16px;
 }
 
-.toolbar {
+.toolbar-icons {
   display: flex;
+  align-items: center;
   gap: 0;
   flex: 1;
-  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-// BUTTONS
-.icon-btn {
-  width: 32px;
-  height: 32px;
-  min-width: 32px;
-  display: flex;
+// ==================== BUTTONS ====================
+.icon-button {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
+  outline: none;
   background: transparent;
-  cursor: pointer;
   border-radius: 50%;
+  cursor: pointer;
   color: #5f6368;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  flex-shrink: 0;
   padding: 0;
-
-  &:hover {
-    background: rgba(95, 99, 104, 0.157);
-  }
-
-  &:active {
-    background: rgba(95, 99, 104, 0.22);
-  }
+  margin: 0;
+  flex-shrink: 0;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
   .material-icons-outlined {
     font-size: 18px;
+    line-height: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: rgba(95, 99, 104, 0.157);
+  }
+
+  &:active {
+    background-color: rgba(95, 99, 104, 0.251);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// Format Button (Underlined A)
+.format-btn {
+  .format-icon {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #5f6368;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    line-height: 18px;
   }
 }
 
 .close-btn {
   height: 36px;
-  padding: 0 24px;
+  padding: 8px 24px;
   border: none;
+  outline: none;
   background: transparent;
   color: #5f6368;
   font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.25px;
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  letter-spacing: 0.0107142857em;
+  line-height: 20px;
   cursor: pointer;
   border-radius: 4px;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Google Sans', Roboto, Arial, sans-serif;
   white-space: nowrap;
   flex-shrink: 0;
+  text-transform: capitalize;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    background: rgba(95, 99, 104, 0.039);
+    background-color: rgba(95, 99, 104, 0.039);
   }
 
   &:active {
-    background: rgba(95, 99, 104, 0.102);
+    background-color: rgba(95, 99, 104, 0.161);
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 
-// RESPONSIVE
-@media (max-width: 768px) {
-  .take-note-wrapper {
-    padding-top: 16px;
+// ==================== FORMATTING TOOLBAR ====================
+.formatting-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 8px 4px 4px;
+  margin-top: 4px;
+  border-top: 1px solid #e8eaed;
+}
+
+.format-option {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #5f6368;
+  padding: 0;
+  margin: 0;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .material-icons-outlined {
+    font-size: 18px;
+    line-height: 18px;
   }
 
-  .toolbar {
+  .format-label {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #5f6368;
+    line-height: 18px;
+  }
+
+  &:hover {
+    background-color: rgba(95, 99, 104, 0.157);
+  }
+
+  &:active {
+    background-color: rgba(95, 99, 104, 0.251);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.format-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e8eaed;
+  margin: 0 4px;
+}
+
+// ==================== RESPONSIVE ====================
+@media (max-width: 768px) {
+  .take-note-wrapper {
+    margin-top: 16px;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .collapsed-view {
+    padding: 10px 12px;
+  }
+
+  .expanded-view {
+    padding: 10px 12px;
+  }
+
+  .toolbar-icons {
+    gap: 0;
+  }
+
+  .icon-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .formatting-toolbar {
     overflow-x: auto;
     scrollbar-width: none;
     
@@ -195,4 +327,139 @@
       display: none;
     }
   }
+}
+// ==================== FOOTER ====================
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  gap: 16px;
+}
+
+.toolbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px; // ✅ Added spacing between icons
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ==================== BUTTONS ====================
+.icon-button {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #5f6368;
+  padding: 0;
+  margin: 0;
+  flex-shrink: 0;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .material-icons-outlined {
+    font-size: 18px;
+    line-height: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: rgba(95, 99, 104, 0.157);
+  }
+
+  &:active {
+    background-color: rgba(95, 99, 104, 0.251);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// Format Button (Underlined A)
+.format-btn {
+  .format-icon {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #5f6368;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    line-height: 18px;
+  }
+}
+
+// ==================== FORMATTING TOOLBAR ====================
+.formatting-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px; // ✅ Added spacing between format options
+  padding: 8px 4px 4px;
+  margin-top: 4px;
+  border-top: 1px solid #e8eaed;
+}
+
+.format-option {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #5f6368;
+  padding: 0;
+  margin: 0;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .material-icons-outlined {
+    font-size: 18px;
+    line-height: 18px;
+  }
+
+  .format-label {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #5f6368;
+    line-height: 18px;
+  }
+
+  &:hover {
+    background-color: rgba(95, 99, 104, 0.157);
+  }
+
+  &:active {
+    background-color: rgba(95, 99, 104, 0.251);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.format-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e8eaed;
+  margin: 0 6px; // ✅ Increased margin for better visual separation
 }

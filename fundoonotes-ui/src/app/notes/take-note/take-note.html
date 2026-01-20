@@ -1,72 +1,130 @@
 <div class="take-note-wrapper">
-  <div class="take-note" [class.expanded]="isExpanded">
-    <!-- COLLAPSED STATE - Simple input with icons -->
+  <div class="take-note-box" [class.expanded]="isExpanded">
+    
+    <!-- COLLAPSED STATE -->
     <div class="collapsed-view" *ngIf="!isExpanded" (click)="expand()">
-      <span class="placeholder">Take a note...</span>
-      <div class="quick-actions">
-        <button class="icon-btn" aria-label="New list with checkboxes">
+      <span class="input-placeholder">Take a note...</span>
+      <div class="quick-icons">
+        <button type="button" class="icon-button" (click)="expand(); $event.stopPropagation()" aria-label="New list with checkboxes">
           <span class="material-icons-outlined">check_box</span>
         </button>
-        <button class="icon-btn" aria-label="New note with drawing">
+        <button type="button" class="icon-button" (click)="expand(); $event.stopPropagation()" aria-label="New note with drawing">
           <span class="material-icons-outlined">brush</span>
         </button>
-        <button class="icon-btn" aria-label="New note with image">
+        <button type="button" class="icon-button" (click)="expand(); $event.stopPropagation()" aria-label="New note with image">
           <span class="material-icons-outlined">image</span>
         </button>
       </div>
     </div>
 
-    <!-- EXPANDED STATE - Full form -->
+    <!-- EXPANDED STATE -->
     <div class="expanded-view" *ngIf="isExpanded">
-      <div class="note-header">
+      <!-- Title Row -->
+      <div class="input-row">
         <input 
+          #titleInput
           type="text" 
-          placeholder="Title" 
+          class="title-field" 
+          placeholder="Title"
           [(ngModel)]="title"
-          class="title-input"
         />
-        <button class="icon-btn pin-btn" aria-label="Pin note">
+        <button type="button" class="icon-button pin-button" aria-label="Pin note">
           <span class="material-icons-outlined">push_pin</span>
         </button>
       </div>
 
-      <textarea 
-        placeholder="Take a note..."
-        [(ngModel)]="content"
-        class="content-input"
-        rows="3"
-        autofocus
-      ></textarea>
+      <!-- Content Area -->
+      <div class="content-row">
+        <textarea 
+          #contentInput
+          class="content-field" 
+          placeholder="Take a note..."
+          [(ngModel)]="content"
+          rows="1"
+        ></textarea>
+      </div>
 
-      <div class="note-footer">
-        <div class="toolbar">
-          <button class="icon-btn" aria-label="Remind me">
-            <span class="material-icons-outlined">add_alert</span>
+      <!-- Footer Row -->
+      <div class="footer-row">
+        <div class="toolbar-icons">
+          <!-- Text Formatting Button (Underlined A) -->
+          <button type="button" class="icon-button format-btn" (click)="toggleFormatting()" aria-label="Text formatting options">
+            <span class="format-icon">A</span>
           </button>
-          <button class="icon-btn" aria-label="Collaborator">
-            <span class="material-icons-outlined">person_add</span>
-          </button>
-          <button class="icon-btn" aria-label="Background options">
+          
+          <!-- Background options -->
+          <button type="button" class="icon-button" aria-label="Background options">
             <span class="material-icons-outlined">palette</span>
           </button>
-          <button class="icon-btn" aria-label="Add image">
+          
+          <!-- Remind me -->
+          <button type="button" class="icon-button" aria-label="Remind me">
+            <span class="material-icons-outlined">add_alert</span>
+          </button>
+          
+          <!-- Collaborator -->
+          <button type="button" class="icon-button" aria-label="Collaborator">
+            <span class="material-icons-outlined">person_add</span>
+          </button>
+          
+          
+          
+          <!-- Add image -->
+          <button type="button" class="icon-button" aria-label="Add image">
             <span class="material-icons-outlined">image</span>
           </button>
-          <button class="icon-btn" aria-label="Archive">
+          
+          <!-- Archive -->
+          <button type="button" class="icon-button" aria-label="Archive">
             <span class="material-icons-outlined">archive</span>
           </button>
-          <button class="icon-btn" aria-label="More">
+          
+          <!-- More options -->
+          <button type="button" class="icon-button" aria-label="More">
             <span class="material-icons-outlined">more_vert</span>
           </button>
-          <button class="icon-btn" aria-label="Undo">
+          
+          <!-- Undo -->
+          <button type="button" class="icon-button" aria-label="Undo">
             <span class="material-icons-outlined">undo</span>
           </button>
-          <button class="icon-btn" aria-label="Redo">
+          
+          <!-- Redo -->
+          <button type="button" class="icon-button" aria-label="Redo">
             <span class="material-icons-outlined">redo</span>
           </button>
         </div>
-        <button class="close-btn" (click)="close()">Close</button>
+        
+        <button type="button" class="close-btn" (click)="close()">Close</button>
+      </div>
+
+      <!-- Formatting Toolbar (shown when format button is clicked) -->
+      <div class="formatting-toolbar" *ngIf="showFormatting">
+        <button type="button" class="format-option" (click)="applyFormat('h1')" aria-label="Heading 1">
+          <span class="format-label">H1</span>
+        </button>
+        <button type="button" class="format-option" (click)="applyFormat('h2')" aria-label="Heading 2">
+          <span class="format-label">H2</span>
+        </button>
+        <button type="button" class="format-option" (click)="applyFormat('normal')" aria-label="Normal text">
+          <span class="format-label">Aa</span>
+        </button>
+        <div class="format-divider"></div>
+        <button type="button" class="format-option" (click)="applyFormat('bold')" aria-label="Bold">
+          <span class="material-icons-outlined">format_bold</span>
+        </button>
+        <button type="button" class="format-option" (click)="applyFormat('italic')" aria-label="Italic">
+          <span class="material-icons-outlined">format_italic</span>
+        </button>
+        <button type="button" class="format-option" (click)="applyFormat('underline')" aria-label="Underline">
+          <span class="material-icons-outlined">format_underlined</span>
+        </button>
+        <div class="format-divider"></div>
+        <button type="button" class="format-option" (click)="applyFormat('clear')" aria-label="Clear formatting">
+          <span class="material-icons-outlined">format_clear</span>
+        </button>
       </div>
     </div>
+
   </div>
 </div>
