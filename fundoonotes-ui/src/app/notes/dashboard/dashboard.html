@@ -1,20 +1,39 @@
 <div class="dashboard-container">
   <app-take-note (save)="addNote($event)"></app-take-note>
 
-  <div class="notes-grid" *ngIf="notes.length > 0">
-    <app-note-card 
-      *ngFor="let note of notes"
-      [note]="note"
-      (delete)="deleteNote($event)"
-      (update)="updateNote($event)">
-    </app-note-card>
-  </div>
 
-  <div class="no-notes" *ngIf="notes.length === 0 && !isLoading">
-    <p>No notes yet. Create your first note!</p>
-  </div>
+  @if (notes.length > 0) {
+    <div class="notes-grid">
+      <app-note-card 
+        *ngFor="let note of notes"
+        [note]="note"
+        (delete)="deleteNote($event)"
+        (noteClick)="openNoteForEdit($event)">
+      </app-note-card>
+    </div>
+  }
 
-  <div class="loading" *ngIf="isLoading">
-    <p>Loading notes...</p>
-  </div>
+
+  @if (notes.length === 0 && !isLoading) {
+    <div class="no-notes">
+      <p>No notes yet. Create your first note!</p>
+    </div>
+  }
+
+
+  @if (isLoading) {
+    <div class="loading">
+      <p>Loading notes...</p>
+    </div>
+  }
+
+
+  <!-- Edit Modal -->
+  @if (selectedNote) {
+    <app-edit-note-modal
+      [note]="selectedNote"
+      (save)="updateNote($event)"
+      (close)="closeEditModal()">
+    </app-edit-note-modal>
+  }
 </div>

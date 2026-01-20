@@ -1,0 +1,27 @@
+<div class="modal-backdrop" #modalBackdrop (click)="onBackdropClick($event)">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="note-input">
+      <input 
+        type="text" 
+        [(ngModel)]="title"
+        placeholder="Title"
+        class="note-title-input"
+        autocomplete="off"
+      />
+      
+      <textarea 
+        [(ngModel)]="content"
+        placeholder="Take a note..."
+        class="note-content-input"
+        rows="5"
+        autocomplete="off"
+      ></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="close-btn" (click)="handleClose()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
