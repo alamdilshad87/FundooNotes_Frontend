@@ -1,130 +1,115 @@
-<div class="take-note-wrapper">
-  <div class="take-note-box" [class.expanded]="isExpanded">
-    
-    <!-- COLLAPSED STATE -->
-    <div class="collapsed-view" *ngIf="!isExpanded" (click)="expand()">
-      <span class="input-placeholder">Take a note...</span>
-      <div class="quick-icons">
-        <button type="button" class="icon-button" (click)="expand(); $event.stopPropagation()" aria-label="New list with checkboxes">
+<div class="take-note-container">
+  @if (!isExpanded) {
+    <div class="collapsed-input" (click)="expand()">
+      <span class="placeholder">Take a note...</span>
+      <div class="collapsed-icons">
+        <button class="icon-btn" title="New list" type="button">
           <span class="material-icons-outlined">check_box</span>
         </button>
-        <button type="button" class="icon-button" (click)="expand(); $event.stopPropagation()" aria-label="New note with drawing">
-          <span class="material-icons-outlined">brush</span>
-        </button>
-        <button type="button" class="icon-button" (click)="expand(); $event.stopPropagation()" aria-label="New note with image">
+        <button class="icon-btn" title="New note with image" type="button">
           <span class="material-icons-outlined">image</span>
         </button>
       </div>
     </div>
+  }
 
-    <!-- EXPANDED STATE -->
-    <div class="expanded-view" *ngIf="isExpanded">
-      <!-- Title Row -->
-      <div class="input-row">
-        <input 
-          #titleInput
-          type="text" 
-          class="title-field" 
+  @if (isExpanded) {
+    <div class="note-input-container" #noteContainer>
+      <div class="note-input">
+        <div
+          #titleEditor
+          class="note-title-input"
+          contenteditable="true"
+          (input)="onTitleInput($event)"
           placeholder="Title"
-          [(ngModel)]="title"
-        />
-        <button type="button" class="icon-button pin-button" aria-label="Pin note">
-          <span class="material-icons-outlined">push_pin</span>
-        </button>
-      </div>
-
-      <!-- Content Area -->
-      <div class="content-row">
-        <textarea 
-          #contentInput
-          class="content-field" 
-          placeholder="Take a note..."
-          [(ngModel)]="content"
-          rows="1"
-        ></textarea>
-      </div>
-
-      <!-- Footer Row -->
-      <div class="footer-row">
-        <div class="toolbar-icons">
-          <!-- Text Formatting Button (Underlined A) -->
-          <button type="button" class="icon-button format-btn" (click)="toggleFormatting()" aria-label="Text formatting options">
-            <span class="format-icon">A</span>
-          </button>
-          
-          <!-- Background options -->
-          <button type="button" class="icon-button" aria-label="Background options">
-            <span class="material-icons-outlined">palette</span>
-          </button>
-          
-          <!-- Remind me -->
-          <button type="button" class="icon-button" aria-label="Remind me">
-            <span class="material-icons-outlined">add_alert</span>
-          </button>
-          
-          <!-- Collaborator -->
-          <button type="button" class="icon-button" aria-label="Collaborator">
-            <span class="material-icons-outlined">person_add</span>
-          </button>
-          
-          
-          
-          <!-- Add image -->
-          <button type="button" class="icon-button" aria-label="Add image">
-            <span class="material-icons-outlined">image</span>
-          </button>
-          
-          <!-- Archive -->
-          <button type="button" class="icon-button" aria-label="Archive">
-            <span class="material-icons-outlined">archive</span>
-          </button>
-          
-          <!-- More options -->
-          <button type="button" class="icon-button" aria-label="More">
-            <span class="material-icons-outlined">more_vert</span>
-          </button>
-          
-          <!-- Undo -->
-          <button type="button" class="icon-button" aria-label="Undo">
-            <span class="material-icons-outlined">undo</span>
-          </button>
-          
-          <!-- Redo -->
-          <button type="button" class="icon-button" aria-label="Redo">
-            <span class="material-icons-outlined">redo</span>
-          </button>
-        </div>
+          role="textbox"
+          aria-label="Title"
+        ></div>
         
-        <button type="button" class="close-btn" (click)="close()">Close</button>
+        <div
+          #contentEditor
+          class="note-content-input"
+          contenteditable="true"
+          (input)="onContentInput($event)"
+          placeholder="Take a note..."
+          role="textbox"
+          aria-label="Note content"
+        ></div>
       </div>
 
-      <!-- Formatting Toolbar (shown when format button is clicked) -->
-      <div class="formatting-toolbar" *ngIf="showFormatting">
-        <button type="button" class="format-option" (click)="applyFormat('h1')" aria-label="Heading 1">
-          <span class="format-label">H1</span>
-        </button>
-        <button type="button" class="format-option" (click)="applyFormat('h2')" aria-label="Heading 2">
-          <span class="format-label">H2</span>
-        </button>
-        <button type="button" class="format-option" (click)="applyFormat('normal')" aria-label="Normal text">
-          <span class="format-label">Aa</span>
-        </button>
-        <div class="format-divider"></div>
-        <button type="button" class="format-option" (click)="applyFormat('bold')" aria-label="Bold">
+      <!-- Formatting Toolbar -->
+      <div class="formatting-toolbar">
+        <button 
+          class="format-btn" 
+          (click)="formatText('bold')"
+          title="Bold"
+          type="button">
           <span class="material-icons-outlined">format_bold</span>
         </button>
-        <button type="button" class="format-option" (click)="applyFormat('italic')" aria-label="Italic">
+        <button 
+          class="format-btn" 
+          (click)="formatText('italic')"
+          title="Italic"
+          type="button">
           <span class="material-icons-outlined">format_italic</span>
         </button>
-        <button type="button" class="format-option" (click)="applyFormat('underline')" aria-label="Underline">
+        <button 
+          class="format-btn" 
+          (click)="formatText('underline')"
+          title="Underline"
+          type="button">
           <span class="material-icons-outlined">format_underlined</span>
         </button>
-        <div class="format-divider"></div>
-        <button type="button" class="format-option" (click)="applyFormat('clear')" aria-label="Clear formatting">
-          <span class="material-icons-outlined">format_clear</span>
+        <button 
+          class="format-btn" 
+          (click)="formatText('strikeThrough')"
+          title="Strikethrough"
+          type="button">
+          <span class="material-icons-outlined">strikethrough_s</span>
+        </button>
+
+        <div class="toolbar-divider"></div>
+
+        <button 
+          class="format-btn" 
+          (click)="formatText('insertUnorderedList')"
+          title="Bulleted list"
+          type="button">
+          <span class="material-icons-outlined">format_list_bulleted</span>
+        </button>
+        <button 
+          class="format-btn" 
+          (click)="formatText('insertOrderedList')"
+          title="Numbered list"
+          type="button">
+          <span class="material-icons-outlined">format_list_numbered</span>
+        </button>
+      </div>
+
+      <div class="note-actions">
+        <button class="action-btn" title="Remind me" type="button">
+          <span class="material-icons-outlined">add_alert</span>
+        </button>
+        <button class="action-btn" title="Collaborator" type="button">
+          <span class="material-icons-outlined">person_add</span>
+        </button>
+        <button class="action-btn" title="Background options" type="button">
+          <span class="material-icons-outlined">palette</span>
+        </button>
+        <button class="action-btn" title="Add image" type="button">
+          <span class="material-icons-outlined">image</span>
+        </button>
+        <button class="action-btn" title="Archive" type="button">
+          <span class="material-icons-outlined">archive</span>
+        </button>
+        <button class="action-btn" title="More" type="button">
+          <span class="material-icons-outlined">more_vert</span>
+        </button>
+        
+        <button class="close-btn" (click)="close()" type="button">
+          Close
         </button>
       </div>
     </div>
-
-  </div>
+  }
 </div>

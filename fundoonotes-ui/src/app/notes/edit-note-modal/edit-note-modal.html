@@ -1,25 +1,78 @@
 <div class="modal-backdrop" #modalBackdrop (click)="onBackdropClick($event)">
   <div class="modal-container" (click)="$event.stopPropagation()">
     <div class="note-input">
-      <input 
-        type="text" 
-        [(ngModel)]="title"
-        placeholder="Title"
+      <div
+        #titleEditor
         class="note-title-input"
-        autocomplete="off"
-      />
+        contenteditable="true"
+        (input)="onTitleInput($event)"
+        placeholder="Title"
+        role="textbox"
+        aria-label="Title"
+      ></div>
       
-      <textarea 
-        [(ngModel)]="content"
-        placeholder="Take a note..."
+      <div
+        #contentEditor
         class="note-content-input"
-        rows="5"
-        autocomplete="off"
-      ></textarea>
+        contenteditable="true"
+        (input)="onContentInput($event)"
+        placeholder="Take a note..."
+        role="textbox"
+        aria-label="Note content"
+      ></div>
+    </div>
+
+    <!-- Formatting Toolbar -->
+    <div class="formatting-toolbar">
+      <button 
+        class="format-btn" 
+        (click)="formatText('bold')"
+        title="Bold"
+        type="button">
+        <span class="material-icons-outlined">format_bold</span>
+      </button>
+      <button 
+        class="format-btn" 
+        (click)="formatText('italic')"
+        title="Italic"
+        type="button">
+        <span class="material-icons-outlined">format_italic</span>
+      </button>
+      <button 
+        class="format-btn" 
+        (click)="formatText('underline')"
+        title="Underline"
+        type="button">
+        <span class="material-icons-outlined">format_underlined</span>
+      </button>
+      <button 
+        class="format-btn" 
+        (click)="formatText('strikeThrough')"
+        title="Strikethrough"
+        type="button">
+        <span class="material-icons-outlined">strikethrough_s</span>
+      </button>
+
+      <div class="toolbar-divider"></div>
+
+      <button 
+        class="format-btn" 
+        (click)="formatText('insertUnorderedList')"
+        title="Bulleted list"
+        type="button">
+        <span class="material-icons-outlined">format_list_bulleted</span>
+      </button>
+      <button 
+        class="format-btn" 
+        (click)="formatText('insertOrderedList')"
+        title="Numbered list"
+        type="button">
+        <span class="material-icons-outlined">format_list_numbered</span>
+      </button>
     </div>
 
     <div class="modal-footer">
-      <button class="close-btn" (click)="handleClose()">
+      <button class="close-btn" (click)="handleClose()" type="button">
         Close
       </button>
     </div>

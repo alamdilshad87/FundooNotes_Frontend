@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -16,6 +16,8 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
   @Output() save = new EventEmitter<any>();
   
   @ViewChild('modalBackdrop') modalBackdrop!: ElementRef;
+  @ViewChild('titleEditor') titleEditor!: ElementRef;
+  @ViewChild('contentEditor') contentEditor!: ElementRef;
 
 
   title: string = '';
@@ -23,7 +25,6 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
   color: string = 'white';
 
 
-  // ✅ FIX: Use ngOnInit instead of ngAfterViewInit for data initialization
   ngOnInit(): void {
     console.log('Modal received note:', this.note);
     if (this.note) {
@@ -33,8 +34,32 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
     }
   }
 
+
   ngAfterViewInit(): void {
-    // Keep this empty or use for DOM-related operations only
+    // Set innerHTML after view is initialized
+    if (this.titleEditor && this.title) {
+      this.titleEditor.nativeElement.innerHTML = this.title;
+    }
+    if (this.contentEditor && this.content) {
+      this.contentEditor.nativeElement.innerHTML = this.content;
+    }
+  }
+
+
+  onTitleInput(event: Event): void {
+    const target = event.target as HTMLElement;
+    this.title = target.innerHTML;
+  }
+
+
+  onContentInput(event: Event): void {
+    const target = event.target as HTMLElement;
+    this.content = target.innerHTML;
+  }
+
+
+  formatText(command: string): void {
+    document.execCommand(command, false, undefined);
   }
 
 
@@ -46,10 +71,9 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
 
 
   saveAndClose(): void {
-    // ✅ FIX: Always include noteId in the updated note object
     if (this.title !== this.note.title || this.content !== this.note.content) {
       const updatedNote = {
-        noteId: this.note.noteId,  // ✅ Include noteId
+        noteId: this.note.noteId,
         title: this.title,
         content: this.content,
         color: this.color

@@ -1,7 +1,7 @@
 <div class="note-card" (click)="onNoteClick()">
   @if (note.title) {
     <div class="card-header">
-      <h3 class="card-title">{{ note.title }}</h3>
+      <h3 class="card-title" [innerHTML]="note.title"></h3>
       <button class="pin-btn" (click)="$event.stopPropagation()">
         <span class="material-icons-outlined">push_pin</span>
       </button>
@@ -9,7 +9,7 @@
   }
 
 
-  <p class="card-content">{{ note.content }}</p>
+  <p class="card-content" [innerHTML]="note.content"></p>
 
 
   <div class="card-actions" (click)="$event.stopPropagation()">
