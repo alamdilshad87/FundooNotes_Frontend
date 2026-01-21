@@ -54,8 +54,8 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     console.log('Modal received note:', this.note);
     if (this.note) {
-      this.title = this.note.title || '';
-      this.content = this.note.content || '';
+      this.title = this.note.title;
+      this.content = this.note.content;
       this.color = this.note.color || 'transparent';
     }
   }
@@ -134,14 +134,18 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
       this.save.emit(updatedNote);
     } else {
       console.log('No changes detected, closing without save');
+      this.close.emit();
     }
-    this.close.emit();
   }
 
   handleClose(): void {
     this.saveAndClose();
   }
+
+  // FIXED: Return white background for transparent notes
   getBackgroundStyle(): any {
-    return { 'background-color': this.color };
+    return {
+      'background-color': this.color === 'transparent' ? '#ffffff' : this.color
+    };
   }
 }

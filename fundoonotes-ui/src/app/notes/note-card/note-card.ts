@@ -12,11 +12,12 @@ import { LabelSelectorComponent } from '../label-selector/label-selector';
 export class NoteCardComponent {
   @Input() note: any;
   @Input() isColorPickerOpen: boolean = false;
+
   @Output() delete = new EventEmitter<number>();
   @Output() archive = new EventEmitter<number>();
   @Output() togglePin = new EventEmitter<number>();
   @Output() noteClick = new EventEmitter<any>();
-  @Output() updateColor = new EventEmitter<{noteId: number, color: string}>();
+  @Output() updateColor = new EventEmitter<{ noteId: number; color: string }>();
   @Output() toggleColorPicker = new EventEmitter<number>();
   @Output() noteUpdated = new EventEmitter<void>();
 
@@ -51,7 +52,7 @@ export class NoteCardComponent {
 
   onTogglePin(event: Event): void {
     event.stopPropagation();
-    console.log('📌 Toggling pin for note:', this.note.noteId);
+    console.log('Toggling pin for note:', this.note.noteId);
     this.togglePin.emit(this.note.noteId);
   }
 
@@ -62,13 +63,16 @@ export class NoteCardComponent {
 
   selectColor(colorValue: string, event: Event): void {
     event.stopPropagation();
-    console.log('🎨 Color selected:', colorValue, 'for note:', this.note.noteId);
+    console.log('Color selected:', colorValue, 'for note:', this.note.noteId);
     this.updateColor.emit({ noteId: this.note.noteId, color: colorValue });
   }
 
+  // FIXED: Return white background for transparent notes
   getBackgroundStyle(): any {
     const color = this.note.color || 'transparent';
-    return { 'background-color': color === 'transparent' ? '#fff' : color };
+    return {
+      'background-color': color === 'transparent' ? '#fff' : color
+    };
   }
 
   onLabelsChanged(): void {

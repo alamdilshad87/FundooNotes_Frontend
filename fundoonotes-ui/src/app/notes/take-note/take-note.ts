@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class TakeNoteComponent {
   @Output() save = new EventEmitter<any>();
+
   @ViewChild('titleEditor') titleEditor!: ElementRef;
   @ViewChild('contentEditor') contentEditor!: ElementRef;
   @ViewChild('noteContainer') noteContainer!: ElementRef;
@@ -21,7 +22,7 @@ export class TakeNoteComponent {
   title: string = '';
   content: string = '';
   color: string = 'transparent';
-  isPinned: boolean = false; // ✅ ADD THIS
+  isPinned: boolean = false;
 
   // Track active formatting states
   isBold = false;
@@ -78,33 +79,32 @@ export class TakeNoteComponent {
       title: this.title.trim(),
       content: this.content.trim(),
       color: this.color,
-      isPinned: this.isPinned, // ✅ ADD THIS
+      isPinned: this.isPinned,
       isArchived: false
     };
 
     if (noteData.title || noteData.content) {
-      console.log('📝 Saving note:', noteData);
+      console.log('Saving note:', noteData);
       this.save.emit(noteData);
       this.resetForm();
     }
   }
 
-  // ✅ ADD THIS METHOD - Toggle Pin
+  // Toggle Pin
   togglePin(event: Event): void {
     event.stopPropagation();
     this.isPinned = !this.isPinned;
-    console.log('📌 Pin toggled in take-note:', this.isPinned);
+    console.log('Pin toggled in take-note:', this.isPinned);
   }
 
   archiveNote(event: Event): void {
     event.stopPropagation();
-
-    console.log('📦 Archive button clicked!');
-    console.log('📦 Title:', this.title);
-    console.log('📦 Content:', this.content);
+    console.log('Archive button clicked!');
+    console.log('Title:', this.title);
+    console.log('Content:', this.content);
 
     if (!this.title.trim() && !this.content.trim()) {
-      console.log('⚠️ Empty note - not archiving');
+      console.log('Empty note - not archiving');
       return;
     }
 
@@ -112,11 +112,11 @@ export class TakeNoteComponent {
       title: this.title.trim(),
       content: this.content.trim(),
       color: this.color,
-      isPinned: false, // ✅ Archived notes shouldn't be pinned
+      isPinned: false,
       isArchived: true
     };
 
-    console.log('📦 Emitting archived note:', noteData);
+    console.log('Emitting archived note:', noteData);
     this.save.emit(noteData);
     this.resetForm();
     this.isExpanded = false;
@@ -126,7 +126,7 @@ export class TakeNoteComponent {
     this.title = '';
     this.content = '';
     this.color = 'transparent';
-    this.isPinned = false; // ✅ RESET PIN STATE
+    this.isPinned = false;
 
     if (this.titleEditor) {
       this.titleEditor.nativeElement.innerHTML = '';
@@ -183,7 +183,10 @@ export class TakeNoteComponent {
     }
   }
 
+  // FIXED: Return white background for transparent notes
   getBackgroundStyle(): any {
-    return { 'background-color': this.color };
+    return {
+      'background-color': this.color === 'transparent' ? '#ffffff' : this.color
+    };
   }
 }
