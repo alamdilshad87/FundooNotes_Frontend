@@ -185,6 +185,14 @@
   &:hover {
     background-color: rgba(95, 99, 104, 0.157);
   }
+
+  &.active {
+    background-color: rgba(95, 99, 104, 0.157);
+    
+    .material-icons-outlined {
+      color: #202124;
+    }
+  }
 }
 
 .close-btn {

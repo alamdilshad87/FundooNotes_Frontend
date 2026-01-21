@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, OnInit, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -19,11 +19,21 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
   @ViewChild('titleEditor') titleEditor!: ElementRef;
   @ViewChild('contentEditor') contentEditor!: ElementRef;
 
-
+  showFormattingToolbar = false;
   title: string = '';
   content: string = '';
   color: string = 'white';
 
+  // Track active formatting states
+  isBold = false;
+  isItalic = false;
+  isUnderline = false;
+  isStrikethrough = false;
+
+  @HostListener('document:selectionchange')
+  onSelectionChange(): void {
+    this.updateFormattingStates();
+  }
 
   ngOnInit(): void {
     console.log('Modal received note:', this.note);
@@ -34,9 +44,7 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   ngAfterViewInit(): void {
-    // Set innerHTML after view is initialized
     if (this.titleEditor && this.title) {
       this.titleEditor.nativeElement.innerHTML = this.title;
     }
@@ -45,30 +53,41 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   onTitleInput(event: Event): void {
     const target = event.target as HTMLElement;
     this.title = target.innerHTML;
+    this.updateFormattingStates();
   }
-
 
   onContentInput(event: Event): void {
     const target = event.target as HTMLElement;
     this.content = target.innerHTML;
+    this.updateFormattingStates();
   }
 
+  toggleFormattingToolbar(): void {
+    this.showFormattingToolbar = !this.showFormattingToolbar;
+  }
 
   formatText(command: string): void {
     document.execCommand(command, false, undefined);
+    setTimeout(() => this.updateFormattingStates(), 10);
   }
 
+  updateFormattingStates(): void {
+    if (this.showFormattingToolbar) {
+      this.isBold = document.queryCommandState('bold');
+      this.isItalic = document.queryCommandState('italic');
+      this.isUnderline = document.queryCommandState('underline');
+      this.isStrikethrough = document.queryCommandState('strikeThrough');
+    }
+  }
 
   onBackdropClick(event: MouseEvent): void {
     if (event.target === this.modalBackdrop.nativeElement) {
       this.saveAndClose();
     }
   }
-
 
   saveAndClose(): void {
     if (this.title !== this.note.title || this.content !== this.note.content) {
@@ -85,7 +104,6 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
     }
     this.close.emit();
   }
-
 
   handleClose(): void {
     this.saveAndClose();

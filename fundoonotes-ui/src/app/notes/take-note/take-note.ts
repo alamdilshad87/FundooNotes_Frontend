@@ -16,12 +16,17 @@ export class TakeNoteComponent {
   @ViewChild('contentEditor') contentEditor!: ElementRef;
   @ViewChild('noteContainer') noteContainer!: ElementRef;
 
-
   isExpanded = false;
+  showFormattingToolbar = false;
   title: string = '';
   content: string = '';
   color: string = 'white';
 
+  // Track active formatting states
+  isBold = false;
+  isItalic = false;
+  isUnderline = false;
+  isStrikethrough = false;
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -33,19 +38,22 @@ export class TakeNoteComponent {
     }
   }
 
+  @HostListener('document:selectionchange')
+  onSelectionChange(): void {
+    this.updateFormattingStates();
+  }
 
   expand(): void {
     this.isExpanded = true;
   }
-
 
   close(): void {
     if (this.title.trim() || this.content.trim()) {
       this.saveNote();
     }
     this.isExpanded = false;
+    this.showFormattingToolbar = false;
   }
-
 
   saveNote(): void {
     const noteData = {
@@ -60,7 +68,6 @@ export class TakeNoteComponent {
       this.content = '';
       this.color = 'white';
       
-      // Clear contenteditable divs
       if (this.titleEditor) {
         this.titleEditor.nativeElement.innerHTML = '';
       }
@@ -70,20 +77,33 @@ export class TakeNoteComponent {
     }
   }
 
-
   onTitleInput(event: Event): void {
     const target = event.target as HTMLElement;
     this.title = target.innerHTML;
+    this.updateFormattingStates();
   }
-
 
   onContentInput(event: Event): void {
     const target = event.target as HTMLElement;
     this.content = target.innerHTML;
+    this.updateFormattingStates();
   }
 
+  toggleFormattingToolbar(): void {
+    this.showFormattingToolbar = !this.showFormattingToolbar;
+  }
 
   formatText(command: string): void {
     document.execCommand(command, false, undefined);
+    setTimeout(() => this.updateFormattingStates(), 10);
+  }
+
+  updateFormattingStates(): void {
+    if (this.isExpanded && this.showFormattingToolbar) {
+      this.isBold = document.queryCommandState('bold');
+      this.isItalic = document.queryCommandState('italic');
+      this.isUnderline = document.queryCommandState('underline');
+      this.isStrikethrough = document.queryCommandState('strikeThrough');
+    }
   }
 }
