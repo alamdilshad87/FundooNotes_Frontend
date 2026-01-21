@@ -12,7 +12,7 @@
         role="textbox"
         aria-label="Title"
       ></div>
-      
+
       <div
         #contentEditor
         class="note-content-input"
@@ -28,32 +28,32 @@
 
     @if (showFormattingToolbar) {
       <div class="formatting-toolbar">
-        <button 
-          class="format-btn" 
+        <button
+          class="format-btn"
           [class.active]="isBold"
           (click)="formatText('bold')"
           title="Bold"
           type="button">
           <span class="material-icons-outlined">format_bold</span>
         </button>
-        <button 
-          class="format-btn" 
+        <button
+          class="format-btn"
           [class.active]="isItalic"
           (click)="formatText('italic')"
           title="Italic"
           type="button">
           <span class="material-icons-outlined">format_italic</span>
         </button>
-        <button 
-          class="format-btn" 
+        <button
+          class="format-btn"
           [class.active]="isUnderline"
           (click)="formatText('underline')"
           title="Underline"
           type="button">
           <span class="material-icons-outlined">format_underlined</span>
         </button>
-        <button 
-          class="format-btn" 
+        <button
+          class="format-btn"
           [class.active]="isStrikethrough"
           (click)="formatText('strikeThrough')"
           title="Strikethrough"
@@ -63,15 +63,15 @@
 
         <div class="toolbar-divider"></div>
 
-        <button 
-          class="format-btn" 
+        <button
+          class="format-btn"
           (click)="formatText('insertUnorderedList')"
           title="Bulleted list"
           type="button">
           <span class="material-icons-outlined">format_list_bulleted</span>
         </button>
-        <button 
-          class="format-btn" 
+        <button
+          class="format-btn"
           (click)="formatText('insertOrderedList')"
           title="Numbered list"
           type="button">
@@ -81,24 +81,24 @@
     }
 
     <div class="modal-footer">
-      <button 
-        class="action-btn" 
+      <button
+        class="action-btn"
         [class.active]="showFormattingToolbar"
-        (click)="toggleFormattingToolbar()" 
+        (click)="toggleFormattingToolbar()"
         title="Text formatting options"
         type="button">
         <span class="material-icons-outlined">text_format</span>
       </button>
-      
-      <button 
-        class="action-btn" 
+
+      <button
+        class="action-btn"
         [class.active]="showColorPicker"
-        (click)="toggleColorPicker($event)" 
-        title="Background options" 
+        (click)="toggleColorPicker($event)"
+        title="Background options"
         type="button">
         <span class="material-icons-outlined">palette</span>
       </button>
-      
+
       <button class="close-btn" (click)="handleClose()" type="button">
         Close
       </button>
@@ -118,24 +118,6 @@
               (click)="selectColor(color.value, $event)"
               type="button">
               @if (this.color === color.value) {
-                <span class="material-icons-outlined checkmark">check</span>
-              }
-            </button>
-          }
-        </div>
-        <div class="color-row">
-          @for (pattern of patternColors; track pattern.value) {
-            <button
-              class="color-option pattern-option"
-              [class.selected]="this.color === pattern.value"
-              [style.background]="pattern.gradient || 'white'"
-              [title]="pattern.name"
-              (click)="selectColor(pattern.value, $event)"
-              type="button">
-              @if (pattern.value === 'no-pattern') {
-                <span class="no-pattern-icon">🚫</span>
-              }
-              @if (this.color === pattern.value) {
                 <span class="material-icons-outlined checkmark">check</span>
               }
             </button>

@@ -1,18 +1,19 @@
 <div class="dashboard-container">
   <app-take-note (save)="addNote($event)"></app-take-note>
 
-
   @if (notes.length > 0) {
     <div class="notes-grid">
-      <app-note-card 
+      <app-note-card
         *ngFor="let note of notes"
         [note]="note"
+        [isColorPickerOpen]="openColorPickerNoteId === note.noteId"
         (delete)="deleteNote($event)"
-        (noteClick)="openNoteForEdit($event)">
+        (noteClick)="openNoteForEdit($event)"
+        (updateColor)="updateNoteColor($event)"
+        (toggleColorPicker)="handleColorPickerToggle($event)">
       </app-note-card>
     </div>
   }
-
 
   @if (notes.length === 0 && !isLoading) {
     <div class="no-notes">
@@ -20,13 +21,11 @@
     </div>
   }
 
-
   @if (isLoading) {
     <div class="loading">
       <p>Loading notes...</p>
     </div>
   }
-
 
   <!-- Edit Modal -->
   @if (selectedNote) {

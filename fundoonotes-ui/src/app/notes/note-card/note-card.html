@@ -17,7 +17,11 @@
     <button class="card-action-btn" title="Collaborator">
       <span class="material-icons-outlined">person_add</span>
     </button>
-    <button class="card-action-btn" title="Background options">
+    <button
+      class="card-action-btn"
+      [class.active]="isColorPickerOpen"
+      (click)="onToggleColorPicker($event)"
+      title="Background options">
       <span class="material-icons-outlined">palette</span>
     </button>
     <button class="card-action-btn" title="Add image">
@@ -30,4 +34,26 @@
       <span class="material-icons-outlined">delete</span>
     </button>
   </div>
+
+  <!-- ✅ UPDATED - Uses Input property -->
+  @if (isColorPickerOpen) {
+    <div class="color-picker-popup" (click)="$event.stopPropagation()">
+      <div class="color-row">
+        @for (color of solidColors; track color.value) {
+          <button
+            class="color-option"
+            [class.selected]="this.note.color === color.value"
+            [style.background-color]="color.value"
+            [class.default-color]="color.value === 'transparent'"
+            [title]="color.name"
+            (click)="selectColor(color.value, $event)"
+            type="button">
+            @if (this.note.color === color.value) {
+              <span class="material-icons-outlined checkmark">check</span>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  }
 </div>

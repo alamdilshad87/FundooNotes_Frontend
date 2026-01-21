@@ -5,7 +5,6 @@ import { NoteCardComponent } from '../note-card/note-card';
 import { EditNoteModalComponent } from '../edit-note-modal/edit-note-modal';
 import { NotesService } from '../../core/services/notes';
 
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -17,18 +16,16 @@ export class DashboardComponent implements OnInit {
   notes: any[] = [];
   isLoading = false;
   selectedNote: any = null;
-
+  openColorPickerNoteId: number | null = null; // ✅ ADD THIS
 
   constructor(
     private notesService: NotesService,
     private cdr: ChangeDetectorRef
   ) {}
 
-
   ngOnInit(): void {
     this.loadNotes();
   }
-
 
   loadNotes(): void {
     this.isLoading = true;
@@ -46,7 +43,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
   addNote(noteData: any): void {
     this.notesService.createNote(noteData).subscribe({
       next: (response) => {
@@ -59,7 +55,6 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-
 
   deleteNote(id: number): void {
     this.notesService.deleteNote(id).subscribe({
@@ -74,21 +69,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
   openNoteForEdit(note: any): void {
     console.log('Opening note for edit:', note);
     this.selectedNote = { ...note };
   }
 
-
   closeEditModal(): void {
     this.selectedNote = null;
   }
 
-
   updateNote(updatedNote: any): void {
     console.log('Received updated note:', updatedNote);
-    
+
     const payload = {
       title: updatedNote.title,
       content: updatedNote.content,
@@ -118,5 +110,49 @@ export class DashboardComponent implements OnInit {
         alert('Failed to update note. Please try again.');
       }
     });
+  }
+
+  updateNoteColor(event: {noteId: number, color: string}): void {
+    console.log('🎨 Updating note color:', event);
+
+    const noteToUpdate = this.notes.find(n => n.noteId === event.noteId);
+
+    if (!noteToUpdate) {
+      console.error('❌ Note not found');
+      return;
+    }
+
+    const payload = {
+      title: noteToUpdate.title,
+      content: noteToUpdate.content,
+      color: event.color
+    };
+
+    console.log('📤 Sending payload:', payload);
+
+    this.notesService.updateNote(event.noteId, payload).subscribe({
+      next: (response) => {
+        console.log('✅ Color updated successfully:', response);
+        const note = this.notes.find(n => n.noteId === event.noteId);
+        if (note) {
+          note.color = event.color;
+          console.log('✅ Local note updated with color:', note.color);
+        }
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('❌ Error updating color:', error);
+        alert('Failed to update note color. Please try again.');
+      }
+    });
+  }
+
+  // ✅ ADD THIS METHOD
+  handleColorPickerToggle(noteId: number): void {
+    if (this.openColorPickerNoteId === noteId) {
+      this.openColorPickerNoteId = null; // Close if same note clicked
+    } else {
+      this.openColorPickerNoteId = noteId; // Open for this note, close others
+    }
   }
 }

@@ -13,7 +13,7 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
   @Input() note: any;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
-  
+
   @ViewChild('modalBackdrop') modalBackdrop!: ElementRef;
   @ViewChild('titleEditor') titleEditor!: ElementRef;
   @ViewChild('contentEditor') contentEditor!: ElementRef;
@@ -44,19 +44,6 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
     { name: 'Blossom', value: '#fdcfe8' },
     { name: 'Clay', value: '#e6c9a8' },
     { name: 'Chalk', value: '#e8eaed' }
-  ];
-
-  patternColors = [
-    { name: 'None', value: 'no-pattern', icon: '🚫' },
-    { name: 'Celebration', value: 'pattern-celebration', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-    { name: 'Lines', value: 'pattern-lines', gradient: 'repeating-linear-gradient(45deg, #fce4ec, #fce4ec 10px, #f8bbd0 10px, #f8bbd0 20px)' },
-    { name: 'Waves', value: 'pattern-waves', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)' },
-    { name: 'Places', value: 'pattern-places', gradient: 'linear-gradient(to right, #fa709a 0%, #fee140 100%)' },
-    { name: 'Desert', value: 'pattern-desert', gradient: 'linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%)' },
-    { name: 'Garden', value: 'pattern-garden', gradient: 'linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)' },
-    { name: 'Beach', value: 'pattern-beach', gradient: 'linear-gradient(to top, #a8edea 0%, #fed6e3 100%)' },
-    { name: 'Groceries', value: 'pattern-groceries', gradient: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' },
-    { name: 'Festival', value: 'pattern-festival', gradient: 'linear-gradient(to right, #ff6a88, #ff99ac)' }
   ];
 
   @HostListener('document:selectionchange')
@@ -154,11 +141,7 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
   handleClose(): void {
     this.saveAndClose();
   }
-
   getBackgroundStyle(): any {
-    if (this.color.startsWith('linear-gradient') || this.color.startsWith('repeating-linear-gradient')) {
-      return { background: this.color };
-    }
     return { 'background-color': this.color };
   }
 }
