@@ -12,7 +12,8 @@ export class NoteCardComponent {
   @Input() note: any;
   @Input() isColorPickerOpen: boolean = false;
   @Output() delete = new EventEmitter<number>();
-  @Output() archive = new EventEmitter<number>(); // ✅ ADD THIS LINE
+  @Output() archive = new EventEmitter<number>();
+  @Output() togglePin = new EventEmitter<number>(); // ✅ ADD THIS
   @Output() noteClick = new EventEmitter<any>();
   @Output() updateColor = new EventEmitter<{noteId: number, color: string}>();
   @Output() toggleColorPicker = new EventEmitter<number>();
@@ -41,10 +42,16 @@ export class NoteCardComponent {
     this.delete.emit(this.note.noteId);
   }
 
-  // ✅ ADD THIS METHOD
   onArchive(event: Event): void {
     event.stopPropagation();
     this.archive.emit(this.note.noteId);
+  }
+
+  // ✅ ADD THIS METHOD
+  onTogglePin(event: Event): void {
+    event.stopPropagation();
+    console.log('📌 Toggling pin for note:', this.note.noteId);
+    this.togglePin.emit(this.note.noteId);
   }
 
   onToggleColorPicker(event: Event): void {

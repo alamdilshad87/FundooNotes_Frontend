@@ -21,6 +21,7 @@ export class TakeNoteComponent {
   title: string = '';
   content: string = '';
   color: string = 'transparent';
+  isPinned: boolean = false; // ✅ ADD THIS
 
   // Track active formatting states
   isBold = false;
@@ -77,17 +78,24 @@ export class TakeNoteComponent {
       title: this.title.trim(),
       content: this.content.trim(),
       color: this.color,
-      isArchived: false // ✅ Normal note
+      isPinned: this.isPinned, // ✅ ADD THIS
+      isArchived: false
     };
 
     if (noteData.title || noteData.content) {
-      console.log('📝 Saving normal note:', noteData);
+      console.log('📝 Saving note:', noteData);
       this.save.emit(noteData);
       this.resetForm();
     }
   }
 
-  // ✅ ADD THIS METHOD - Archive Note
+  // ✅ ADD THIS METHOD - Toggle Pin
+  togglePin(event: Event): void {
+    event.stopPropagation();
+    this.isPinned = !this.isPinned;
+    console.log('📌 Pin toggled in take-note:', this.isPinned);
+  }
+
   archiveNote(event: Event): void {
     event.stopPropagation();
 
@@ -104,7 +112,8 @@ export class TakeNoteComponent {
       title: this.title.trim(),
       content: this.content.trim(),
       color: this.color,
-      isArchived: true // ✅ Archived note
+      isPinned: false, // ✅ Archived notes shouldn't be pinned
+      isArchived: true
     };
 
     console.log('📦 Emitting archived note:', noteData);
@@ -117,6 +126,7 @@ export class TakeNoteComponent {
     this.title = '';
     this.content = '';
     this.color = 'transparent';
+    this.isPinned = false; // ✅ RESET PIN STATE
 
     if (this.titleEditor) {
       this.titleEditor.nativeElement.innerHTML = '';

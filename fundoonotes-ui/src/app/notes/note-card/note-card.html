@@ -2,8 +2,15 @@
   @if (note.title) {
     <div class="card-header">
       <h3 class="card-title">{{ note.title }}</h3>
-      <button class="pin-btn" (click)="$event.stopPropagation()">
-        <span class="material-icons-outlined">push_pin</span>
+      <!-- ✅ PIN BUTTON with filled icon when pinned -->
+      <button
+        class="pin-btn"
+        [class.pinned]="note.isPinned"
+        (click)="onTogglePin($event)"
+        [title]="note.isPinned ? 'Unpin note' : 'Pin note'">
+        <span [class]="note.isPinned ? 'material-icons' : 'material-icons-outlined'">
+          push_pin
+        </span>
       </button>
     </div>
   }
@@ -27,7 +34,6 @@
     <button class="card-action-btn" title="Add image">
       <span class="material-icons-outlined">image</span>
     </button>
-    <!-- ✅ ADD CLICK EVENT HERE -->
     <button class="card-action-btn" (click)="onArchive($event)" title="Archive">
       <span class="material-icons-outlined">archive</span>
     </button>

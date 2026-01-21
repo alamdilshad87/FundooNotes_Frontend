@@ -14,6 +14,8 @@ import { NotesService } from '../../core/services/notes';
 })
 export class DashboardComponent implements OnInit {
   notes: any[] = [];
+  pinnedNotes: any[] = [];
+  unpinnedNotes: any[] = [];
   isLoading = false;
   selectedNote: any = null;
   openColorPickerNoteId: number | null = null;
@@ -32,17 +34,14 @@ export class DashboardComponent implements OnInit {
     this.notesService.getNotes().subscribe({
       next: (response) => {
         console.log('📥 All notes from API:', response);
-        console.log('📊 Total notes:', response.length);
 
         this.notes = response.filter(note => {
           const isDeleted = note.isDeleted ?? note.IsDeleted ?? false;
           const isArchived = note.isArchived ?? note.IsArchived ?? false;
-
           return !isDeleted && !isArchived;
         });
 
-        console.log('✅ Active notes count:', this.notes.length);
-
+        this.separateNotes();
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -53,55 +52,114 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  addNote(noteData: any): void {
-    console.log('🎯 DASHBOARD addNote called with:', noteData);
-    console.log('🎯 isArchived value:', noteData.isArchived);
+  // ✅ Sort pinned notes (newest first) and unpinned notes (newest first)
+  private separateNotes(): void {
+    // Separate pinned and unpinned
+    const pinned = this.notes.filter(note => note.isPinned);
+    const unpinned = this.notes.filter(note => !note.isPinned);
 
-    this.notesService.createNote(noteData).subscribe({
-      next: (response) => {
-        console.log('✅ Note created response:', response);
-
-        if (noteData.isArchived === true) {
-          console.log('📦 Note was archived during creation');
-        } else {
-          console.log('📝 Note was created as normal');
-        }
-
-        this.loadNotes();
-      },
-      error: (error) => {
-        console.error('❌ Error creating note:', error);
-        console.error('❌ Error details:', error.error);
-        alert('Failed to create note. Please try again.');
-      }
+    // ✅ Sort pinned notes by updatedAt (NEWEST FIRST - most recently pinned at top)
+    this.pinnedNotes = pinned.sort((a, b) => {
+      const dateA = new Date(a.updatedAt || a.createdAt).getTime();
+      const dateB = new Date(b.updatedAt || b.createdAt).getTime();
+      return dateB - dateA; // Descending order (newest first)
     });
+
+    // Sort unpinned notes by updatedAt (newest first)
+    this.unpinnedNotes = unpinned.sort((a, b) => {
+      const dateA = new Date(a.updatedAt || a.createdAt).getTime();
+      const dateB = new Date(b.updatedAt || b.createdAt).getTime();
+      return dateB - dateA; // Descending order (newest first)
+    });
+
+    console.log('📌 Pinned:', this.pinnedNotes.length, '📝 Unpinned:', this.unpinnedNotes.length);
   }
 
+  addNote(noteData: any): void {
+  console.log('🎯 DASHBOARD addNote called with:', noteData);
+  console.log('📌 isPinned:', noteData.isPinned);
+
+  this.notesService.createNote(noteData).subscribe({
+    next: (response) => {
+      console.log('✅ Note created response:', response);
+
+      // ✅ FIX: Reload notes to get proper data from backend
+      this.loadNotes();
+    },
+    error: (error) => {
+      console.error('❌ Error creating note:', error);
+      alert('Failed to create note. Please try again.');
+    }
+  });
+}
+
+
   deleteNote(id: number): void {
+    // Optimistic update - remove from UI immediately
+    this.notes = this.notes.filter(note => note.noteId !== id);
+    this.separateNotes();
+    this.cdr.detectChanges();
+
+    // Then call backend
     this.notesService.deleteNote(id).subscribe({
       next: () => {
         console.log('✅ Note moved to trash');
-        this.notes = this.notes.filter(note => note.noteId !== id);
-        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('❌ Error moving note to trash:', error);
         alert('Failed to move note to trash. Please try again.');
+        this.loadNotes(); // Reload on error to restore state
       }
     });
   }
 
   archiveNote(id: number): void {
-    console.log('📦 Archiving existing note:', id);
+    console.log('📦 Archiving note:', id);
+
+    // Optimistic update - remove from UI immediately
+    this.notes = this.notes.filter(note => note.noteId !== id);
+    this.separateNotes();
+    this.cdr.detectChanges();
+
+    // Then call backend
     this.notesService.toggleArchive(id).subscribe({
       next: () => {
         console.log('✅ Note archived successfully');
-        this.notes = this.notes.filter(note => note.noteId !== id);
-        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('❌ Error archiving note:', error);
         alert('Failed to archive note. Please try again.');
+        this.loadNotes(); // Reload on error to restore state
+      }
+    });
+  }
+
+  togglePin(id: number): void {
+    console.log('📌 Toggling pin for note:', id);
+
+    // Optimistic update - toggle immediately in UI
+    const note = this.notes.find(n => n.noteId === id);
+    if (note) {
+      note.isPinned = !note.isPinned;
+      note.updatedAt = new Date().toISOString(); // Update timestamp for proper sorting
+      this.separateNotes(); // Re-separate and sort
+      this.cdr.detectChanges();
+    }
+
+    // Then call backend
+    this.notesService.togglePin(id).subscribe({
+      next: () => {
+        console.log('✅ Pin toggled successfully');
+      },
+      error: (error) => {
+        console.error('❌ Error toggling pin:', error);
+        alert('Failed to toggle pin. Please try again.');
+        // Revert optimistic update on error
+        if (note) {
+          note.isPinned = !note.isPinned;
+          this.separateNotes();
+          this.cdr.detectChanges();
+        }
       }
     });
   }
@@ -133,8 +191,19 @@ export class DashboardComponent implements OnInit {
     this.notesService.updateNote(noteId, payload).subscribe({
       next: (response) => {
         console.log('✅ Note updated successfully:', response);
+
+        // Update local note immediately
+        const note = this.notes.find(n => n.noteId === noteId);
+        if (note) {
+          note.title = updatedNote.title;
+          note.content = updatedNote.content;
+          note.color = updatedNote.color;
+          note.updatedAt = new Date().toISOString(); // Update timestamp
+          this.separateNotes(); // Re-sort after update
+          this.cdr.detectChanges();
+        }
+
         this.closeEditModal();
-        this.loadNotes();
       },
       error: (error) => {
         console.error('❌ Error updating note:', error);
@@ -151,24 +220,28 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
+    // Optimistic update - change color immediately
+    const oldColor = noteToUpdate.color;
+    noteToUpdate.color = event.color;
+    this.cdr.detectChanges();
+
     const payload = {
       title: noteToUpdate.title,
       content: noteToUpdate.content,
       color: event.color
     };
 
+    // Then call backend
     this.notesService.updateNote(event.noteId, payload).subscribe({
       next: (response) => {
         console.log('✅ Color updated successfully');
-        const note = this.notes.find(n => n.noteId === event.noteId);
-        if (note) {
-          note.color = event.color;
-        }
-        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('❌ Error updating color:', error);
         alert('Failed to update note color. Please try again.');
+        // Revert on error
+        noteToUpdate.color = oldColor;
+        this.cdr.detectChanges();
       }
     });
   }

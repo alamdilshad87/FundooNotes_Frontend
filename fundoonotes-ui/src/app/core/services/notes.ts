@@ -47,4 +47,12 @@ export class NotesService {
   toggleArchive(id: number): Observable<any> {
     return this.http.patch(`${this.baseUrl}/${id}/archive`, {});
   }
+
+  // ✅ ADD THIS METHOD
+  togglePin(id: number): Observable<any> {
+    console.log('📌 Sending togglePin request for note:', id);
+    return this.http.patch(`${this.baseUrl}/${id}/pin`, {}).pipe(
+      tap(response => console.log('📌 togglePin response:', response))
+    );
+  }
 }

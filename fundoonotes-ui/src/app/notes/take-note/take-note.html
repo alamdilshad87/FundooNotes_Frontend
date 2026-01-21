@@ -16,17 +16,31 @@
   @if (isExpanded) {
     <div class="note-input-container" #noteContainer [ngStyle]="getBackgroundStyle()">
       <div class="note-input">
-        <div
-          #titleEditor
-          class="note-title-input"
-          contenteditable="true"
-          (input)="onTitleInput($event)"
-          (mouseup)="updateFormattingStates()"
-          (keyup)="updateFormattingStates()"
-          placeholder="Title"
-          role="textbox"
-          aria-label="Title"
-        ></div>
+        <!-- ✅ ADD PIN BUTTON HERE -->
+        <div class="note-header">
+          <div
+            #titleEditor
+            class="note-title-input"
+            contenteditable="true"
+            (input)="onTitleInput($event)"
+            (mouseup)="updateFormattingStates()"
+            (keyup)="updateFormattingStates()"
+            placeholder="Title"
+            role="textbox"
+            aria-label="Title"
+          ></div>
+
+          <button
+            class="pin-btn-create"
+            [class.pinned]="isPinned"
+            (click)="togglePin($event)"
+            [title]="isPinned ? 'Unpin note' : 'Pin note'"
+            type="button">
+            <span [class]="isPinned ? 'material-icons' : 'material-icons-outlined'">
+              push_pin
+            </span>
+          </button>
+        </div>
 
         <div
           #contentEditor
@@ -121,7 +135,6 @@
         <button class="action-btn" title="Add image" type="button">
           <span class="material-icons-outlined">image</span>
         </button>
-        <!-- ✅ ADD CLICK EVENT HERE -->
         <button
           class="action-btn"
           (click)="archiveNote($event)"

@@ -5,7 +5,7 @@
   padding: 12px 16px;
   cursor: pointer;
   transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative; // ✅ This is correct - keep it
+  position: relative;
 
   &:hover {
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
@@ -38,6 +38,7 @@
   padding-right: 8px;
 }
 
+// ✅ PIN BUTTON STYLES - Fixed for filled icon
 .pin-btn {
   background: transparent;
   border: none;
@@ -51,13 +52,25 @@
   transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
               background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  .material-icons-outlined {
+  // Both outlined and filled icons
+  .material-icons-outlined,
+  .material-icons {
     font-size: 18px;
     color: #5f6368;
   }
 
   &:hover {
     background-color: rgba(95, 99, 104, 0.157);
+  }
+
+  // ✅ When pinned - show filled icon, always visible, darker color
+  &.pinned {
+    opacity: 1 !important; // Always visible
+
+    .material-icons {
+      color: #202124; // ✅ Darker gray for filled icon
+      font-weight: 400;
+    }
   }
 }
 
@@ -103,12 +116,12 @@
   }
 }
 
-// Color Picker Popup - Centered & Absolute
+// Color Picker Popup
 .color-picker-popup {
-  position: absolute; // ✅ FIXED - Changed from relative to absolute
-  bottom: -50px; // ✅ Position from bottom of note card
-  left: 50%; // ✅ Center horizontally
-  transform: translateX(-50%); // ✅ Perfect centering
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
@@ -116,7 +129,6 @@
   padding: 6px;
   z-index: 100;
   animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  // ✅ REMOVED: width: max-content, top: 4rem (these were causing issues)
 }
 
 @keyframes fadeIn {
