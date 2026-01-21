@@ -55,19 +55,21 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-
   deleteNote(id: number): void {
+    // ✅ No confirmation - just move to trash silently like Google Keep
     this.notesService.deleteNote(id).subscribe({
       next: () => {
+        // ✅ Remove from current view
         this.notes = this.notes.filter(note => note.noteId !== id);
-        console.log('Note deleted successfully');
+        console.log('Note moved to trash');
       },
       error: (error) => {
-        console.error('Error deleting note:', error);
-        alert('Failed to delete note. Please try again.');
+        console.error('Error moving note to trash:', error);
+        alert('Failed to move note to trash. Please try again.');
       }
     });
   }
+
 
   openNoteForEdit(note: any): void {
     console.log('Opening note for edit:', note);

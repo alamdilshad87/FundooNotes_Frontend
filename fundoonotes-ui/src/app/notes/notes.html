@@ -1,6 +1,11 @@
-<app-header (toggleSidebar)="sidebarCollapsed = !sidebarCollapsed"></app-header>
-
 <div class="notes-layout">
-  <app-sidebar [collapsed]="sidebarCollapsed"></app-sidebar>
-  <app-dashboard class="notes-content"></app-dashboard>
+  <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+
+  <div class="content-wrapper">
+    <app-sidebar [collapsed]="sidebarCollapsed"></app-sidebar>
+
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

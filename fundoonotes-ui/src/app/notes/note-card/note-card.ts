@@ -37,10 +37,10 @@ export class NoteCardComponent {
 
   onDelete(event: Event): void {
     event.stopPropagation();
-    if (confirm('Delete this note?')) {
-      this.delete.emit(this.note.noteId);
-    }
+    // ✅ No confirmation dialog - just like Google Keep
+    this.delete.emit(this.note.noteId);
   }
+
 
   // ✅ UPDATED METHOD
   onToggleColorPicker(event: Event): void {

@@ -1,35 +1,32 @@
-// FORCE Material Icons Outlined (DO NOT REMOVE)
-.material-icons-outlined {
-  font-family: 'Material Icons Outlined' !important;
-  font-weight: normal !important;
-  font-style: normal !important;
-  font-size: 20px;
-  line-height: 1;
-  display: inline-block;
-  text-transform: none !important;
-  letter-spacing: normal !important;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
 .notes-layout {
   display: flex;
-  width: 100%;
-  min-height: calc(100vh - 64px);
-  background: #fff;
-  .notes-content{
-    
-    justify-content: center;
-    width: 100%;
-
-  }
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.content {
+.content-wrapper {
+  display: flex;
   flex: 1;
+}
+
+.main-content {
+  flex: 1;
+  background-color: #fff;
   overflow-y: auto;
-  background: #fff;
+}
+.notes-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  display: flex;
+  flex: 1;
+}
+
+.main-content {
+  flex: 1;
+  background-color: #fff;
+  overflow-y: auto;
 }

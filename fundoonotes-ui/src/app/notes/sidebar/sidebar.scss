@@ -9,44 +9,20 @@
   position: relative;
 }
 
-// COLLAPSED STATE
-.sidebar.collapsed {
-  width: 80px;
-
-  .nav-item {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    padding-left: 12px;
-    padding-right: 12px;
-    margin-left: 16px;
-    margin-right: 16px;
-  }
-
-  .label {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-  }
-}
-
 // NAV
 nav {
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
 
-// NAV ITEM - FIXED LEFT PADDING KEEPS ICON POSITION
+// NAV ITEM WRAPPER - Contains icon in fixed position
 .nav-item {
   height: 48px;
   margin: 0 12px 0 12px;
-  padding-left: 12px;  // NEVER CHANGES - keeps icon at same X position
-  padding-right: 24px;
-  padding-top: 0;
-  padding-bottom: 0;
   display: flex;
   align-items: center;
-  gap: 20px;
+  position: relative;  // ✅ For absolute positioning of icon
   border-radius: 0 24px 24px 0;
   cursor: pointer;
   color: #202124;
@@ -55,21 +31,23 @@ nav {
   letter-spacing: 0.01785714em;
   font-family: 'Google Sans', Roboto, Arial, sans-serif;
   line-height: 1.25rem;
-  transition: 
+  user-select: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition:
     background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
     border-radius 195ms cubic-bezier(0.4, 0, 0.6, 1),
     width 195ms cubic-bezier(0.4, 0, 0.6, 1),
-    padding-right 195ms cubic-bezier(0.4, 0, 0.6, 1),
-    margin 195ms cubic-bezier(0.4, 0, 0.6, 1),
-    gap 195ms cubic-bezier(0.4, 0, 0.6, 1);
-  user-select: none;
-  position: relative;
-  text-decoration: none;
-  box-sizing: border-box;
+    margin 195ms cubic-bezier(0.4, 0, 0.6, 1);
 }
 
-// ICON - LOCKED IN POSITION
+// ICON - Absolutely positioned, never moves
 .icon {
+  position: absolute;  // ✅ Take out of flow
+  left: 12px;          // ✅ Always 12px from left edge
+  top: 50%;            // ✅ Vertically centered
+  transform: translateY(-50%);  // ✅ Perfect vertical centering
   width: 24px;
   height: 24px;
   font-size: 20px;
@@ -78,17 +56,21 @@ nav {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  z-index: 1;
 }
 
-// LABEL
+// LABEL - Pushed to the right
 .label {
   white-space: nowrap;
-  flex: 1;
   font-size: 14px;
   line-height: 20px;
-  transition: 
+  padding-left: 48px;  // ✅ Space for icon (12px + 24px + 12px gap)
+  padding-right: 24px;
+  opacity: 1;
+  width: 100%;
+  transition:
     opacity 195ms cubic-bezier(0.4, 0, 0.6, 1),
-    width 195ms cubic-bezier(0.4, 0, 0.6, 1);
+    transform 195ms cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 // HOVER STATE
@@ -99,7 +81,7 @@ nav {
 // ACTIVE STATE
 .nav-item.active {
   background-color: #feefc3;
-  
+
   .icon {
     color: #202124;
   }
@@ -110,13 +92,33 @@ nav {
   outline: none;
 }
 
-// COLLAPSED STATES
-.sidebar.collapsed .nav-item:hover {
-  background-color: #f1f3f4;
-}
+// ========================================
+// COLLAPSED STATE - Icon is LOCKED
+// ========================================
+.sidebar.collapsed {
+  width: 80px;
 
-.sidebar.collapsed .nav-item.active {
-  background-color: #feefc3;
+  .nav-item {
+    width: 48px;          // ✅ Circle size
+    height: 48px;
+    border-radius: 50%;   // ✅ Perfect circle
+    margin-left: 16px;    // ✅ Center in 80px sidebar
+    margin-right: 16px;
+  }
+
+
+  .label {
+    opacity: 0;
+    transform: translateX(-20px);  // ✅ Slide out smoothly
+  }
+
+  .nav-item:hover {
+    background-color: #f1f3f4;
+  }
+
+  .nav-item.active {
+    background-color: #feefc3;
+  }
 }
 
 // RESPONSIVE
