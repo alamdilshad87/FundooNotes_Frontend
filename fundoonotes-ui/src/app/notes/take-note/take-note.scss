@@ -1,44 +1,65 @@
 .take-note-container {
   max-width: 600px;
-  margin: 32px auto;
+  margin: 24px auto;
 }
 
 .collapsed-input {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 12px 16px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
-              0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3),
+              0 4px 8px rgba(60, 64, 67, 0.15);
   cursor: text;
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
-                0 4px 8px 3px rgba(60, 64, 67, 0.15);
+    box-shadow: 0 1px 3px rgba(60, 64, 67, 0.4),
+                0 4px 8px rgba(60, 64, 67, 0.25);
   }
+}
 
-  .placeholder {
+.placeholder {
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.collapsed-icons {
+  display: flex;
+  gap: 4px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  .material-icons-outlined {
+    font-size: 18px;
     color: #5f6368;
-    font-size: 16px;
   }
 
-  .collapsed-icons {
-    display: flex;
-    gap: 4px;
+  &:hover {
+    background-color: rgba(95, 99, 104, 0.157);
   }
 }
 
 .note-input-container {
-  background: #fff;
-  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
-              0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3),
+              0 4px 8px rgba(60, 64, 67, 0.15);
   padding: 16px;
+  background: #ffffff;
+  position: relative;
+  transition: background-color 0.2s ease;
 }
 
 .note-input {
@@ -91,15 +112,15 @@
 }
 
 .note-title-input {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 500;
-  min-height: 24px;
+  min-height: 28px;
 }
 
 .note-content-input {
   font-size: 14px;
   line-height: 20px;
-  min-height: 60px;
+  min-height: 80px;
 }
 
 .formatting-toolbar {
@@ -139,7 +160,8 @@
     background-color: rgba(95, 99, 104, 0.157);
   }
 
-  &:active {
+  &:active,
+  &.active {
     background-color: rgba(95, 99, 104, 0.251);
   }
 }
@@ -154,14 +176,11 @@
 
 .note-actions {
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 4px;
-  padding-top: 4px;
 }
 
-.action-btn,
-.icon-btn {
+.action-btn {
   background: transparent;
   border: none;
   border-radius: 50%;
@@ -205,7 +224,6 @@
   color: #202124;
   cursor: pointer;
   border-radius: 4px;
-  white-space: nowrap;
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
@@ -213,8 +231,107 @@
   }
 }
 
+// Color Picker Popup
+.color-picker-popup {
+  position: absolute;
+  bottom: 60px;
+  left: 16px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+              0 5px 15px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  z-index: 100;
+  animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.color-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.color-option {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.selected {
+    border-color: #5f6368;
+  }
+
+  &.default-color {
+    border: 2px solid #e0e0e0;
+    background: white;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: #d93025;
+      transform: rotate(45deg);
+    }
+  }
+
+  .checkmark {
+    font-size: 18px;
+    color: #000;
+    position: absolute;
+  }
+
+  .no-pattern-icon {
+    font-size: 20px;
+  }
+}
+
+.pattern-option {
+  background-size: cover !important;
+  background-position: center !important;
+}
+
 @media (max-width: 768px) {
   .take-note-container {
     margin: 16px;
+  }
+
+  .color-picker-popup {
+    left: 8px;
+    right: 8px;
+    width: auto;
+  }
+
+  .color-row {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

@@ -1,5 +1,5 @@
 <div class="modal-backdrop" #modalBackdrop (click)="onBackdropClick($event)">
-  <div class="modal-container" (click)="$event.stopPropagation()">
+  <div class="modal-container" (click)="$event.stopPropagation()" [ngStyle]="getBackgroundStyle()">
     <div class="note-input">
       <div
         #titleEditor
@@ -90,9 +90,58 @@
         <span class="material-icons-outlined">text_format</span>
       </button>
       
+      <button 
+        class="action-btn" 
+        [class.active]="showColorPicker"
+        (click)="toggleColorPicker($event)" 
+        title="Background options" 
+        type="button">
+        <span class="material-icons-outlined">palette</span>
+      </button>
+      
       <button class="close-btn" (click)="handleClose()" type="button">
         Close
       </button>
     </div>
+
+    <!-- Color Picker Popup -->
+    @if (showColorPicker) {
+      <div class="color-picker-popup" (click)="$event.stopPropagation()">
+        <div class="color-row">
+          @for (color of solidColors; track color.value) {
+            <button
+              class="color-option"
+              [class.selected]="this.color === color.value"
+              [style.background-color]="color.value"
+              [class.default-color]="color.value === 'transparent'"
+              [title]="color.name"
+              (click)="selectColor(color.value, $event)"
+              type="button">
+              @if (this.color === color.value) {
+                <span class="material-icons-outlined checkmark">check</span>
+              }
+            </button>
+          }
+        </div>
+        <div class="color-row">
+          @for (pattern of patternColors; track pattern.value) {
+            <button
+              class="color-option pattern-option"
+              [class.selected]="this.color === pattern.value"
+              [style.background]="pattern.gradient || 'white'"
+              [title]="pattern.name"
+              (click)="selectColor(pattern.value, $event)"
+              type="button">
+              @if (pattern.value === 'no-pattern') {
+                <span class="no-pattern-icon">🚫</span>
+              }
+              @if (this.color === pattern.value) {
+                <span class="material-icons-outlined checkmark">check</span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
   </div>
 </div>

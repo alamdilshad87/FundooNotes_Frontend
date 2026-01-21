@@ -201,3 +201,105 @@
     max-width: 100%;
   }
 }
+// ... (keep existing styles) ...
+
+// Add Color Picker Popup styles at the end
+.color-picker-popup {
+  position: absolute;
+  bottom: 60px;
+  left: 16px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+              0 5px 15px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  z-index: 1001;
+  animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.color-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.color-option {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.selected {
+    border-color: #5f6368;
+  }
+
+  &.default-color {
+    border: 2px solid #e0e0e0;
+    background: white;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: #d93025;
+      transform: rotate(45deg);
+    }
+  }
+
+  .checkmark {
+    font-size: 18px;
+    color: #000;
+    position: absolute;
+  }
+
+  .no-pattern-icon {
+    font-size: 20px;
+  }
+}
+
+.pattern-option {
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+@media (max-width: 768px) {
+  .color-picker-popup {
+    left: 8px;
+    right: 8px;
+    width: auto;
+  }
+
+  .color-row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

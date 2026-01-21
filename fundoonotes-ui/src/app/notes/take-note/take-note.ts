@@ -2,7 +2,6 @@ import { Component, Output, EventEmitter, ViewChild, ElementRef, HostListener } 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-take-note',
   standalone: true,
@@ -18,15 +17,45 @@ export class TakeNoteComponent {
 
   isExpanded = false;
   showFormattingToolbar = false;
+  showColorPicker = false;
   title: string = '';
   content: string = '';
-  color: string = 'white';
+  color: string = 'transparent';
 
   // Track active formatting states
   isBold = false;
   isItalic = false;
   isUnderline = false;
   isStrikethrough = false;
+
+  // Color palette matching Google Keep
+  solidColors = [
+    { name: 'Default', value: 'transparent' },
+    { name: 'Coral', value: '#f28b82' },
+    { name: 'Peach', value: '#fbbc04' },
+    { name: 'Sand', value: '#fff475' },
+    { name: 'Mint', value: '#ccff90' },
+    { name: 'Sage', value: '#a7ffeb' },
+    { name: 'Fog', value: '#cbf0f8' },
+    { name: 'Storm', value: '#aecbfa' },
+    { name: 'Dusk', value: '#d7aefb' },
+    { name: 'Blossom', value: '#fdcfe8' },
+    { name: 'Clay', value: '#e6c9a8' },
+    { name: 'Chalk', value: '#e8eaed' }
+  ];
+
+  patternColors = [
+    { name: 'None', value: 'no-pattern', icon: '🚫' },
+    { name: 'Celebration', value: 'pattern-celebration', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+    { name: 'Lines', value: 'pattern-lines', gradient: 'repeating-linear-gradient(45deg, #fce4ec, #fce4ec 10px, #f8bbd0 10px, #f8bbd0 20px)' },
+    { name: 'Waves', value: 'pattern-waves', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)' },
+    { name: 'Places', value: 'pattern-places', gradient: 'linear-gradient(to right, #fa709a 0%, #fee140 100%)' },
+    { name: 'Desert', value: 'pattern-desert', gradient: 'linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%)' },
+    { name: 'Garden', value: 'pattern-garden', gradient: 'linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)' },
+    { name: 'Beach', value: 'pattern-beach', gradient: 'linear-gradient(to top, #a8edea 0%, #fed6e3 100%)' },
+    { name: 'Groceries', value: 'pattern-groceries', gradient: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' },
+    { name: 'Festival', value: 'pattern-festival', gradient: 'linear-gradient(to right, #ff6a88, #ff99ac)' }
+  ];
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -53,6 +82,7 @@ export class TakeNoteComponent {
     }
     this.isExpanded = false;
     this.showFormattingToolbar = false;
+    this.showColorPicker = false;
   }
 
   saveNote(): void {
@@ -66,7 +96,7 @@ export class TakeNoteComponent {
       this.save.emit(noteData);
       this.title = '';
       this.content = '';
-      this.color = 'white';
+      this.color = 'transparent';
       
       if (this.titleEditor) {
         this.titleEditor.nativeElement.innerHTML = '';
@@ -91,6 +121,23 @@ export class TakeNoteComponent {
 
   toggleFormattingToolbar(): void {
     this.showFormattingToolbar = !this.showFormattingToolbar;
+    if (this.showFormattingToolbar) {
+      this.showColorPicker = false;
+    }
+  }
+
+  toggleColorPicker(event: Event): void {
+    event.stopPropagation();
+    this.showColorPicker = !this.showColorPicker;
+    if (this.showColorPicker) {
+      this.showFormattingToolbar = false;
+    }
+  }
+
+  selectColor(colorValue: string, event: Event): void {
+    event.stopPropagation();
+    this.color = colorValue;
+    this.showColorPicker = false;
   }
 
   formatText(command: string): void {
@@ -105,5 +152,12 @@ export class TakeNoteComponent {
       this.isUnderline = document.queryCommandState('underline');
       this.isStrikethrough = document.queryCommandState('strikeThrough');
     }
+  }
+
+  getBackgroundStyle(): any {
+    if (this.color.startsWith('linear-gradient') || this.color.startsWith('repeating-linear-gradient')) {
+      return { background: this.color };
+    }
+    return { 'background-color': this.color };
   }
 }

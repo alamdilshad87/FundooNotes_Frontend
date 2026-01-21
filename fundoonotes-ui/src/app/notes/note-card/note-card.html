@@ -1,4 +1,4 @@
-<div class="note-card" (click)="onNoteClick()">
+<div class="note-card" [ngStyle]="getBackgroundStyle()" (click)="onNoteClick()">
   @if (note.title) {
     <div class="card-header">
       <h3 class="card-title" [innerHTML]="note.title"></h3>
@@ -8,9 +8,7 @@
     </div>
   }
 
-
   <p class="card-content" [innerHTML]="note.content"></p>
-
 
   <div class="card-actions" (click)="$event.stopPropagation()">
     <button class="card-action-btn" title="Remind me">
