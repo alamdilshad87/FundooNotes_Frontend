@@ -1,6 +1,5 @@
 <div class="trash-container">
   <div class="trash-header">
-    <h2>Trash</h2>
     <p class="trash-info">Notes in trash are deleted after 7 days</p>
   </div>
 
@@ -23,9 +22,9 @@
         <div class="trash-note-card" [style.background-color]="note.color === 'transparent' ? '#fff' : note.color">
           <div class="note-content-area">
             @if (note.title) {
-              <h3 class="note-title">{{note.title}}</h3>
+              <h3 class="note-title">{{ note.title }}</h3>
             }
-            <p class="note-content" [innerHTML]="note.content"></p>
+            <p class="note-content">{{ note.content }}</p>
           </div>
 
           <div class="trash-actions">

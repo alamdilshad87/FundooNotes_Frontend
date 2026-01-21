@@ -1,6 +1,5 @@
 <div class="archive-container">
   <div class="archive-header">
-    <h2>Archive</h2>
   </div>
 
   @if (isLoading) {
@@ -12,7 +11,7 @@
   @if (!isLoading && archivedNotes.length === 0) {
     <div class="empty-archive">
       <span class="material-icons-outlined empty-icon">archive</span>
-      <p>No archived notes</p>
+      <p>Your archived notes will appear here</p>
     </div>
   }
 
@@ -22,9 +21,9 @@
         <div class="archive-note-card" [style.background-color]="note.color === 'transparent' ? '#fff' : note.color">
           <div class="note-content-area">
             @if (note.title) {
-              <h3 class="note-title">{{note.title}}</h3>
+              <h3 class="note-title">{{ note.title }}</h3>
             }
-            <p class="note-content" [innerHTML]="note.content"></p>
+            <p class="note-content">{{ note.content }}</p>
           </div>
 
           <div class="archive-actions">

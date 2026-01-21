@@ -10,11 +10,12 @@ import { CommonModule } from '@angular/common';
 })
 export class NoteCardComponent {
   @Input() note: any;
-  @Input() isColorPickerOpen: boolean = false; // ✅ ADD THIS
+  @Input() isColorPickerOpen: boolean = false;
   @Output() delete = new EventEmitter<number>();
+  @Output() archive = new EventEmitter<number>(); // ✅ ADD THIS LINE
   @Output() noteClick = new EventEmitter<any>();
   @Output() updateColor = new EventEmitter<{noteId: number, color: string}>();
-  @Output() toggleColorPicker = new EventEmitter<number>(); // ✅ CHANGED - now emits noteId
+  @Output() toggleColorPicker = new EventEmitter<number>();
 
   solidColors = [
     { name: 'Default', value: 'transparent' },
@@ -37,15 +38,18 @@ export class NoteCardComponent {
 
   onDelete(event: Event): void {
     event.stopPropagation();
-    // ✅ No confirmation dialog - just like Google Keep
     this.delete.emit(this.note.noteId);
   }
 
+  // ✅ ADD THIS METHOD
+  onArchive(event: Event): void {
+    event.stopPropagation();
+    this.archive.emit(this.note.noteId);
+  }
 
-  // ✅ UPDATED METHOD
   onToggleColorPicker(event: Event): void {
     event.stopPropagation();
-    this.toggleColorPicker.emit(this.note.noteId); // Emit noteId to parent
+    this.toggleColorPicker.emit(this.note.noteId);
   }
 
   selectColor(colorValue: string, event: Event): void {

@@ -1,14 +1,14 @@
 <div class="note-card" [ngStyle]="getBackgroundStyle()" (click)="onNoteClick()">
   @if (note.title) {
     <div class="card-header">
-      <h3 class="card-title" [innerHTML]="note.title"></h3>
+      <h3 class="card-title">{{ note.title }}</h3>
       <button class="pin-btn" (click)="$event.stopPropagation()">
         <span class="material-icons-outlined">push_pin</span>
       </button>
     </div>
   }
 
-  <p class="card-content" [innerHTML]="note.content"></p>
+  <p class="card-content">{{ note.content }}</p>
 
   <div class="card-actions" (click)="$event.stopPropagation()">
     <button class="card-action-btn" title="Remind me">
@@ -27,7 +27,8 @@
     <button class="card-action-btn" title="Add image">
       <span class="material-icons-outlined">image</span>
     </button>
-    <button class="card-action-btn" title="Archive">
+    <!-- ✅ ADD CLICK EVENT HERE -->
+    <button class="card-action-btn" (click)="onArchive($event)" title="Archive">
       <span class="material-icons-outlined">archive</span>
     </button>
     <button class="card-action-btn" (click)="onDelete($event)" title="Delete">
@@ -35,7 +36,6 @@
     </button>
   </div>
 
-  <!-- ✅ UPDATED - Uses Input property -->
   @if (isColorPickerOpen) {
     <div class="color-picker-popup" (click)="$event.stopPropagation()">
       <div class="color-row">

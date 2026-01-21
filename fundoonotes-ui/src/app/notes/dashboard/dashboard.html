@@ -8,6 +8,7 @@
         [note]="note"
         [isColorPickerOpen]="openColorPickerNoteId === note.noteId"
         (delete)="deleteNote($event)"
+        (archive)="archiveNote($event)"
         (noteClick)="openNoteForEdit($event)"
         (updateColor)="updateNoteColor($event)"
         (toggleColorPicker)="handleColorPickerToggle($event)">
