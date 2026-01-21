@@ -76,21 +76,53 @@ export class TakeNoteComponent {
     const noteData = {
       title: this.title.trim(),
       content: this.content.trim(),
-      color: this.color
+      color: this.color,
+      isArchived: false // ✅ Normal note
     };
 
     if (noteData.title || noteData.content) {
+      console.log('📝 Saving normal note:', noteData);
       this.save.emit(noteData);
-      this.title = '';
-      this.content = '';
-      this.color = 'transparent';
+      this.resetForm();
+    }
+  }
 
-      if (this.titleEditor) {
-        this.titleEditor.nativeElement.innerHTML = '';
-      }
-      if (this.contentEditor) {
-        this.contentEditor.nativeElement.innerHTML = '';
-      }
+  // ✅ ADD THIS METHOD - Archive Note
+  archiveNote(event: Event): void {
+    event.stopPropagation();
+
+    console.log('📦 Archive button clicked!');
+    console.log('📦 Title:', this.title);
+    console.log('📦 Content:', this.content);
+
+    if (!this.title.trim() && !this.content.trim()) {
+      console.log('⚠️ Empty note - not archiving');
+      return;
+    }
+
+    const noteData = {
+      title: this.title.trim(),
+      content: this.content.trim(),
+      color: this.color,
+      isArchived: true // ✅ Archived note
+    };
+
+    console.log('📦 Emitting archived note:', noteData);
+    this.save.emit(noteData);
+    this.resetForm();
+    this.isExpanded = false;
+  }
+
+  resetForm(): void {
+    this.title = '';
+    this.content = '';
+    this.color = 'transparent';
+
+    if (this.titleEditor) {
+      this.titleEditor.nativeElement.innerHTML = '';
+    }
+    if (this.contentEditor) {
+      this.contentEditor.nativeElement.innerHTML = '';
     }
   }
 
@@ -140,6 +172,7 @@ export class TakeNoteComponent {
       this.isStrikethrough = document.queryCommandState('strikeThrough');
     }
   }
+
   getBackgroundStyle(): any {
     return { 'background-color': this.color };
   }

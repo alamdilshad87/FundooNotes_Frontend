@@ -121,7 +121,12 @@
         <button class="action-btn" title="Add image" type="button">
           <span class="material-icons-outlined">image</span>
         </button>
-        <button class="action-btn" title="Archive" type="button">
+        <!-- ✅ ADD CLICK EVENT HERE -->
+        <button
+          class="action-btn"
+          (click)="archiveNote($event)"
+          title="Archive"
+          type="button">
           <span class="material-icons-outlined">archive</span>
         </button>
         <button class="action-btn" title="More" type="button">

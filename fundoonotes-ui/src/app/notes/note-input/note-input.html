@@ -16,10 +16,22 @@
   @if (expanded) {
     <div class="actions">
       <div class="icons">
-        <button>⏰</button>
-        <button>🎨</button>
-        <button>🖼</button>
-        <button>📦</button>
+        <button class="action-icon-btn" title="Remind me">
+          <span class="material-icons-outlined">add_alert</span>
+        </button>
+        <button class="action-icon-btn" title="Background options">
+          <span class="material-icons-outlined">palette</span>
+        </button>
+        <button class="action-icon-btn" title="Add image">
+          <span class="material-icons-outlined">image</span>
+        </button>
+        <!-- ✅ ADD ARCHIVE BUTTON -->
+        <button
+          class="action-icon-btn"
+          (click)="archiveNote($event)"
+          title="Archive">
+          <span class="material-icons-outlined">archive</span>
+        </button>
       </div>
       <button class="close" (click)="close()">Close</button>
     </div>

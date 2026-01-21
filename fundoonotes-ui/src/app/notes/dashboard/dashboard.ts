@@ -38,12 +38,9 @@ export class DashboardComponent implements OnInit {
           const isDeleted = note.isDeleted ?? note.IsDeleted ?? false;
           const isArchived = note.isArchived ?? note.IsArchived ?? false;
 
-          console.log(`Note ${note.noteId}: isDeleted=${isDeleted}, isArchived=${isArchived}`);
-
           return !isDeleted && !isArchived;
         });
 
-        console.log('✅ Active notes after filtering:', this.notes);
         console.log('✅ Active notes count:', this.notes.length);
 
         this.isLoading = false;
@@ -57,13 +54,24 @@ export class DashboardComponent implements OnInit {
   }
 
   addNote(noteData: any): void {
+    console.log('🎯 DASHBOARD addNote called with:', noteData);
+    console.log('🎯 isArchived value:', noteData.isArchived);
+
     this.notesService.createNote(noteData).subscribe({
       next: (response) => {
-        console.log('Note created successfully:', response.message);
+        console.log('✅ Note created response:', response);
+
+        if (noteData.isArchived === true) {
+          console.log('📦 Note was archived during creation');
+        } else {
+          console.log('📝 Note was created as normal');
+        }
+
         this.loadNotes();
       },
       error: (error) => {
-        console.error('Error creating note:', error);
+        console.error('❌ Error creating note:', error);
+        console.error('❌ Error details:', error.error);
         alert('Failed to create note. Please try again.');
       }
     });
@@ -83,13 +91,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // ✅ ADD THIS METHOD
   archiveNote(id: number): void {
-    console.log('📦 Archiving note:', id);
+    console.log('📦 Archiving existing note:', id);
     this.notesService.toggleArchive(id).subscribe({
       next: () => {
         console.log('✅ Note archived successfully');
-        // Remove from current view
         this.notes = this.notes.filter(note => note.noteId !== id);
         this.cdr.detectChanges();
       },
@@ -110,8 +116,6 @@ export class DashboardComponent implements OnInit {
   }
 
   updateNote(updatedNote: any): void {
-    console.log('Received updated note:', updatedNote);
-
     const payload = {
       title: updatedNote.title,
       content: updatedNote.content,
@@ -121,13 +125,10 @@ export class DashboardComponent implements OnInit {
     const noteId = updatedNote.noteId;
 
     if (!noteId) {
-      console.error('❌ Note ID is missing!', updatedNote);
+      console.error('❌ Note ID is missing!');
       alert('Cannot update note: ID is missing');
       return;
     }
-
-    console.log('Updating note ID:', noteId);
-    console.log('Payload:', payload);
 
     this.notesService.updateNote(noteId, payload).subscribe({
       next: (response) => {
@@ -137,15 +138,12 @@ export class DashboardComponent implements OnInit {
       },
       error: (error) => {
         console.error('❌ Error updating note:', error);
-        console.error('Error details:', error.error);
         alert('Failed to update note. Please try again.');
       }
     });
   }
 
   updateNoteColor(event: {noteId: number, color: string}): void {
-    console.log('🎨 Updating note color:', event);
-
     const noteToUpdate = this.notes.find(n => n.noteId === event.noteId);
 
     if (!noteToUpdate) {
@@ -159,15 +157,12 @@ export class DashboardComponent implements OnInit {
       color: event.color
     };
 
-    console.log('📤 Sending payload:', payload);
-
     this.notesService.updateNote(event.noteId, payload).subscribe({
       next: (response) => {
-        console.log('✅ Color updated successfully:', response);
+        console.log('✅ Color updated successfully');
         const note = this.notes.find(n => n.noteId === event.noteId);
         if (note) {
           note.color = event.color;
-          console.log('✅ Local note updated with color:', note.color);
         }
         this.cdr.detectChanges();
       },
