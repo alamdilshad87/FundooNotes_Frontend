@@ -23,6 +23,7 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
   title: string = '';
   content: string = '';
   color: string = 'transparent';
+  isPinned: boolean = false;
 
   // Track active formatting states
   isBold = false;
@@ -57,6 +58,7 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
       this.title = this.note.title;
       this.content = this.note.content;
       this.color = this.note.color || 'transparent';
+      this.isPinned = this.note.isPinned || false;
     }
   }
 
@@ -79,6 +81,12 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
     const target = event.target as HTMLElement;
     this.content = target.innerHTML;
     this.updateFormattingStates();
+  }
+
+  togglePin(event: Event): void {
+    event.stopPropagation();
+    this.isPinned = !this.isPinned;
+    console.log('Pin toggled in edit modal:', this.isPinned);
   }
 
   toggleFormattingToolbar(): void {
@@ -122,27 +130,36 @@ export class EditNoteModalComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // ✅ FIXED - Close modal immediately after emitting save
   saveAndClose(): void {
-    if (this.title !== this.note.title || this.content !== this.note.content || this.color !== this.note.color) {
+    const hasChanges =
+      this.title !== this.note.title ||
+      this.content !== this.note.content ||
+      this.color !== this.note.color ||
+      this.isPinned !== this.note.isPinned;
+
+    if (hasChanges) {
       const updatedNote = {
         noteId: this.note.noteId,
         title: this.title,
         content: this.content,
-        color: this.color
+        color: this.color,
+        isPinned: this.isPinned
       };
-      console.log('Emitting updated note:', updatedNote);
+      console.log('✅ Saving and closing - updated note:', updatedNote);
       this.save.emit(updatedNote);
     } else {
-      console.log('No changes detected, closing without save');
-      this.close.emit();
+      console.log('ℹ️ No changes detected');
     }
+
+    // ✅ ALWAYS CLOSE THE MODAL IMMEDIATELY
+    this.close.emit();
   }
 
   handleClose(): void {
     this.saveAndClose();
   }
 
-  // FIXED: Return white background for transparent notes
   getBackgroundStyle(): any {
     return {
       'background-color': this.color === 'transparent' ? '#ffffff' : this.color

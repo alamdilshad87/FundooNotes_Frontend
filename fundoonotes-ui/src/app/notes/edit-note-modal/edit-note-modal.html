@@ -1,17 +1,30 @@
 <div class="modal-backdrop" #modalBackdrop (click)="onBackdropClick($event)">
   <div class="modal-container" (click)="$event.stopPropagation()" [ngStyle]="getBackgroundStyle()">
     <div class="note-input">
-      <div
-        #titleEditor
-        class="note-title-input"
-        contenteditable="true"
-        (input)="onTitleInput($event)"
-        (mouseup)="updateFormattingStates()"
-        (keyup)="updateFormattingStates()"
-        placeholder="Title"
-        role="textbox"
-        aria-label="Title"
-      ></div>
+      <!-- NOTE HEADER WITH TITLE AND PIN BUTTON -->
+      <div class="note-header">
+        <div
+          #titleEditor
+          class="note-title-input"
+          contenteditable="true"
+          (input)="onTitleInput($event)"
+          (mouseup)="updateFormattingStates()"
+          (keyup)="updateFormattingStates()"
+          placeholder="Title"
+          role="textbox"
+          aria-label="Title"
+        ></div>
+
+        <!-- PIN BUTTON -->
+        <button
+          class="pin-btn-modal"
+          [class.pinned]="isPinned"
+          (click)="togglePin($event)"
+          [title]="isPinned ? 'Unpin note' : 'Pin note'"
+          type="button">
+          <span [class]="isPinned ? 'material-icons' : 'material-icons-outlined'">push_pin</span>
+        </button>
+      </div>
 
       <div
         #contentEditor
