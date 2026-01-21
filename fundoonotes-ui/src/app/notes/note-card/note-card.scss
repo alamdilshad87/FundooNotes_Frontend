@@ -38,7 +38,6 @@
   padding-right: 8px;
 }
 
-// ✅ PIN BUTTON STYLES - Fixed for filled icon
 .pin-btn {
   background: transparent;
   border: none;
@@ -52,7 +51,6 @@
   transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
               background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  // Both outlined and filled icons
   .material-icons-outlined,
   .material-icons {
     font-size: 18px;
@@ -63,12 +61,11 @@
     background-color: rgba(95, 99, 104, 0.157);
   }
 
-  // ✅ When pinned - show filled icon, always visible, darker color
   &.pinned {
-    opacity: 1 !important; // Always visible
+    opacity: 1 !important;
 
     .material-icons {
-      color: #202124; // ✅ Darker gray for filled icon
+      color: #202124;
       font-weight: 400;
     }
   }
@@ -84,11 +81,30 @@
   margin-bottom: 12px;
 }
 
+// Label chips styling
+.note-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+
+  .label-chip {
+    font-size: 12px;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    color: #202124;
+    font-weight: 400;
+    line-height: 16px;
+  }
+}
+
 .card-actions {
   display: flex;
   gap: 4px;
   opacity: 0;
   transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  align-items: center;
 }
 
 .card-action-btn {

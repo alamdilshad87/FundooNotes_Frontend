@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LabelSelectorComponent } from '../label-selector/label-selector';
 
 @Component({
   selector: 'app-note-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LabelSelectorComponent],
   templateUrl: './note-card.html',
   styleUrls: ['./note-card.scss']
 })
@@ -13,10 +14,11 @@ export class NoteCardComponent {
   @Input() isColorPickerOpen: boolean = false;
   @Output() delete = new EventEmitter<number>();
   @Output() archive = new EventEmitter<number>();
-  @Output() togglePin = new EventEmitter<number>(); // ✅ ADD THIS
+  @Output() togglePin = new EventEmitter<number>();
   @Output() noteClick = new EventEmitter<any>();
   @Output() updateColor = new EventEmitter<{noteId: number, color: string}>();
   @Output() toggleColorPicker = new EventEmitter<number>();
+  @Output() noteUpdated = new EventEmitter<void>();
 
   solidColors = [
     { name: 'Default', value: 'transparent' },
@@ -47,7 +49,6 @@ export class NoteCardComponent {
     this.archive.emit(this.note.noteId);
   }
 
-  // ✅ ADD THIS METHOD
   onTogglePin(event: Event): void {
     event.stopPropagation();
     console.log('📌 Toggling pin for note:', this.note.noteId);
@@ -68,5 +69,9 @@ export class NoteCardComponent {
   getBackgroundStyle(): any {
     const color = this.note.color || 'transparent';
     return { 'background-color': color === 'transparent' ? '#fff' : color };
+  }
+
+  onLabelsChanged(): void {
+    this.noteUpdated.emit();
   }
 }

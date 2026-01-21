@@ -2,7 +2,7 @@
   @if (note.title) {
     <div class="card-header">
       <h3 class="card-title">{{ note.title }}</h3>
-      <!-- ✅ PIN BUTTON with filled icon when pinned -->
+      <!-- PIN BUTTON with filled icon when pinned -->
       <button
         class="pin-btn"
         [class.pinned]="note.isPinned"
@@ -16,6 +16,13 @@
   }
 
   <p class="card-content">{{ note.content }}</p>
+
+  <!-- Labels display -->
+  <div class="note-labels" *ngIf="note.labels && note.labels.length > 0">
+    <span class="label-chip" *ngFor="let label of note.labels">
+      {{ label }}
+    </span>
+  </div>
 
   <div class="card-actions" (click)="$event.stopPropagation()">
     <button class="card-action-btn" title="Remind me">
@@ -34,6 +41,14 @@
     <button class="card-action-btn" title="Add image">
       <span class="material-icons-outlined">image</span>
     </button>
+
+    <!-- Label selector -->
+    <app-label-selector
+      [noteId]="note.noteId"
+      [currentLabels]="note.labels"
+      (labelsChanged)="onLabelsChanged()">
+    </app-label-selector>
+
     <button class="card-action-btn" (click)="onArchive($event)" title="Archive">
       <span class="material-icons-outlined">archive</span>
     </button>

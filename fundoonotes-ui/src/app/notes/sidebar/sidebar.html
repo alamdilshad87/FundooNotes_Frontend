@@ -5,15 +5,10 @@
       <span class="label">Notes</span>
     </a>
 
-    <a class="nav-item" routerLink="/notes/reminders" routerLinkActive="active">
-      <span class="material-icons-outlined icon">notifications_none</span>
-      <span class="label">Reminders</span>
-    </a>
-
-    <a class="nav-item" routerLink="/notes/labels" routerLinkActive="active">
+    <div class="nav-item" (click)="openLabelManager()">
       <span class="material-icons-outlined icon">edit</span>
       <span class="label">Edit labels</span>
-    </a>
+    </div>
 
     <a class="nav-item" routerLink="/notes/archive" routerLinkActive="active">
       <span class="material-icons-outlined icon">archive</span>
@@ -25,4 +20,11 @@
       <span class="label">Trash</span>
     </a>
   </nav>
+
+  <!-- Label Manager Modal -->
+  <div class="label-manager-overlay" *ngIf="showLabelManager" (click)="openLabelManager()">
+    <div class="label-manager-wrapper" (click)="$event.stopPropagation()">
+      <app-label-manager></app-label-manager>
+    </div>
+  </div>
 </aside>

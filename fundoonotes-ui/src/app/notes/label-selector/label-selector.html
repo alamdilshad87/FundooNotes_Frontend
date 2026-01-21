@@ -1,0 +1,24 @@
+<div class="label-selector">
+  <button class="label-btn" (click)="showDropdown = !showDropdown">
+    <span class="material-icons-outlined">label</span>
+  </button>
+
+  <div class="label-dropdown" *ngIf="showDropdown" (clickOutside)="showDropdown = false">
+    <div class="dropdown-header">Label note</div>
+    <div class="label-list">
+      <div
+        class="label-option"
+        *ngFor="let label of allLabels"
+        (click)="toggleLabel(label)"
+      >
+        <span class="material-icons-outlined">
+          {{ isLabelAttached(label.name) ? 'check_box' : 'check_box_outline_blank' }}
+        </span>
+        <span class="label-name">{{ label.name }}</span>
+      </div>
+      <div class="no-labels" *ngIf="allLabels.length === 0">
+        No labels created yet
+      </div>
+    </div>
+  </div>
+</div>

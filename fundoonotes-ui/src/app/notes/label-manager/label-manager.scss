@@ -1,0 +1,107 @@
+.label-manager {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 400px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h3 {
+      font-size: 16px;
+      font-weight: 500;
+      color: #202124;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+
+      &:hover {
+        background: #f1f3f4;
+      }
+    }
+  }
+
+  .create-label {
+    margin-bottom: 12px;
+
+    .add-label-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 8px 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #202124;
+
+      &:hover {
+        background: #f1f3f4;
+      }
+    }
+  }
+
+  .label-input-row,
+  .label-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+
+    &:hover {
+      background: #f1f3f4;
+    }
+
+    span.material-icons-outlined {
+      color: #5f6368;
+      font-size: 20px;
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      background: transparent;
+
+      &.edit-input {
+        border-bottom: 1px solid #1a73e8;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+
+      button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 50%;
+
+        &:hover {
+          background: #e8eaed;
+        }
+
+        span {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
