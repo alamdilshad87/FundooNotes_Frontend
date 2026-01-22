@@ -1,0 +1,34 @@
+<div class="label-dropdown">
+  <div class="dropdown-header">
+    <span>Label note</span>
+    <button class="close-btn" (click)="closeDropdown()" type="button">
+      <span class="material-icons-outlined">close</span>
+    </button>
+  </div>
+
+  <div class="label-search">
+    <input
+      type="text"
+      placeholder="Enter label name"
+      [(ngModel)]="searchText"
+      class="search-input"
+    />
+  </div>
+
+  <div class="label-list">
+    @for (label of allLabels; track label.labelId) {
+      <div class="label-option" (click)="toggleLabel(label)">
+        <span class="material-icons-outlined checkbox-icon">
+          {{ isLabelSelected(label.name) ? 'check_box' : 'check_box_outline_blank' }}
+        </span>
+        <span class="label-name">{{ label.name }}</span>
+      </div>
+    }
+
+    @if (allLabels.length === 0) {
+      <div class="empty-state">
+        <p>No labels created yet</p>
+      </div>
+    }
+  </div>
+</div>

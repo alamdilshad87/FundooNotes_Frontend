@@ -1,13 +1,14 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LabelDropdownComponent } from '../label-dropdown/label-dropdown';
 
 @Component({
   selector: 'app-note-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LabelDropdownComponent], // ✅ Add this
   templateUrl: './note-card.html',
   styleUrls: ['./note-card.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush // ✅ PERFORMANCE BOOST
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NoteCardComponent {
   @Input() note: any;
@@ -21,8 +22,10 @@ export class NoteCardComponent {
   @Output() updateColor = new EventEmitter<{noteId: number, color: string}>();
   @Output() toggleColorPicker = new EventEmitter<number>();
   @Output() restore = new EventEmitter<number>();
+  @Output() labelsUpdated = new EventEmitter<{noteId: number, labels: string[]}>(); // ✅ Add this
 
   showMenu = false;
+  showLabelDropdown = false; // ✅ Add this
 
   colors = [
     { name: 'Default', value: '#ffffff' },
@@ -71,6 +74,19 @@ export class NoteCardComponent {
   toggleMenu(event: Event): void {
     event.stopPropagation();
     this.showMenu = !this.showMenu;
+    this.showLabelDropdown = false; // Close label dropdown when menu toggles
+  }
+
+  // ✅ ADD THESE METHODS
+  toggleLabelDropdown(event: Event): void {
+    event.stopPropagation();
+    this.showLabelDropdown = !this.showLabelDropdown;
+    this.showMenu = false; // Close menu when label dropdown opens
+  }
+
+  onLabelsChanged(labels: string[]): void {
+    this.note.labels = labels;
+    this.labelsUpdated.emit({ noteId: this.note.noteId, labels });
   }
 
   onColorClick(color: string, event: Event): void {
@@ -81,10 +97,5 @@ export class NoteCardComponent {
   onToggleColorPicker(event: Event): void {
     event.stopPropagation();
     this.toggleColorPicker.emit(this.note.noteId);
-  }
-
-  // ✅ PERFORMANCE: Track by function for *ngFor
-  trackByColor(index: number, color: any): string {
-    return color.value;
   }
 }

@@ -98,7 +98,7 @@
             <span class="material-icons-outlined">delete</span>
             <span>Delete note</span>
           </button>
-          <button class="menu-item" type="button">
+          <button class="menu-item" (click)="toggleLabelDropdown($event)" type="button">
             <span class="material-icons-outlined">label</span>
             <span>Add label</span>
           </button>
@@ -112,9 +112,19 @@
           </button>
         </div>
       }
+
+      <!-- ✅ LABEL DROPDOWN -->
+      @if (showLabelDropdown) {
+        <app-label-dropdown
+          [noteId]="note.noteId"
+          [currentLabels]="note.labels || []"
+          (labelsChanged)="onLabelsChanged($event)"
+          (close)="showLabelDropdown = false">
+        </app-label-dropdown>
+      }
     </div>
 
-    <!-- COLOR PICKER -->
+    <!-- ✅ COLOR PICKER -->
     @if (isColorPickerOpen) {
       <div class="color-picker-palette" (click)="$event.stopPropagation()">
         @for (color of colors; track color.value) {
