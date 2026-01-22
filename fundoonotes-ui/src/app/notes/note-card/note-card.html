@@ -100,7 +100,7 @@
           </button>
           <button class="menu-item" (click)="toggleLabelDropdown($event)" type="button">
             <span class="material-icons-outlined">label</span>
-            <span>Add label</span>
+            <span>{{ labelViewMode ? 'Change labels' : 'Add label' }}</span>
           </button>
           <button class="menu-item" type="button">
             <span class="material-icons-outlined">check_box</span>
@@ -118,8 +118,9 @@
         <app-label-dropdown
           [noteId]="note.noteId"
           [currentLabels]="note.labels || []"
+          [headerText]="labelViewMode ? 'Change labels' : 'Label note'"
           (labelsChanged)="onLabelsChanged($event)"
-          (close)="showLabelDropdown = false">
+          (close)="closeLabelDropdown()">
         </app-label-dropdown>
       }
     </div>

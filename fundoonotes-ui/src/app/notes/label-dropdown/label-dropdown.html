@@ -1,6 +1,6 @@
-<div class="label-dropdown">
+<div class="label-dropdown" (click)="$event.stopPropagation()">
   <div class="dropdown-header">
-    <span>Label note</span>
+    <span>{{ headerText }}</span> <!-- ✅ USE DYNAMIC HEADER -->
     <button class="close-btn" (click)="closeDropdown()" type="button">
       <span class="material-icons-outlined">close</span>
     </button>
@@ -12,16 +12,23 @@
       placeholder="Enter label name"
       [(ngModel)]="searchText"
       class="search-input"
+      (click)="$event.stopPropagation()"
     />
   </div>
 
   <div class="label-list">
-    @for (label of allLabels; track label.labelId) {
-      <div class="label-option" (click)="toggleLabel(label)">
+    @for (label of filteredLabels; track label.labelId) {
+      <div class="label-option" (click)="toggleLabel(label, $event)">
         <span class="material-icons-outlined checkbox-icon">
           {{ isLabelSelected(label.name) ? 'check_box' : 'check_box_outline_blank' }}
         </span>
         <span class="label-name">{{ label.name }}</span>
+      </div>
+    }
+
+    @if (filteredLabels.length === 0 && searchText) {
+      <div class="empty-state">
+        <p>No labels match "{{ searchText }}"</p>
       </div>
     }
 

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LabelService, Label } from '../../core/services/label';
@@ -13,6 +13,7 @@ import { LabelService, Label } from '../../core/services/label';
 export class LabelDropdownComponent implements OnInit {
   @Input() noteId?: number;
   @Input() currentLabels: string[] = [];
+  @Input() headerText: string = 'Label note'; // ✅ ADD THIS - Default header text
   @Output() labelsChanged = new EventEmitter<string[]>();
   @Output() close = new EventEmitter<void>();
 
@@ -21,8 +22,17 @@ export class LabelDropdownComponent implements OnInit {
 
   constructor(
     private labelService: LabelService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private elementRef: ElementRef
   ) {}
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.closeDropdown();
+    }
+  }
 
   ngOnInit(): void {
     this.loadLabels();
@@ -42,7 +52,11 @@ export class LabelDropdownComponent implements OnInit {
     return this.currentLabels.includes(labelName);
   }
 
-  toggleLabel(label: Label): void {
+  toggleLabel(label: Label, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
     if (!this.noteId) {
       // For new notes, just update the array
       if (this.isLabelSelected(label.name)) {
@@ -51,6 +65,7 @@ export class LabelDropdownComponent implements OnInit {
         this.currentLabels = [...this.currentLabels, label.name];
       }
       this.labelsChanged.emit(this.currentLabels);
+      this.cdr.detectChanges();
       return;
     }
 
@@ -61,6 +76,7 @@ export class LabelDropdownComponent implements OnInit {
           this.currentLabels = this.currentLabels.filter(l => l !== label.name);
           this.labelsChanged.emit(this.currentLabels);
           this.cdr.detectChanges();
+          console.log('✅ Label removed:', label.name);
         },
         error: (err: any) => console.error('❌ Error removing label:', err)
       });
@@ -70,6 +86,7 @@ export class LabelDropdownComponent implements OnInit {
           this.currentLabels = [...this.currentLabels, label.name];
           this.labelsChanged.emit(this.currentLabels);
           this.cdr.detectChanges();
+          console.log('✅ Label added:', label.name);
         },
         error: (err: any) => console.error('❌ Error adding label:', err)
       });
@@ -78,5 +95,14 @@ export class LabelDropdownComponent implements OnInit {
 
   closeDropdown(): void {
     this.close.emit();
+  }
+
+  get filteredLabels(): Label[] {
+    if (!this.searchText.trim()) {
+      return this.allLabels;
+    }
+    return this.allLabels.filter(label =>
+      label.name.toLowerCase().includes(this.searchText.toLowerCase())
+    );
   }
 }

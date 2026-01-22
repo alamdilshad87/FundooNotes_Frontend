@@ -17,7 +17,7 @@ export class NotesComponent {
   @ViewChild(RouterOutlet) outlet?: RouterOutlet;
 
   sidebarCollapsed = false;
-  showLabelManager = false; // ✅ THIS IS HERE
+  showLabelManager = false;
 
   constructor(private router: Router) {}
 
@@ -25,7 +25,6 @@ export class NotesComponent {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 
-  // ✅ HANDLE LABEL MANAGER
   openLabelManager(): void {
     console.log('🚪 Opening label manager');
     this.showLabelManager = true;
@@ -36,14 +35,16 @@ export class NotesComponent {
     this.showLabelManager = false;
   }
 
+  onLabelCreated(): void {
+    console.log('✅ Label created - refreshing sidebar');
+    if (this.sidebar) {
+      this.sidebar.loadLabels();
+    }
+  }
 
-
-  // ✅ PASS SEARCH TO ACTIVE COMPONENT
   onSearch(query: string): void {
     console.log('🔍 Notes component search:', query);
-
     const component = this.outlet?.component as any;
-
     if (component && typeof component.onSearch === 'function') {
       component.onSearch(query);
     }

@@ -13,12 +13,14 @@
         *ngFor="let note of notes"
         [note]="note"
         [isColorPickerOpen]="openColorPickerNoteId === note.noteId"
+        [labelViewMode]="true"
         (delete)="deleteNote($event)"
         (archive)="archiveNote($event)"
         (togglePin)="togglePin($event)"
         (noteClick)="openNoteForEdit($event)"
         (updateColor)="updateNoteColor($event)"
-        (toggleColorPicker)="handleColorPickerToggle($event)">
+        (toggleColorPicker)="handleColorPickerToggle($event)"
+        (labelsUpdated)="handleLabelsUpdated($event)">
       </app-note-card>
     </div>
   }

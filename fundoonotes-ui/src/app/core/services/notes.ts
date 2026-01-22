@@ -48,11 +48,23 @@ export class NotesService {
     return this.http.patch(`${this.baseUrl}/${id}/archive`, {});
   }
 
-  // ✅ ADD THIS METHOD
   togglePin(id: number): Observable<any> {
     console.log('📌 Sending togglePin request for note:', id);
     return this.http.patch(`${this.baseUrl}/${id}/pin`, {}).pipe(
       tap(response => console.log('📌 togglePin response:', response))
     );
+  }
+
+  // ✅ FIXED: Use baseUrl instead of apiUrl
+  archiveNote(noteId: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${noteId}/archive`, {});
+  }
+
+  unarchiveNote(noteId: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${noteId}/unarchive`, {});
+  }
+
+  updateColor(noteId: number, color: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${noteId}/color`, { color });
   }
 }
