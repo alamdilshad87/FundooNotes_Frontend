@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TakeNoteComponent } from '../take-note/take-note';
 import { NoteCardComponent } from '../note-card/note-card';
@@ -29,20 +29,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private notesService: NotesService,
     private viewModeService: ViewModeService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef // ✅ Add this back
   ) {}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     this.openColorPickerNoteId = null;
-    this.cdr.detectChanges();
   }
 
   ngOnInit(): void {
     this.loadNotes();
     this.viewModeSubscription = this.viewModeService.viewMode$.subscribe(mode => {
       this.viewMode = mode;
-      this.cdr.detectChanges();
+      this.cdr.detectChanges(); // ✅ Force update
     });
   }
 
@@ -61,11 +60,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
         this.applyFilters();
         this.isLoading = false;
-        this.cdr.detectChanges();
+        this.cdr.detectChanges(); // ✅ Force update
       },
       error: (error) => {
         console.error('❌ Error loading notes:', error);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -73,6 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onSearch(query: string): void {
     this.searchQuery = query.toLowerCase().trim();
     this.applyFilters();
+    this.cdr.detectChanges(); // ✅ Force update
   }
 
   private applyFilters(): void {
@@ -109,9 +110,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   addNote(noteData: any): void {
+    console.log('📝 Creating note:', noteData);
+
     this.notesService.createNote(noteData).subscribe({
-      next: () => {
-        this.loadNotes();
+      next: (response) => {
+        console.log('✅ Note created successfully:', response);
+
+        // ✅ IMMEDIATE UPDATE - Add the new note to arrays
+        const newNote = {
+          ...noteData,
+          noteId: response.noteId || response.id || Date.now(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
+        this.allNotes.unshift(newNote); // Add to beginning
+        this.notes.unshift(newNote);
+
+        if (newNote.isPinned) {
+          this.pinnedNotes.unshift(newNote);
+        } else {
+          this.unpinnedNotes.unshift(newNote);
+        }
+
+        this.cdr.detectChanges(); // ✅ Force UI update immediately
+
+        // ✅ Then reload from server to ensure sync
+        setTimeout(() => {
+          this.loadNotes();
+        }, 500);
       },
       error: (error) => {
         console.error('❌ Error creating note:', error);
@@ -121,10 +148,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   deleteNote(id: number): void {
+    // ✅ Optimistic update
     this.notes = this.notes.filter(note => note.noteId !== id);
     this.allNotes = this.allNotes.filter(note => note.noteId !== id);
     this.separateNotes();
-    this.cdr.detectChanges();
+    this.cdr.detectChanges(); // ✅ Force update
 
     this.notesService.deleteNote(id).subscribe({
       next: () => console.log('✅ Note moved to trash'),
@@ -137,10 +165,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   archiveNote(id: number): void {
+    // ✅ Optimistic update
     this.notes = this.notes.filter(note => note.noteId !== id);
     this.allNotes = this.allNotes.filter(note => note.noteId !== id);
     this.separateNotes();
-    this.cdr.detectChanges();
+    this.cdr.detectChanges(); // ✅ Force update
 
     this.notesService.toggleArchive(id).subscribe({
       next: () => console.log('✅ Note archived'),
@@ -158,7 +187,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       note.isPinned = !note.isPinned;
       note.updatedAt = new Date().toISOString();
       this.separateNotes();
-      this.cdr.detectChanges();
+      this.cdr.detectChanges(); // ✅ Force update
     }
 
     this.notesService.togglePin(id).subscribe({
@@ -180,6 +209,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   closeEditModal(): void {
     this.selectedNote = null;
+    this.cdr.detectChanges(); // ✅ Force update
   }
 
   updateNote(updatedNote: any): void {
@@ -196,6 +226,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // ✅ Optimistic update
     const note = this.notes.find(n => n.noteId === noteId);
     if (note) {
       note.title = updatedNote.title;
@@ -204,7 +235,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       note.isPinned = updatedNote.isPinned;
       note.updatedAt = new Date().toISOString();
       this.separateNotes();
-      this.cdr.detectChanges();
+      this.cdr.detectChanges(); // ✅ Force update
     }
 
     this.notesService.updateNote(noteId, payload).subscribe({
@@ -220,9 +251,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const noteToUpdate = this.notes.find(n => n.noteId === event.noteId);
     if (!noteToUpdate) return;
 
+    // ✅ Optimistic update
     const oldColor = noteToUpdate.color;
     noteToUpdate.color = event.color;
-    this.cdr.detectChanges();
+    this.cdr.detectChanges(); // ✅ Force update
 
     const payload = {
       title: noteToUpdate.title,
@@ -242,5 +274,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   handleColorPickerToggle(noteId: number): void {
     this.openColorPickerNoteId = this.openColorPickerNoteId === noteId ? null : noteId;
+    this.cdr.detectChanges(); // ✅ Force update
   }
 }
