@@ -30,6 +30,11 @@ export const routes: Routes = [
       {
         path: 'archive',
         loadComponent: () => import('./notes/archive/archive').then(m => m.ArchiveComponent)
+      },
+      // ✅ ADD LABEL ROUTE
+      {
+        path: 'label/:id',
+        loadComponent: () => import('./notes/label-view/label-view').then(m => m.LabelViewComponent)
       }
     ]
   },

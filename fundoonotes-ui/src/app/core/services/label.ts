@@ -26,7 +26,6 @@ export class LabelService {
   }
 
   createLabel(name: string): Observable<any> {
-    // Send as JSON string wrapped in quotes
     return this.http.post(this.apiUrl, JSON.stringify(name), {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -35,7 +34,6 @@ export class LabelService {
   }
 
   updateLabel(labelId: number, name: string): Observable<any> {
-    // Send as JSON string wrapped in quotes
     return this.http.put(`${this.apiUrl}/${labelId}`, JSON.stringify(name), {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -45,6 +43,11 @@ export class LabelService {
 
   deleteLabel(labelId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${labelId}`);
+  }
+
+  // ✅ ADD THIS METHOD
+  getNotesByLabel(labelId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${labelId}/notes`);
   }
 
   // Note-Label operations

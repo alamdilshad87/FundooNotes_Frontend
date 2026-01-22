@@ -1,40 +1,33 @@
 <div class="label-manager">
   <div class="header">
     <h3>Edit labels</h3>
-    <button class="close-btn" (click)="toggleInput()">
+  </div>
+
+  <!-- ✅ Create new label - Always visible at top -->
+  <div class="create-label-row">
+    <button class="icon-btn cancel-btn" type="button" (click)="clearNewLabel()">
       <span class="material-icons-outlined">close</span>
     </button>
-  </div>
-
-  <!-- Create new label -->
-  <div class="create-label">
-    <button class="add-label-btn" (click)="showInput = true" *ngIf="!showInput">
-      <span class="material-icons-outlined">add</span>
-      <span>Create new label</span>
+    <input
+      type="text"
+      [(ngModel)]="newLabelName"
+      placeholder="Create new label"
+      (keyup.enter)="createLabel()"
+      class="label-input"
+    />
+    <button class="icon-btn check-btn" (click)="createLabel()" type="button">
+      <span class="material-icons-outlined">check</span>
     </button>
-
-    <div class="label-input-row" *ngIf="showInput">
-      <span class="material-icons-outlined">label</span>
-      <input
-        type="text"
-        [(ngModel)]="newLabelName"
-        placeholder="Label name"
-        (keyup.enter)="createLabel()"
-        (keyup.escape)="showInput = false"
-      />
-      <button (click)="createLabel()">
-        <span class="material-icons-outlined">check</span>
-      </button>
-      <button (click)="showInput = false">
-        <span class="material-icons-outlined">close</span>
-      </button>
-    </div>
   </div>
 
-  <!-- Label list -->
+  <!-- ✅ Label list -->
   <div class="labels-list">
-    <div class="label-item" *ngFor="let label of labels">
-      <span class="material-icons-outlined">label</span>
+    <div class="label-row" *ngFor="let label of labels">
+      <button class="icon-btn delete-btn" (click)="deleteLabel(label.labelId)" type="button">
+        <span class="material-icons-outlined">delete</span>
+      </button>
+
+      <span class="label-icon material-icons-outlined">label</span>
 
       <input
         *ngIf="editingLabel?.labelId === label.labelId"
@@ -42,37 +35,28 @@
         [(ngModel)]="editLabelName"
         (keyup.enter)="updateLabel()"
         (keyup.escape)="cancelEdit()"
-        class="edit-input"
+        (blur)="updateLabel()"
+        class="label-input edit-mode"
+        autofocus
       />
-      <span *ngIf="editingLabel?.labelId !== label.labelId">{{ label.name }}</span>
+      <span class="label-text" *ngIf="editingLabel?.labelId !== label.labelId">
+        {{ label.name }}
+      </span>
 
-      <div class="actions">
-        <button
-          *ngIf="editingLabel?.labelId === label.labelId"
-          (click)="updateLabel()"
-        >
-          <span class="material-icons-outlined">check</span>
-        </button>
-        <button
-          *ngIf="editingLabel?.labelId === label.labelId"
-          (click)="cancelEdit()"
-        >
-          <span class="material-icons-outlined">close</span>
-        </button>
-
-        <button
-          *ngIf="editingLabel?.labelId !== label.labelId"
-          (click)="startEdit(label)"
-        >
-          <span class="material-icons-outlined">edit</span>
-        </button>
-        <button
-          *ngIf="editingLabel?.labelId !== label.labelId"
-          (click)="deleteLabel(label.labelId)"
-        >
-          <span class="material-icons-outlined">delete</span>
-        </button>
-      </div>
+      <button
+        class="icon-btn edit-btn"
+        (click)="editingLabel?.labelId === label.labelId ? updateLabel() : startEdit(label)"
+        type="button">
+        <span class="material-icons-outlined">edit</span>
+      </button>
     </div>
+
+    <div class="empty-state" *ngIf="labels.length === 0">
+      <p>No labels created yet</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="done-btn" (click)="closeModal()" type="button">Done</button>
   </div>
 </div>

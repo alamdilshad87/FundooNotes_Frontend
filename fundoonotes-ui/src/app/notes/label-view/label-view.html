@@ -1,0 +1,46 @@
+<div class="label-view-container">
+  <div class="label-header">
+    <h2 class="label-title" *ngIf="label">{{ label.name }}</h2>
+  </div>
+
+  <div class="take-note-wrapper">
+    <app-take-note (save)="saveNote($event)"></app-take-note>
+  </div>
+
+  @if (notes.length > 0) {
+    <div class="notes-grid" [class.list-view]="viewMode === 'list'">
+      <app-note-card
+        *ngFor="let note of notes"
+        [note]="note"
+        [isColorPickerOpen]="openColorPickerNoteId === note.noteId"
+        (delete)="deleteNote($event)"
+        (archive)="archiveNote($event)"
+        (togglePin)="togglePin($event)"
+        (noteClick)="openNoteForEdit($event)"
+        (updateColor)="updateNoteColor($event)"
+        (toggleColorPicker)="handleColorPickerToggle($event)">
+      </app-note-card>
+    </div>
+  }
+
+  @if (notes.length === 0 && !isLoading) {
+    <div class="empty-state">
+      <span class="material-icons-outlined" style="font-size: 120px;">label</span>
+      <p>No notes with this label yet</p>
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="loading">
+      <p>Loading notes...</p>
+    </div>
+  }
+
+  @if (selectedNote) {
+    <app-edit-note-modal
+      [note]="selectedNote"
+      (save)="updateNote($event)"
+      (close)="closeEditModal()">
+    </app-edit-note-modal>
+  }
+</div>

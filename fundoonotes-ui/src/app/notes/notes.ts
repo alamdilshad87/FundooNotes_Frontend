@@ -36,10 +36,7 @@ export class NotesComponent {
     this.showLabelManager = false;
   }
 
-  onLabelCreated(): void {
-    console.log('🔄 Label created - refreshing sidebar');
-    this.sidebar?.refreshLabels();
-  }
+
 
   // ✅ PASS SEARCH TO ACTIVE COMPONENT
   onSearch(query: string): void {

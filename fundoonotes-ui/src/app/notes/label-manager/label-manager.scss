@@ -1,107 +1,212 @@
 .label-manager {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: #fff;
   border-radius: 8px;
-  padding: 16px;
-  max-width: 400px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  width: 300px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
+              0 2px 6px 2px rgba(60, 64, 67, 0.15);
+  font-family: 'Roboto', Arial, sans-serif;
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
+.header {
+  padding: 16px 24px 8px;
 
-    h3 {
-      font-size: 16px;
-      font-weight: 500;
-      color: #202124;
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-
-      &:hover {
-        background: #f1f3f4;
-      }
-    }
+  h3 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #5f6368;
+    margin: 0;
+    font-family: 'Roboto', Arial, sans-serif;
   }
+}
 
-  .create-label {
-    margin-bottom: 12px;
+// ✅ CREATE NEW LABEL ROW (Always at top)
+.create-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 48px;
 
-    .add-label-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      padding: 8px 12px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 14px;
-      color: #202124;
-
-      &:hover {
-        background: #f1f3f4;
-      }
-    }
-  }
-
-  .label-input-row,
-  .label-item {
+  .icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
-    border-radius: 4px;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    transition: background-color 150ms;
 
     &:hover {
-      background: #f1f3f4;
+      background-color: rgba(95, 99, 104, 0.157);
     }
 
-    span.material-icons-outlined {
+    span {
+      font-size: 18px;
       color: #5f6368;
-      font-size: 20px;
     }
+  }
 
-    input {
-      flex: 1;
-      border: none;
-      outline: none;
+  .label-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+    color: #202124;
+    padding: 8px 0;
+    font-family: 'Roboto', Arial, sans-serif;
+
+    &::placeholder {
+      color: #5f6368;
+    }
+  }
+}
+
+// ✅ LABELS LIST
+.labels-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 400px;
+
+  .empty-state {
+    padding: 32px 16px;
+    text-align: center;
+
+    p {
       font-size: 14px;
-      background: transparent;
+      color: #5f6368;
+      margin: 0;
+    }
+  }
+}
 
-      &.edit-input {
-        border-bottom: 1px solid #1a73e8;
-      }
+// ✅ LABEL ROW (Each existing label)
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px;
+  min-height: 48px;
+  transition: background-color 150ms;
+
+  &:hover {
+    background-color: #f1f3f4;
+
+    .icon-btn {
+      opacity: 1;
+    }
+  }
+
+  .icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    opacity: 0;
+    transition: all 150ms;
+
+    &:hover {
+      background-color: rgba(95, 99, 104, 0.157);
     }
 
-    .actions {
-      display: flex;
-      gap: 4px;
-      margin-left: auto;
-
-      button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 4px;
-        border-radius: 50%;
-
-        &:hover {
-          background: #e8eaed;
-        }
-
-        span {
-          font-size: 18px;
-        }
-      }
+    span {
+      font-size: 18px;
+      color: #5f6368;
     }
+  }
+
+  .label-icon {
+    font-size: 18px;
+    color: #5f6368;
+    flex-shrink: 0;
+  }
+
+  .label-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+    color: #202124;
+    padding: 8px 0;
+    font-family: 'Roboto', Arial, sans-serif;
+
+    &.edit-mode {
+      border-bottom: 2px solid #1a73e8;
+    }
+  }
+
+  .label-text {
+    flex: 1;
+    font-size: 14px;
+    color: #202124;
+    padding: 8px 0;
+    cursor: pointer;
+    font-family: 'Roboto', Arial, sans-serif;
+  }
+
+  // Always show edit button
+  .edit-btn {
+    opacity: 1;
+  }
+}
+
+// ✅ FOOTER
+.footer {
+  padding: 8px 16px;
+  display: flex;
+  justify-content: flex-end;
+
+  .done-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a73e8;
+    border-radius: 4px;
+    transition: background-color 150ms;
+    font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.25px;
+
+    &:hover {
+      background-color: rgba(26, 115, 232, 0.04);
+    }
+  }
+}
+
+// ✅ Scrollbar styling
+.labels-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.labels-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.labels-list::-webkit-scrollbar-thumb {
+  background: #dadce0;
+  border-radius: 4px;
+
+  &:hover {
+    background: #bdc1c6;
   }
 }

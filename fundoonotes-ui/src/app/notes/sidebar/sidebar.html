@@ -10,7 +10,7 @@
       <span class="label">Reminders</span>
     </a>
 
-    <!-- DYNAMIC LABELS -->
+    <!-- ✅ DYNAMIC LABELS -->
     @for (label of labels; track label.labelId) {
       <a class="nav-item" [routerLink]="['/notes/label', label.labelId]" routerLinkActive="active">
         <span class="material-icons-outlined icon">label</span>
@@ -18,7 +18,7 @@
       </a>
     }
 
-    <!-- EDIT LABELS -->
+    <!-- ✅ EDIT LABELS BUTTON -->
     <div class="nav-item" (click)="openLabelManager()">
       <span class="material-icons-outlined icon">edit</span>
       <span class="label">Edit labels</span>
@@ -35,3 +35,15 @@
     </a>
   </nav>
 </aside>
+
+<!-- ✅ LABEL MANAGER MODAL -->
+@if (showLabelManager) {
+  <div class="label-manager-overlay" (click)="closeLabelManager()">
+    <div class="label-manager-wrapper" (click)="$event.stopPropagation()">
+      <app-label-manager
+        (close)="closeLabelManager()"
+        (labelCreated)="onLabelChange()">
+      </app-label-manager>
+    </div>
+  </div>
+}
