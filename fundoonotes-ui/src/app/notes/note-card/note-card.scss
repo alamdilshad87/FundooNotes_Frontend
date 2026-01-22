@@ -320,3 +320,67 @@
     min-width: 24px;
   }
 }
+// ✅ TRASH ACTIONS - ICON ONLY (Bottom of card)
+.trash-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.trash-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  flex-shrink: 0;
+
+  .material-icons-outlined {
+    font-size: 18px;
+    color: #5f6368;
+  }
+
+  &:hover {
+    background: rgba(95, 99, 104, 0.157);
+  }
+
+  &:active {
+    background: rgba(95, 99, 104, 0.2);
+  }
+}
+
+.delete-btn {
+  &:hover {
+    background: rgba(217, 48, 37, 0.08);
+
+    .material-icons-outlined {
+      color: #d93025;
+    }
+  }
+}
+
+.restore-btn {
+  &:hover {
+    background: rgba(26, 115, 232, 0.08);
+
+    .material-icons-outlined {
+      color: #1a73e8;
+    }
+  }
+}
+
+// ✅ When in trash, disable click and hide other actions
+.note-card:has(.trash-actions) {
+  cursor: default;
+
+  .note-actions {
+    display: none !important;
+  }
+}

@@ -2,7 +2,7 @@
   width: 100%;
   min-height: calc(100vh - 64px);
   background: #fff;
-  padding: 0; // ✅ REMOVED 5rem padding
+  padding: 0;
   margin: 0;
 }
 
@@ -93,6 +93,19 @@ app-take-note {
   }
 }
 
+// ✅ ALIGN LABELS WITH NOTES IN LIST VIEW
+.notes-section .notes-grid.list-view {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.notes-section:has(.list-view) .section-label {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 4px;
+}
+
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -150,5 +163,10 @@ app-take-note {
     &.list-view {
       max-width: 100%;
     }
+  }
+
+  // ✅ Mobile alignment
+  .notes-section:has(.list-view) .section-label {
+    max-width: 100%;
   }
 }

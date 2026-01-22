@@ -26,12 +26,9 @@ export class TrashComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log('🗑️ Trash component initialized');
     this.loadTrashedNotes();
-
     this.viewModeSubscription = this.viewModeService.viewMode$.subscribe(mode => {
       this.viewMode = mode;
-      console.log('🗑️ Trash view mode:', mode);
       this.cdr.detectChanges();
     });
   }
@@ -42,11 +39,8 @@ export class TrashComponent implements OnInit, OnDestroy {
 
   loadTrashedNotes(): void {
     this.isLoading = true;
-    console.log('📥 Loading trashed notes...');
-
     this.notesService.getTrashedNotes().subscribe({
       next: (notes) => {
-        console.log('✅ Trashed notes loaded:', notes);
         this.notes = notes;
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -60,15 +54,11 @@ export class TrashComponent implements OnInit, OnDestroy {
   }
 
   restoreNote(noteId: number): void {
-    console.log('♻️ Restoring note:', noteId);
-
     this.notes = this.notes.filter(n => n.noteId !== noteId);
     this.cdr.detectChanges();
 
     this.notesService.restoreNote(noteId).subscribe({
-      next: () => {
-        console.log('✅ Note restored');
-      },
+      next: () => console.log('✅ Note restored'),
       error: (error) => {
         console.error('❌ Error restoring note:', error);
         alert('Failed to restore note');
@@ -82,15 +72,11 @@ export class TrashComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('💀 Permanently deleting note:', noteId);
-
     this.notes = this.notes.filter(n => n.noteId !== noteId);
     this.cdr.detectChanges();
 
     this.notesService.permanentDeleteNote(noteId).subscribe({
-      next: () => {
-        console.log('✅ Note permanently deleted');
-      },
+      next: () => console.log('✅ Note permanently deleted'),
       error: (error) => {
         console.error('❌ Error permanently deleting note:', error);
         alert('Failed to permanently delete note');
@@ -99,16 +85,11 @@ export class TrashComponent implements OnInit, OnDestroy {
     });
   }
 
-  // For note card restore button
   handleRestore(noteId: number): void {
     this.restoreNote(noteId);
   }
 
   handleColorPickerToggle(noteId: number): void {
     this.openColorPickerNoteId = this.openColorPickerNoteId === noteId ? null : noteId;
-  }
-
-  onSearch(query: string): void {
-    console.log('🔍 Trash search:', query);
   }
 }

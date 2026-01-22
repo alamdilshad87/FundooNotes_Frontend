@@ -47,19 +47,15 @@ export class TakeNoteComponent {
   }
 
   expand(): void {
-    console.log('🔥 EXPAND CLICKED!');
     this.isExpanded = true;
-    console.log('isExpanded is now:', this.isExpanded);
-
     setTimeout(() => {
       if (this.contentEditor) {
         this.contentEditor.nativeElement.focus();
       }
-    }, 150);
+    }, 100);
   }
 
   close(): void {
-    console.log('🔥 CLOSE CLICKED!');
     if (this.title.trim() || this.content.trim()) {
       this.saveNote();
     }
@@ -77,7 +73,6 @@ export class TakeNoteComponent {
     };
 
     if (noteData.title || noteData.content) {
-      console.log('💾 Saving note:', noteData);
       this.save.emit(noteData);
       this.resetForm();
     }

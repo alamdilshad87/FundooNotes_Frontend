@@ -3,76 +3,45 @@
   width: 100%;
   min-height: calc(100vh - 64px);
   background: #fff;
-  padding: 24px 16px;
+  padding: 0;
   margin: 0;
 }
 
+// ✅ TITLE - Align with take-note in list view
 .page-title {
   font-size: 24px;
   font-weight: 400;
   color: #202124;
   margin: 0 0 24px 0;
-  padding-left: 4px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 24px 16px 0;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
 }
 
-// ✅ GRID VIEW - Masonry layout
+// ✅ GRID VIEW - Full width masonry
 .notes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
-  padding: 0;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0 16px;
   transition: all 0.2s ease;
 
-  // ✅ LIST VIEW - Single column, centered
+  // ✅ LIST VIEW - Centered at 600px
   &.list-view {
     grid-template-columns: 1fr;
     max-width: 600px;
+    margin: 0 auto;
     gap: 8px;
-
-    // List view: Note cards become horizontal
-    ::ng-deep app-note-card {
-      .note-card {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        min-height: auto;
-        padding: 16px;
-
-        // Content section
-        .note-title,
-        .note-content,
-        .note-labels {
-          flex: 1;
-        }
-
-        .note-title {
-          margin-bottom: 4px;
-        }
-
-        .note-content {
-          margin-bottom: 0;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-
-        // Actions stay on right
-        .note-actions {
-          margin-left: 16px;
-          margin-top: 0;
-          padding-top: 0;
-          flex-direction: row;
-          opacity: 1; // Always visible in list view
-        }
-      }
-    }
   }
+}
+
+// ✅ ALIGN TITLE WITH NOTES IN LIST VIEW
+.archive-container:has(.notes-grid.list-view) .page-title,
+.trash-container:has(.notes-grid.list-view) .page-title {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .empty-state {
@@ -94,6 +63,7 @@
     font-size: 22px;
     color: #5f6368;
     margin: 0;
+    font-weight: 400;
   }
 }
 
@@ -112,26 +82,30 @@
 }
 
 @media (max-width: 1024px) {
-  .notes-grid {
+  .notes-grid:not(.list-view) {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
-  .archive-container,
-  .trash-container {
-    padding: 16px 8px;
-  }
-
   .page-title {
-    padding-left: 0;
+    padding: 16px;
   }
 
   .notes-grid {
-    grid-template-columns: 1fr;
+    padding: 0 8px;
+  }
 
-    &.list-view {
-      max-width: 100%;
-    }
+  .notes-grid:not(.list-view) {
+    grid-template-columns: 1fr;
+  }
+
+  .notes-grid.list-view {
+    max-width: 100%;
+  }
+
+  .archive-container:has(.notes-grid.list-view) .page-title,
+  .trash-container:has(.notes-grid.list-view) .page-title {
+    max-width: 100%;
   }
 }

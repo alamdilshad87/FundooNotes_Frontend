@@ -30,26 +30,38 @@
     </div>
   }
 
-  <!-- ✅ ALL ACTION ICONS -->
-  <div class="note-actions" (click)="$event.stopPropagation()">
-    @if (!isInTrash) {
-      <!-- Remind me -->
+  <!-- ✅ TRASH ACTIONS - ONLY SHOW IN TRASH -->
+  @if (isInTrash) {
+    <div class="trash-actions" (click)="$event.stopPropagation()">
       <button
-        class="action-btn"
-        title="Remind me"
-        type="button">
+        class="trash-action-btn delete-btn"
+        (click)="onDelete($event)"
+        type="button"
+        title="Delete forever">
+        <span class="material-icons-outlined">delete_forever</span>
+      </button>
+
+      <button
+        class="trash-action-btn restore-btn"
+        (click)="onRestore($event)"
+        type="button"
+        title="Restore">
+        <span class="material-icons-outlined">restore_from_trash</span>
+      </button>
+    </div>
+  }
+
+  <!-- ✅ NORMAL ACTIONS - ONLY SHOW WHEN NOT IN TRASH -->
+  @if (!isInTrash) {
+    <div class="note-actions" (click)="$event.stopPropagation()">
+      <button class="action-btn" title="Remind me" type="button">
         <span class="material-icons-outlined">add_alert</span>
       </button>
 
-      <!-- Collaborator -->
-      <button
-        class="action-btn"
-        title="Collaborator"
-        type="button">
+      <button class="action-btn" title="Collaborator" type="button">
         <span class="material-icons-outlined">person_add</span>
       </button>
 
-      <!-- Color picker -->
       <button
         class="action-btn"
         [class.active]="isColorPickerOpen"
@@ -59,15 +71,10 @@
         <span class="material-icons-outlined">palette</span>
       </button>
 
-      <!-- Image -->
-      <button
-        class="action-btn"
-        title="Add image"
-        type="button">
+      <button class="action-btn" title="Add image" type="button">
         <span class="material-icons-outlined">image</span>
       </button>
 
-      <!-- Archive -->
       <button
         class="action-btn"
         (click)="onArchive($event)"
@@ -75,30 +82,18 @@
         type="button">
         <span class="material-icons-outlined">archive</span>
       </button>
-    }
 
-    <!-- More menu -->
-    <button
-      class="action-btn"
-      [class.active]="showMenu"
-      (click)="toggleMenu($event)"
-      title="More"
-      type="button">
-      <span class="material-icons-outlined">more_vert</span>
-    </button>
+      <button
+        class="action-btn"
+        [class.active]="showMenu"
+        (click)="toggleMenu($event)"
+        title="More"
+        type="button">
+        <span class="material-icons-outlined">more_vert</span>
+      </button>
 
-    @if (showMenu) {
-      <div class="menu-dropdown" (click)="$event.stopPropagation()">
-        @if (isInTrash) {
-          <button class="menu-item" (click)="onRestore($event)" type="button">
-            <span class="material-icons-outlined">restore_from_trash</span>
-            <span>Restore</span>
-          </button>
-          <button class="menu-item delete-forever" (click)="onDelete($event)" type="button">
-            <span class="material-icons-outlined">delete_forever</span>
-            <span>Delete forever</span>
-          </button>
-        } @else {
+      @if (showMenu) {
+        <div class="menu-dropdown" (click)="$event.stopPropagation()">
           <button class="menu-item" (click)="onDelete($event)" type="button">
             <span class="material-icons-outlined">delete</span>
             <span>Delete note</span>
@@ -115,28 +110,28 @@
             <span class="material-icons-outlined">content_copy</span>
             <span>Make a copy</span>
           </button>
+        </div>
+      }
+    </div>
+
+    <!-- COLOR PICKER -->
+    @if (isColorPickerOpen) {
+      <div class="color-picker-palette" (click)="$event.stopPropagation()">
+        @for (color of colors; track color.value) {
+          <button
+            class="color-option"
+            [style.background-color]="color.value"
+            [class.selected]="note.color === color.value"
+            [class.default-color]="color.value === '#ffffff'"
+            (click)="onColorClick(color.value, $event)"
+            [title]="color.name"
+            type="button">
+            @if (note.color === color.value) {
+              <span class="material-icons-outlined check">check</span>
+            }
+          </button>
         }
       </div>
     }
-  </div>
-
-  <!-- ✅ HORIZONTAL COLOR PICKER (SINGLE ROW) -->
-  @if (isColorPickerOpen && !isInTrash) {
-    <div class="color-picker-palette" (click)="$event.stopPropagation()">
-      @for (color of colors; track color.value) {
-        <button
-          class="color-option"
-          [style.background-color]="color.value"
-          [class.selected]="note.color === color.value"
-          [class.default-color]="color.value === '#ffffff'"
-          (click)="onColorClick(color.value, $event)"
-          [title]="color.name"
-          type="button">
-          @if (note.color === color.value) {
-            <span class="material-icons-outlined check">check</span>
-          }
-        </button>
-      }
-    </div>
   }
 </div>
