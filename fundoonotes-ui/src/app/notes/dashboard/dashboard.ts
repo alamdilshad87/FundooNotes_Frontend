@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TakeNoteComponent } from '../take-note/take-note';
 import { NoteCardComponent } from '../note-card/note-card';
@@ -23,19 +23,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedNote: any = null;
   openColorPickerNoteId: number | null = null;
   searchQuery: string = '';
-  viewMode: ViewMode = 'grid'; // ✅ NEW
-  private viewModeSubscription?: Subscription; // ✅ NEW
+  viewMode: ViewMode = 'grid';
+  private viewModeSubscription?: Subscription;
 
   constructor(
     private notesService: NotesService,
-    private viewModeService: ViewModeService, // ✅ NEW
+    private viewModeService: ViewModeService,
     private cdr: ChangeDetectorRef
   ) {}
+
+  // ✅ HostListener INSIDE the class
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    // Close color picker when clicking outside
+    this.openColorPickerNoteId = null;
+    this.cdr.detectChanges();
+  }
 
   ngOnInit(): void {
     this.loadNotes();
 
-    // ✅ Subscribe to view mode changes
     this.viewModeSubscription = this.viewModeService.viewMode$.subscribe(mode => {
       this.viewMode = mode;
       console.log('📋 Dashboard view mode:', mode);

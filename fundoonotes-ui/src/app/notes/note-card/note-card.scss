@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100px;
-  break-inside: avoid; // ✅ For masonry layout
+  break-inside: avoid;
 
   &:hover {
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
@@ -18,17 +18,69 @@
     .note-actions {
       opacity: 1;
     }
+
+    .pin-btn {
+      opacity: 1; // Show pin on hover
+    }
   }
+}
+
+// ✅ CARD HEADER - Title and Pin Button
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .note-title {
   font-size: 16px;
   font-weight: 500;
   color: #202124;
-  margin: 0 0 12px 0;
+  margin: 0;
   line-height: 20px;
   word-wrap: break-word;
   letter-spacing: 0.00625em;
+  flex: 1;
+}
+
+// ✅ PIN BUTTON - Top Right
+.pin-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms, opacity 150ms;
+  flex-shrink: 0;
+  opacity: 0; // Hidden by default
+  width: 24px;
+  height: 24px;
+  margin-top: -4px; // Align with title
+
+  .material-icons-outlined,
+  .material-icons {
+    font-size: 18px;
+    color: #5f6368;
+  }
+
+  &:hover {
+    background-color: rgba(95, 99, 104, 0.157);
+  }
+
+  // ✅ When pinned - always visible, darker icon
+  &.pinned {
+    opacity: 1 !important;
+
+    .material-icons {
+      color: #202124;
+      font-weight: 500;
+    }
+  }
 }
 
 .note-content {
@@ -60,7 +112,7 @@
   font-weight: 400;
 }
 
-// ✅ ACTIONS BAR
+// ✅ ACTIONS BAR - Bottom (without pin)
 .note-actions {
   display: flex;
   gap: 4px;
@@ -83,24 +135,19 @@
   justify-content: center;
   transition: background-color 150ms;
   padding: 0;
-  flex-shrink: 0; // ✅ Prevent shrinking in list view
+  flex-shrink: 0;
 
   &:hover {
+    background: rgba(95, 99, 104, 0.157);
+  }
+
+  &.active {
     background: rgba(95, 99, 104, 0.157);
   }
 
   span {
     font-size: 18px;
     color: #5f6368;
-  }
-}
-
-.pin-btn {
-  margin-right: auto;
-
-  &.pinned span {
-    color: #202124;
-    font-weight: 500;
   }
 }
 
@@ -166,18 +213,19 @@
   }
 }
 
-// ✅ COLOR PICKER PALETTE
+// ✅ COLOR PICKER PALETTE - Fixed positioning
 .color-picker-palette {
   position: absolute;
   bottom: 40px;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
               0 2px 6px 2px rgba(60, 64, 67, 0.15);
   padding: 8px;
   display: grid;
-  grid-template-columns: repeat(4, 36px);
+  grid-template-columns: repeat(6, 36px); // 6 colors per row
   gap: 4px;
   z-index: 100;
   animation: fadeIn 0.15s ease;
@@ -194,10 +242,11 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  position: relative;
 
   &:hover {
-    border-color: rgba(0, 0, 0, 0.15);
-    transform: scale(1.05);
+    border-color: rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
   }
 
   &.selected {
@@ -208,6 +257,21 @@
       color: #202124;
     }
   }
+
+  // ✅ Default/white color with red slash
+  &.default-color {
+    border: 2px solid #e0e0e0;
+    background: white !important;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: #d93025;
+      transform: rotate(45deg);
+    }
+  }
 }
 
 // ✅ RESPONSIVE
@@ -216,9 +280,15 @@
     .note-actions {
       opacity: 1; // Always visible on mobile
     }
+
+    .pin-btn {
+      opacity: 1; // Always visible on mobile
+    }
   }
 
   .color-picker-palette {
-    grid-template-columns: repeat(3, 36px);
+    grid-template-columns: repeat(4, 36px); // 4 colors per row on mobile
+    left: 0;
+    transform: none;
   }
 }

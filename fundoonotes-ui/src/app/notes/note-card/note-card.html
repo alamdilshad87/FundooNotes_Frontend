@@ -2,10 +2,26 @@
      [style.background-color]="note.color || '#fff'"
      (click)="onCardClick()">
 
-  <!-- Title -->
-  @if (note.title) {
-    <h3 class="note-title">{{ note.title }}</h3>
-  }
+  <!-- ✅ HEADER: Title + Pin Button -->
+  <div class="card-header">
+    @if (note.title) {
+      <h3 class="note-title">{{ note.title }}</h3>
+    }
+
+    <!-- ✅ PIN BUTTON - Always at top right -->
+    @if (!isInTrash) {
+      <button
+        class="pin-btn"
+        [class.pinned]="note.isPinned"
+        (click)="onTogglePin($event)"
+        [title]="note.isPinned ? 'Unpin' : 'Pin'"
+        type="button">
+        <span [class]="note.isPinned ? 'material-icons' : 'material-icons-outlined'">
+          push_pin
+        </span>
+      </button>
+    }
+  </div>
 
   <!-- Content -->
   @if (note.content) {
@@ -21,26 +37,12 @@
     </div>
   }
 
-  <!-- Actions Bar -->
+  <!-- ✅ ACTIONS BAR - Bottom (without pin) -->
   <div class="note-actions" (click)="$event.stopPropagation()">
-
-    <!-- Pin button (not in trash) -->
-    @if (!isInTrash) {
-      <button
-        class="action-btn pin-btn"
-        [class.pinned]="note.isPinned"
-        (click)="onTogglePin($event)"
-        [title]="note.isPinned ? 'Unpin' : 'Pin'"
-        type="button">
-        <span class="material-icons-outlined">
-          {{ note.isPinned ? 'push_pin' : 'push_pin' }}
-        </span>
-      </button>
-    }
-
     <!-- Color picker -->
     <button
       class="action-btn"
+      [class.active]="isColorPickerOpen"
       (click)="onToggleColorPicker($event)"
       title="Change color"
       type="button">
@@ -50,6 +52,7 @@
     <!-- Menu -->
     <button
       class="action-btn"
+      [class.active]="showMenu"
       (click)="toggleMenu($event)"
       title="More"
       type="button">
@@ -84,7 +87,7 @@
     }
   </div>
 
-  <!-- Color Picker Palette -->
+  <!-- ✅ COLOR PICKER PALETTE -->
   @if (isColorPickerOpen) {
     <div class="color-picker-palette" (click)="$event.stopPropagation()">
       @for (color of colors; track color.value) {
@@ -92,6 +95,7 @@
           class="color-option"
           [style.background-color]="color.value"
           [class.selected]="note.color === color.value"
+          [class.default-color]="color.value === '#ffffff'"
           (click)="onColorClick(color.value, $event)"
           [title]="color.name"
           type="button">

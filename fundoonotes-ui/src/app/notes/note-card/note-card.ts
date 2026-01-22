@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class NoteCardComponent {
   @Input() note: any;
   @Input() isColorPickerOpen: boolean = false;
-  @Input() isInTrash: boolean = false; // ✅ ADD THIS
+  @Input() isInTrash: boolean = false;
 
   @Output() delete = new EventEmitter<number>();
   @Output() archive = new EventEmitter<number>();
@@ -19,27 +19,33 @@ export class NoteCardComponent {
   @Output() noteClick = new EventEmitter<any>();
   @Output() updateColor = new EventEmitter<{noteId: number, color: string}>();
   @Output() toggleColorPicker = new EventEmitter<number>();
-  @Output() restore = new EventEmitter<number>(); // ✅ ADD THIS
+  @Output() restore = new EventEmitter<number>();
 
   showMenu = false;
 
   colors = [
     { name: 'Default', value: '#ffffff' },
-    { name: 'Red', value: '#f28b82' },
-    { name: 'Orange', value: '#fbbc04' },
-    { name: 'Yellow', value: '#fff475' },
-    { name: 'Green', value: '#ccff90' },
-    { name: 'Teal', value: '#a7ffeb' },
-    { name: 'Blue', value: '#cbf0f8' },
-    { name: 'Dark Blue', value: '#aecbfa' },
-    { name: 'Purple', value: '#d7aefb' },
-    { name: 'Pink', value: '#fdcfe8' },
-    { name: 'Brown', value: '#e6c9a8' },
-    { name: 'Gray', value: '#e8eaed' }
+    { name: 'Coral', value: '#f28b82' },
+    { name: 'Peach', value: '#fbbc04' },
+    { name: 'Sand', value: '#fff475' },
+    { name: 'Mint', value: '#ccff90' },
+    { name: 'Sage', value: '#a7ffeb' },
+    { name: 'Fog', value: '#cbf0f8' },
+    { name: 'Storm', value: '#aecbfa' },
+    { name: 'Dusk', value: '#d7aefb' },
+    { name: 'Blossom', value: '#fdcfe8' },
+    { name: 'Clay', value: '#e6c9a8' },
+    { name: 'Chalk', value: '#e8eaed' }
   ];
 
+  // ✅ Close popups when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    // This will be handled by parent component
+  }
+
   onCardClick(): void {
-    if (!this.isInTrash) { // ✅ Don't open modal in trash
+    if (!this.isInTrash) {
       this.noteClick.emit(this.note);
     }
   }
@@ -67,7 +73,6 @@ export class NoteCardComponent {
     this.togglePin.emit(this.note.noteId);
   }
 
-  // ✅ ADD THIS METHOD
   onRestore(event?: Event): void {
     if (event) {
       event.stopPropagation();
