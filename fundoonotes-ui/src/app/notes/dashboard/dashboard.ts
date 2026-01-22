@@ -13,12 +13,14 @@ import { NotesService } from '../../core/services/notes';
   styleUrls: ['./dashboard.scss']
 })
 export class DashboardComponent implements OnInit {
+  allNotes: any[] = [];
   notes: any[] = [];
   pinnedNotes: any[] = [];
   unpinnedNotes: any[] = [];
   isLoading = false;
   selectedNote: any = null;
   openColorPickerNoteId: number | null = null;
+  searchQuery: string = ''; // ✅ NEW
 
   constructor(
     private notesService: NotesService,
@@ -35,13 +37,13 @@ export class DashboardComponent implements OnInit {
       next: (response) => {
         console.log('📥 All notes from API:', response);
 
-        this.notes = response.filter(note => {
+        this.allNotes = response.filter(note => {
           const isDeleted = note.isDeleted ?? note.IsDeleted ?? false;
           const isArchived = note.isArchived ?? note.IsArchived ?? false;
           return !isDeleted && !isArchived;
         });
 
-        this.separateNotes();
+        this.applyFilters();
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -50,6 +52,31 @@ export class DashboardComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  // ✅ NEW - Search functionality
+  onSearch(query: string): void {
+    console.log('🔍 Dashboard search called with:', query);
+    this.searchQuery = query.toLowerCase().trim();
+    this.applyFilters();
+  }
+
+  // ✅ NEW - Apply search filter
+  private applyFilters(): void {
+    if (this.searchQuery) {
+      this.notes = this.allNotes.filter(note => {
+        const titleMatch = note.title?.toLowerCase().includes(this.searchQuery);
+        const contentMatch = note.content?.toLowerCase().includes(this.searchQuery);
+        const labelsMatch = note.labels?.some((label: string) =>
+          label.toLowerCase().includes(this.searchQuery)
+        );
+        return titleMatch || contentMatch || labelsMatch;
+      });
+    } else {
+      this.notes = [...this.allNotes];
+    }
+
+    this.separateNotes();
   }
 
   private separateNotes(): void {
@@ -73,7 +100,6 @@ export class DashboardComponent implements OnInit {
 
   addNote(noteData: any): void {
     console.log('🎯 DASHBOARD addNote called with:', noteData);
-    console.log('📌 isPinned:', noteData.isPinned);
 
     this.notesService.createNote(noteData).subscribe({
       next: (response) => {
@@ -89,6 +115,7 @@ export class DashboardComponent implements OnInit {
 
   deleteNote(id: number): void {
     this.notes = this.notes.filter(note => note.noteId !== id);
+    this.allNotes = this.allNotes.filter(note => note.noteId !== id);
     this.separateNotes();
     this.cdr.detectChanges();
 
@@ -108,6 +135,7 @@ export class DashboardComponent implements OnInit {
     console.log('📦 Archiving note:', id);
 
     this.notes = this.notes.filter(note => note.noteId !== id);
+    this.allNotes = this.allNotes.filter(note => note.noteId !== id);
     this.separateNotes();
     this.cdr.detectChanges();
 
@@ -159,7 +187,6 @@ export class DashboardComponent implements OnInit {
     this.selectedNote = null;
   }
 
-  // ✅ FIXED - Don't call closeEditModal here, the modal will close itself
   updateNote(updatedNote: any): void {
     const payload = {
       title: updatedNote.title,
@@ -176,7 +203,6 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    // ✅ Update UI optimistically
     const note = this.notes.find(n => n.noteId === noteId);
     if (note) {
       note.title = updatedNote.title;
@@ -188,16 +214,13 @@ export class DashboardComponent implements OnInit {
       this.cdr.detectChanges();
     }
 
-    // ✅ Then save to backend
     this.notesService.updateNote(noteId, payload).subscribe({
       next: (response) => {
         console.log('✅ Note updated successfully:', response);
-        // Don't close modal here - it's already closed by the modal component
       },
       error: (error) => {
         console.error('❌ Error updating note:', error);
         alert('Failed to update note. Please try again.');
-        // Revert changes on error
         this.loadNotes();
       }
     });

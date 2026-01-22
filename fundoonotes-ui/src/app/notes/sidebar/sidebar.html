@@ -5,6 +5,20 @@
       <span class="label">Notes</span>
     </a>
 
+    <a class="nav-item" routerLink="/notes/reminders" routerLinkActive="active">
+      <span class="material-icons-outlined icon">notifications</span>
+      <span class="label">Reminders</span>
+    </a>
+
+    <!-- DYNAMIC LABELS -->
+    @for (label of labels; track label.labelId) {
+      <a class="nav-item" [routerLink]="['/notes/label', label.labelId]" routerLinkActive="active">
+        <span class="material-icons-outlined icon">label</span>
+        <span class="label">{{ label.name }}</span>
+      </a>
+    }
+
+    <!-- EDIT LABELS -->
     <div class="nav-item" (click)="openLabelManager()">
       <span class="material-icons-outlined icon">edit</span>
       <span class="label">Edit labels</span>
@@ -20,11 +34,4 @@
       <span class="label">Trash</span>
     </a>
   </nav>
-
-  <!-- Label Manager Modal -->
-  <div class="label-manager-overlay" *ngIf="showLabelManager" (click)="openLabelManager()">
-    <div class="label-manager-wrapper" (click)="$event.stopPropagation()">
-      <app-label-manager></app-label-manager>
-    </div>
-  </div>
 </aside>

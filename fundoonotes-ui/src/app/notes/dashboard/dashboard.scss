@@ -13,7 +13,48 @@
   padding: 0 16px;
 }
 
-// ✅ ADD NOTES SECTION STYLING
+// ✅ SEARCH INFO BAR
+.search-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #e8f0fe;
+  border-radius: 8px;
+  margin: 24px 0 16px 0;
+  font-size: 14px;
+  color: #1967d2;
+  font-weight: 500;
+
+  span.material-icons-outlined {
+    font-size: 20px;
+    color: #1967d2;
+  }
+
+  .clear-search-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 150ms;
+
+    &:hover {
+      background: rgba(25, 103, 210, 0.1);
+    }
+
+    span {
+      font-size: 18px;
+      color: #1967d2;
+    }
+  }
+}
+
+// ✅ NOTES SECTION STYLING
 .notes-section {
   margin-top: 32px;
   width: 100%;
@@ -25,11 +66,11 @@
   &:not(:first-of-type) {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #e0e0e0; // ✅ Separator between sections
+    border-top: 1px solid #e0e0e0;
   }
 }
 
-// ✅ ADD SECTION LABEL STYLING
+// ✅ SECTION LABEL STYLING
 .section-label {
   font-size: 11px;
   font-weight: 500;
@@ -129,5 +170,10 @@
 
   .section-label {
     padding-left: 0;
+  }
+
+  .search-info {
+    margin: 16px 0 12px 0;
+    font-size: 13px;
   }
 }

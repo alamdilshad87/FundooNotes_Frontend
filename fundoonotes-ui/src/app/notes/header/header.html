@@ -4,13 +4,13 @@
     <button class="icon-btn menu-btn" (click)="toggleSidebar.emit()" aria-label="Main menu">
       <span class="material-icons-outlined">menu</span>
     </button>
-    
-    <img 
-      class="logo" 
-      src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" 
+
+    <img
+      class="logo"
+      src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png"
       alt="Keep"
     />
-    
+
     <span class="title">Keep</span>
   </div>
 
@@ -20,18 +20,18 @@
       <button class="search-icon" aria-label="Search">
         <span class="material-icons-outlined">search</span>
       </button>
-      
-      <input 
-        type="text" 
+
+      <input
+        type="text"
         placeholder="Search"
         [(ngModel)]="searchQuery"
         (input)="onSearch()"
         aria-label="Search"
       />
-      
-      <button 
-        class="clear-icon" 
-        *ngIf="searchQuery" 
+
+      <button
+        class="clear-icon"
+        *ngIf="searchQuery"
         (click)="clearSearch()"
         aria-label="Clear search"
       >
@@ -45,11 +45,11 @@
     <button class="icon-btn" aria-label="Refresh">
       <span class="material-icons-outlined">refresh</span>
     </button>
-    
+
     <button class="icon-btn" aria-label="List view">
       <span class="material-icons-outlined">view_agenda</span>
     </button>
-    
+
     <button class="icon-btn" aria-label="Settings">
       <span class="material-icons-outlined">settings</span>
     </button>
@@ -57,7 +57,7 @@
     <button class="icon-btn apps-btn" aria-label="Google apps">
       <span class="material-icons-outlined">apps</span>
     </button>
-    
+
     <button class="avatar" aria-label="Google Account">
       {{ getInitials() }}
     </button>

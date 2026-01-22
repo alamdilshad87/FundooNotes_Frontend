@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -16,14 +17,22 @@ export class HeaderComponent {
 
   searchQuery = '';
   userEmail = '';
+  private searchSubject = new Subject<string>();
 
   constructor(private authService: AuthService) {
-    // You can get user email from token or service
     this.userEmail = 'user@example.com';
+
+    // ✅ Debounce search - wait 300ms after user stops typing
+    this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(query => {
+      console.log('🔍 Emitting search:', query);
+      this.search.emit(query);
+    });
   }
 
   onSearch(): void {
-    this.search.emit(this.searchQuery);
+    this.searchSubject.next(this.searchQuery.trim());
   }
 
   clearSearch(): void {
