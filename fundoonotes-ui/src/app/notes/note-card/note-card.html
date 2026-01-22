@@ -1,14 +1,9 @@
-<div class="note-card"
-     [style.background-color]="note.color || '#fff'"
-     (click)="onCardClick()">
-
-  <!-- ✅ HEADER: Title + Pin Button -->
+<div class="note-card" [style.background-color]="note.color || '#fff'" (click)="onCardClick()">
   <div class="card-header">
     @if (note.title) {
       <h3 class="note-title">{{ note.title }}</h3>
     }
 
-    <!-- ✅ PIN BUTTON - Always at top right -->
     @if (!isInTrash) {
       <button
         class="pin-btn"
@@ -23,12 +18,10 @@
     }
   </div>
 
-  <!-- Content -->
   @if (note.content) {
     <p class="note-content">{{ note.content }}</p>
   }
 
-  <!-- Labels -->
   @if (note.labels && note.labels.length > 0) {
     <div class="note-labels">
       @for (label of note.labels; track label) {
@@ -37,19 +30,54 @@
     </div>
   }
 
-  <!-- ✅ ACTIONS BAR - Bottom (without pin) -->
+  <!-- ✅ ALL ACTION ICONS -->
   <div class="note-actions" (click)="$event.stopPropagation()">
-    <!-- Color picker -->
-    <button
-      class="action-btn"
-      [class.active]="isColorPickerOpen"
-      (click)="onToggleColorPicker($event)"
-      title="Change color"
-      type="button">
-      <span class="material-icons-outlined">palette</span>
-    </button>
+    @if (!isInTrash) {
+      <!-- Remind me -->
+      <button
+        class="action-btn"
+        title="Remind me"
+        type="button">
+        <span class="material-icons-outlined">add_alert</span>
+      </button>
 
-    <!-- Menu -->
+      <!-- Collaborator -->
+      <button
+        class="action-btn"
+        title="Collaborator"
+        type="button">
+        <span class="material-icons-outlined">person_add</span>
+      </button>
+
+      <!-- Color picker -->
+      <button
+        class="action-btn"
+        [class.active]="isColorPickerOpen"
+        (click)="onToggleColorPicker($event)"
+        title="Change color"
+        type="button">
+        <span class="material-icons-outlined">palette</span>
+      </button>
+
+      <!-- Image -->
+      <button
+        class="action-btn"
+        title="Add image"
+        type="button">
+        <span class="material-icons-outlined">image</span>
+      </button>
+
+      <!-- Archive -->
+      <button
+        class="action-btn"
+        (click)="onArchive($event)"
+        title="Archive"
+        type="button">
+        <span class="material-icons-outlined">archive</span>
+      </button>
+    }
+
+    <!-- More menu -->
     <button
       class="action-btn"
       [class.active]="showMenu"
@@ -59,11 +87,9 @@
       <span class="material-icons-outlined">more_vert</span>
     </button>
 
-    <!-- Menu Dropdown -->
     @if (showMenu) {
       <div class="menu-dropdown" (click)="$event.stopPropagation()">
         @if (isInTrash) {
-          <!-- Trash Actions -->
           <button class="menu-item" (click)="onRestore($event)" type="button">
             <span class="material-icons-outlined">restore_from_trash</span>
             <span>Restore</span>
@@ -73,22 +99,29 @@
             <span>Delete forever</span>
           </button>
         } @else {
-          <!-- Normal Actions -->
-          <button class="menu-item" (click)="onArchive($event)" type="button">
-            <span class="material-icons-outlined">archive</span>
-            <span>Archive</span>
-          </button>
           <button class="menu-item" (click)="onDelete($event)" type="button">
             <span class="material-icons-outlined">delete</span>
-            <span>Delete</span>
+            <span>Delete note</span>
+          </button>
+          <button class="menu-item" type="button">
+            <span class="material-icons-outlined">label</span>
+            <span>Add label</span>
+          </button>
+          <button class="menu-item" type="button">
+            <span class="material-icons-outlined">check_box</span>
+            <span>Add checkboxes</span>
+          </button>
+          <button class="menu-item" type="button">
+            <span class="material-icons-outlined">content_copy</span>
+            <span>Make a copy</span>
           </button>
         }
       </div>
     }
   </div>
 
-  <!-- ✅ COLOR PICKER PALETTE -->
-  @if (isColorPickerOpen) {
+  <!-- ✅ HORIZONTAL COLOR PICKER (SINGLE ROW) -->
+  @if (isColorPickerOpen && !isInTrash) {
     <div class="color-picker-palette" (click)="$event.stopPropagation()">
       @for (color of colors; track color.value) {
         <button

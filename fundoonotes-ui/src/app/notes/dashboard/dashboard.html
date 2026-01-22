@@ -1,7 +1,6 @@
 <div class="dashboard-container">
   <app-take-note (save)="addNote($event)"></app-take-note>
 
-  <!-- ✅ SEARCH INFO -->
   @if (searchQuery) {
     <div class="search-info">
       <span class="material-icons-outlined">search</span>
@@ -12,11 +11,9 @@
     </div>
   }
 
-  <!-- ✅ PINNED NOTES SECTION -->
   @if (pinnedNotes.length > 0) {
     <div class="notes-section">
       <div class="section-label">PINNED</div>
-      <!-- ✅ ADD [class.list-view] based on viewMode -->
       <div class="notes-grid" [class.list-view]="viewMode === 'list'">
         <app-note-card
           *ngFor="let note of pinnedNotes"
@@ -33,13 +30,11 @@
     </div>
   }
 
-  <!-- ✅ UNPINNED NOTES SECTION -->
   @if (unpinnedNotes.length > 0) {
     <div class="notes-section">
       @if (pinnedNotes.length > 0) {
         <div class="section-label">OTHERS</div>
       }
-      <!-- ✅ ADD [class.list-view] based on viewMode -->
       <div class="notes-grid" [class.list-view]="viewMode === 'list'">
         <app-note-card
           *ngFor="let note of unpinnedNotes"
@@ -56,7 +51,6 @@
     </div>
   }
 
-  <!-- ✅ EMPTY STATE -->
   @if (pinnedNotes.length === 0 && unpinnedNotes.length === 0 && !isLoading) {
     <div class="empty-state">
       @if (searchQuery) {
@@ -73,14 +67,12 @@
     </div>
   }
 
-  <!-- ✅ LOADING STATE -->
   @if (isLoading) {
     <div class="loading">
       <p>Loading notes...</p>
     </div>
   }
 
-  <!-- Edit Modal -->
   @if (selectedNote) {
     <app-edit-note-modal
       [note]="selectedNote"

@@ -32,20 +32,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef
   ) {}
 
-  // ✅ HostListener INSIDE the class
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    // Close color picker when clicking outside
     this.openColorPickerNoteId = null;
     this.cdr.detectChanges();
   }
 
   ngOnInit(): void {
     this.loadNotes();
-
     this.viewModeSubscription = this.viewModeService.viewMode$.subscribe(mode => {
       this.viewMode = mode;
-      console.log('📋 Dashboard view mode:', mode);
       this.cdr.detectChanges();
     });
   }
@@ -58,14 +54,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.notesService.getNotes().subscribe({
       next: (response) => {
-        console.log('📥 All notes from API:', response);
-
         this.allNotes = response.filter(note => {
           const isDeleted = note.isDeleted ?? note.IsDeleted ?? false;
           const isArchived = note.isArchived ?? note.IsArchived ?? false;
           return !isDeleted && !isArchived;
         });
-
         this.applyFilters();
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -78,7 +71,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onSearch(query: string): void {
-    console.log('🔍 Dashboard search called with:', query);
     this.searchQuery = query.toLowerCase().trim();
     this.applyFilters();
   }
@@ -96,7 +88,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       this.notes = [...this.allNotes];
     }
-
     this.separateNotes();
   }
 
@@ -115,16 +106,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const dateB = new Date(b.updatedAt || b.createdAt).getTime();
       return dateB - dateA;
     });
-
-    console.log('📌 Pinned:', this.pinnedNotes.length, '📝 Unpinned:', this.unpinnedNotes.length);
   }
 
   addNote(noteData: any): void {
-    console.log('🎯 DASHBOARD addNote called with:', noteData);
-
     this.notesService.createNote(noteData).subscribe({
-      next: (response) => {
-        console.log('✅ Note created response:', response);
+      next: () => {
         this.loadNotes();
       },
       error: (error) => {
@@ -141,40 +127,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
 
     this.notesService.deleteNote(id).subscribe({
-      next: () => {
-        console.log('✅ Note moved to trash');
-      },
+      next: () => console.log('✅ Note moved to trash'),
       error: (error) => {
-        console.error('❌ Error moving note to trash:', error);
-        alert('Failed to move note to trash. Please try again.');
+        console.error('❌ Error:', error);
+        alert('Failed to move note to trash.');
         this.loadNotes();
       }
     });
   }
 
   archiveNote(id: number): void {
-    console.log('📦 Archiving note:', id);
-
     this.notes = this.notes.filter(note => note.noteId !== id);
     this.allNotes = this.allNotes.filter(note => note.noteId !== id);
     this.separateNotes();
     this.cdr.detectChanges();
 
     this.notesService.toggleArchive(id).subscribe({
-      next: () => {
-        console.log('✅ Note archived successfully');
-      },
+      next: () => console.log('✅ Note archived'),
       error: (error) => {
-        console.error('❌ Error archiving note:', error);
-        alert('Failed to archive note. Please try again.');
+        console.error('❌ Error:', error);
+        alert('Failed to archive note.');
         this.loadNotes();
       }
     });
   }
 
   togglePin(id: number): void {
-    console.log('📌 Toggling pin for note:', id);
-
     const note = this.notes.find(n => n.noteId === id);
     if (note) {
       note.isPinned = !note.isPinned;
@@ -184,12 +162,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     this.notesService.togglePin(id).subscribe({
-      next: () => {
-        console.log('✅ Pin toggled successfully');
-      },
+      next: () => console.log('✅ Pin toggled'),
       error: (error) => {
-        console.error('❌ Error toggling pin:', error);
-        alert('Failed to toggle pin. Please try again.');
+        console.error('❌ Error:', error);
         if (note) {
           note.isPinned = !note.isPinned;
           this.separateNotes();
@@ -200,7 +175,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openNoteForEdit(note: any): void {
-    console.log('Opening note for edit:', note);
     this.selectedNote = { ...note };
   }
 
@@ -212,15 +186,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const payload = {
       title: updatedNote.title,
       content: updatedNote.content,
-      color: updatedNote.color || 'white',
+      color: updatedNote.color || '#ffffff',
       isPinned: updatedNote.isPinned
     };
 
     const noteId = updatedNote.noteId;
-
     if (!noteId) {
       console.error('❌ Note ID is missing!');
-      alert('Cannot update note: ID is missing');
       return;
     }
 
@@ -236,12 +208,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     this.notesService.updateNote(noteId, payload).subscribe({
-      next: (response) => {
-        console.log('✅ Note updated successfully:', response);
-      },
+      next: () => console.log('✅ Note updated'),
       error: (error) => {
-        console.error('❌ Error updating note:', error);
-        alert('Failed to update note. Please try again.');
+        console.error('❌ Error:', error);
         this.loadNotes();
       }
     });
@@ -249,11 +218,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   updateNoteColor(event: {noteId: number, color: string}): void {
     const noteToUpdate = this.notes.find(n => n.noteId === event.noteId);
-
-    if (!noteToUpdate) {
-      console.error('❌ Note not found');
-      return;
-    }
+    if (!noteToUpdate) return;
 
     const oldColor = noteToUpdate.color;
     noteToUpdate.color = event.color;
@@ -266,12 +231,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
 
     this.notesService.updateNote(event.noteId, payload).subscribe({
-      next: (response) => {
-        console.log('✅ Color updated successfully');
-      },
+      next: () => console.log('✅ Color updated'),
       error: (error) => {
-        console.error('❌ Error updating color:', error);
-        alert('Failed to update note color. Please try again.');
+        console.error('❌ Error:', error);
         noteToUpdate.color = oldColor;
         this.cdr.detectChanges();
       }
@@ -279,10 +241,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   handleColorPickerToggle(noteId: number): void {
-    if (this.openColorPickerNoteId === noteId) {
-      this.openColorPickerNoteId = null;
-    } else {
-      this.openColorPickerNoteId = noteId;
-    }
+    this.openColorPickerNoteId = this.openColorPickerNoteId === noteId ? null : noteId;
   }
 }

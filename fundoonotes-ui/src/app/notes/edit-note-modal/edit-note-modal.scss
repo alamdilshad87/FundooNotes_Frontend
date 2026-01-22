@@ -22,16 +22,16 @@
   padding: 16px;
   margin: 0 16px;
   position: relative;
+  overflow: visible; // ✅ Allow popup to show
 }
 
 .note-input {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
-// Header with title and pin button
 .note-header {
   display: flex;
   align-items: flex-start;
@@ -49,34 +49,9 @@
   white-space: pre-wrap;
 
   &:empty:before {
-    content: attr(placeholder);
+    content: attr(data-placeholder);
     color: #5f6368;
     pointer-events: none;
-  }
-
-  b, strong {
-    font-weight: 600;
-  }
-
-  i, em {
-    font-style: italic;
-  }
-
-  u {
-    text-decoration: underline;
-  }
-
-  strike, s {
-    text-decoration: line-through;
-  }
-
-  ul, ol {
-    padding-left: 24px;
-    margin: 8px 0;
-  }
-
-  li {
-    margin: 4px 0;
   }
 }
 
@@ -84,7 +59,7 @@
   font-size: 22px;
   font-weight: 500;
   min-height: 28px;
-  flex: 1; // Takes remaining space
+  flex: 1;
 }
 
 .note-content-input {
@@ -93,8 +68,7 @@
   min-height: 120px;
 }
 
-// Pin button in modal
-.pin-btn-modal {
+.pin-btn-edit {
   background: transparent;
   border: none;
   padding: 4px;
@@ -103,9 +77,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 150ms;
   flex-shrink: 0;
-  margin-top: -4px; // Align with title
+  width: 28px;
+  height: 28px;
+  margin-top: -4px;
 
   .material-icons-outlined,
   .material-icons {
@@ -119,59 +95,9 @@
 
   &.pinned {
     .material-icons {
-      color: #202124; // Darker when pinned
+      color: #202124;
     }
   }
-}
-
-.formatting-toolbar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 2px;
-  padding: 8px 0;
-  border-top: 1px solid #e8eaed;
-  border-bottom: 1px solid #e8eaed;
-  margin-bottom: 8px;
-  flex-wrap: nowrap;
-}
-
-.format-btn {
-  background: transparent;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  min-width: 32px;
-  min-height: 32px;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  .material-icons-outlined {
-    font-size: 18px;
-    color: #5f6368;
-  }
-
-  &:hover {
-    background-color: rgba(95, 99, 104, 0.157);
-  }
-
-  &:active {
-    background-color: rgba(95, 99, 104, 0.251);
-  }
-}
-
-.toolbar-divider {
-  width: 1px;
-  height: 20px;
-  background-color: #dadce0;
-  margin: 0 6px;
-  flex-shrink: 0;
 }
 
 .modal-footer {
@@ -187,15 +113,12 @@
   border-radius: 50%;
   width: 32px;
   height: 32px;
-  min-width: 32px;
-  min-height: 32px;
   padding: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 150ms;
 
   .material-icons-outlined {
     font-size: 18px;
@@ -208,10 +131,6 @@
 
   &.active {
     background-color: rgba(95, 99, 104, 0.157);
-
-    .material-icons-outlined {
-      color: #202124;
-    }
   }
 }
 
@@ -225,51 +144,49 @@
   color: #202124;
   cursor: pointer;
   border-radius: 4px;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 150ms;
 
   &:hover {
     background-color: rgba(95, 99, 104, 0.078);
   }
 }
 
-// Color Picker Popup
+// ✅ CENTERED COLOR PICKER
 .color-picker-popup {
   position: absolute;
-  bottom: 60px;
-  left: 16px;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-              0 5px 15px rgba(0, 0, 0, 0.15);
-  padding: 8px;
+  border-radius: 24px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+              0 2px 6px 2px rgba(60, 64, 67, 0.15);
+  padding: 6px 12px;
   z-index: 1001;
-  animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  animation: fadeIn 0.15s ease;
+  white-space: nowrap;
+  max-width: 95%;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateX(-50%) translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.color-row {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 4px;
-
-  &:last-child {
-    margin-bottom: 0;
+    transform: translateX(-50%) translateY(0);
   }
 }
 
 .color-option {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -277,22 +194,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.15s, border-color 0.15s;
   padding: 0;
+  flex-shrink: 0;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    border-color: rgba(0, 0, 0, 0.2);
   }
 
   &.selected {
     border-color: #5f6368;
+
+    .material-icons-outlined {
+      font-size: 16px;
+      color: #000;
+    }
   }
 
   &.default-color {
     border: 2px solid #e0e0e0;
-    background: white;
-    position: relative;
+    background: white !important;
 
     &::before {
       content: '';
@@ -303,12 +225,6 @@
       transform: rotate(45deg);
     }
   }
-
-  .checkmark {
-    font-size: 18px;
-    color: #000;
-    position: absolute;
-  }
 }
 
 @media (max-width: 768px) {
@@ -316,18 +232,14 @@
     padding-top: 40px;
   }
 
-  .modal-container {
-    max-width: 100%;
-  }
-
   .color-picker-popup {
-    left: 8px;
-    right: 8px;
-    width: auto;
+    max-width: 100%;
+    padding: 6px 8px;
   }
 
-  .color-row {
-    flex-wrap: wrap;
-    justify-content: center;
+  .color-option {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
   }
 }

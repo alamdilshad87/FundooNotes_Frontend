@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './note-card.html',
-  styleUrls: ['./note-card.scss']
+  styleUrls: ['./note-card.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush // ✅ PERFORMANCE BOOST
 })
 export class NoteCardComponent {
   @Input() note: any;
@@ -38,12 +39,6 @@ export class NoteCardComponent {
     { name: 'Chalk', value: '#e8eaed' }
   ];
 
-  // ✅ Close popups when clicking outside
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    // This will be handled by parent component
-  }
-
   onCardClick(): void {
     if (!this.isInTrash) {
       this.noteClick.emit(this.note);
@@ -51,32 +46,24 @@ export class NoteCardComponent {
   }
 
   onDelete(event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
+    if (event) event.stopPropagation();
     this.delete.emit(this.note.noteId);
     this.showMenu = false;
   }
 
   onArchive(event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
+    if (event) event.stopPropagation();
     this.archive.emit(this.note.noteId);
     this.showMenu = false;
   }
 
   onTogglePin(event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
+    if (event) event.stopPropagation();
     this.togglePin.emit(this.note.noteId);
   }
 
   onRestore(event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
+    if (event) event.stopPropagation();
     this.restore.emit(this.note.noteId);
     this.showMenu = false;
   }
@@ -94,5 +81,10 @@ export class NoteCardComponent {
   onToggleColorPicker(event: Event): void {
     event.stopPropagation();
     this.toggleColorPicker.emit(this.note.noteId);
+  }
+
+  // ✅ PERFORMANCE: Track by function for *ngFor
+  trackByColor(index: number, color: any): string {
+    return color.value;
   }
 }

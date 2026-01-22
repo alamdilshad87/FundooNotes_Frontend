@@ -1,28 +1,24 @@
 <div class="modal-backdrop" #modalBackdrop (click)="onBackdropClick($event)">
   <div class="modal-container" (click)="$event.stopPropagation()" [ngStyle]="getBackgroundStyle()">
     <div class="note-input">
-      <!-- NOTE HEADER WITH TITLE AND PIN BUTTON -->
       <div class="note-header">
         <div
           #titleEditor
           class="note-title-input"
           contenteditable="true"
           (input)="onTitleInput($event)"
-          (mouseup)="updateFormattingStates()"
-          (keyup)="updateFormattingStates()"
-          placeholder="Title"
-          role="textbox"
-          aria-label="Title"
-        ></div>
+          data-placeholder="Title">
+        </div>
 
-        <!-- PIN BUTTON -->
         <button
-          class="pin-btn-modal"
+          class="pin-btn-edit"
           [class.pinned]="isPinned"
           (click)="togglePin($event)"
-          [title]="isPinned ? 'Unpin note' : 'Pin note'"
+          [title]="isPinned ? 'Unpin' : 'Pin'"
           type="button">
-          <span [class]="isPinned ? 'material-icons' : 'material-icons-outlined'">push_pin</span>
+          <span [class]="isPinned ? 'material-icons' : 'material-icons-outlined'">
+            push_pin
+          </span>
         </button>
       </div>
 
@@ -31,78 +27,11 @@
         class="note-content-input"
         contenteditable="true"
         (input)="onContentInput($event)"
-        (mouseup)="updateFormattingStates()"
-        (keyup)="updateFormattingStates()"
-        placeholder="Take a note..."
-        role="textbox"
-        aria-label="Note content"
-      ></div>
+        data-placeholder="Take a note...">
+      </div>
     </div>
 
-    @if (showFormattingToolbar) {
-      <div class="formatting-toolbar">
-        <button
-          class="format-btn"
-          [class.active]="isBold"
-          (click)="formatText('bold')"
-          title="Bold"
-          type="button">
-          <span class="material-icons-outlined">format_bold</span>
-        </button>
-        <button
-          class="format-btn"
-          [class.active]="isItalic"
-          (click)="formatText('italic')"
-          title="Italic"
-          type="button">
-          <span class="material-icons-outlined">format_italic</span>
-        </button>
-        <button
-          class="format-btn"
-          [class.active]="isUnderline"
-          (click)="formatText('underline')"
-          title="Underline"
-          type="button">
-          <span class="material-icons-outlined">format_underlined</span>
-        </button>
-        <button
-          class="format-btn"
-          [class.active]="isStrikethrough"
-          (click)="formatText('strikeThrough')"
-          title="Strikethrough"
-          type="button">
-          <span class="material-icons-outlined">strikethrough_s</span>
-        </button>
-
-        <div class="toolbar-divider"></div>
-
-        <button
-          class="format-btn"
-          (click)="formatText('insertUnorderedList')"
-          title="Bulleted list"
-          type="button">
-          <span class="material-icons-outlined">format_list_bulleted</span>
-        </button>
-        <button
-          class="format-btn"
-          (click)="formatText('insertOrderedList')"
-          title="Numbered list"
-          type="button">
-          <span class="material-icons-outlined">format_list_numbered</span>
-        </button>
-      </div>
-    }
-
     <div class="modal-footer">
-      <button
-        class="action-btn"
-        [class.active]="showFormattingToolbar"
-        (click)="toggleFormattingToolbar()"
-        title="Text formatting options"
-        type="button">
-        <span class="material-icons-outlined">text_format</span>
-      </button>
-
       <button
         class="action-btn"
         [class.active]="showColorPicker"
@@ -117,25 +46,22 @@
       </button>
     </div>
 
-    <!-- Color Picker Popup -->
     @if (showColorPicker) {
       <div class="color-picker-popup" (click)="$event.stopPropagation()">
-        <div class="color-row">
-          @for (color of solidColors; track color.value) {
-            <button
-              class="color-option"
-              [class.selected]="this.color === color.value"
-              [style.background-color]="color.value"
-              [class.default-color]="color.value === 'transparent'"
-              [title]="color.name"
-              (click)="selectColor(color.value, $event)"
-              type="button">
-              @if (this.color === color.value) {
-                <span class="material-icons-outlined checkmark">check</span>
-              }
-            </button>
-          }
-        </div>
+        @for (color of solidColors; track color.value) {
+          <button
+            class="color-option"
+            [class.selected]="this.color === color.value"
+            [style.background-color]="color.value"
+            [class.default-color]="color.value === '#ffffff'"
+            [title]="color.name"
+            (click)="selectColor(color.value, $event)"
+            type="button">
+            @if (this.color === color.value) {
+              <span class="material-icons-outlined">check</span>
+            }
+          </button>
+        }
       </div>
     }
   </div>
