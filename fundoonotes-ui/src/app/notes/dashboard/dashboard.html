@@ -16,7 +16,8 @@
   @if (pinnedNotes.length > 0) {
     <div class="notes-section">
       <div class="section-label">PINNED</div>
-      <div class="notes-grid">
+      <!-- ✅ ADD [class.list-view] based on viewMode -->
+      <div class="notes-grid" [class.list-view]="viewMode === 'list'">
         <app-note-card
           *ngFor="let note of pinnedNotes"
           [note]="note"
@@ -38,7 +39,8 @@
       @if (pinnedNotes.length > 0) {
         <div class="section-label">OTHERS</div>
       }
-      <div class="notes-grid">
+      <!-- ✅ ADD [class.list-view] based on viewMode -->
+      <div class="notes-grid" [class.list-view]="viewMode === 'list'">
         <app-note-card
           *ngFor="let note of unpinnedNotes"
           [note]="note"

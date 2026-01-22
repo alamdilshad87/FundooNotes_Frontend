@@ -1,80 +1,105 @@
-<div class="note-card" [ngStyle]="getBackgroundStyle()" (click)="onNoteClick()">
+<div class="note-card"
+     [style.background-color]="note.color || '#fff'"
+     (click)="onCardClick()">
+
+  <!-- Title -->
   @if (note.title) {
-    <div class="card-header">
-      <h3 class="card-title">{{ note.title }}</h3>
-      <!-- PIN BUTTON with filled icon when pinned -->
-      <button
-        class="pin-btn"
-        [class.pinned]="note.isPinned"
-        (click)="onTogglePin($event)"
-        [title]="note.isPinned ? 'Unpin note' : 'Pin note'">
-        <span [class]="note.isPinned ? 'material-icons' : 'material-icons-outlined'">
-          push_pin
-        </span>
-      </button>
+    <h3 class="note-title">{{ note.title }}</h3>
+  }
+
+  <!-- Content -->
+  @if (note.content) {
+    <p class="note-content">{{ note.content }}</p>
+  }
+
+  <!-- Labels -->
+  @if (note.labels && note.labels.length > 0) {
+    <div class="note-labels">
+      @for (label of note.labels; track label) {
+        <span class="label-chip">{{ label }}</span>
+      }
     </div>
   }
 
-  <p class="card-content">{{ note.content }}</p>
+  <!-- Actions Bar -->
+  <div class="note-actions" (click)="$event.stopPropagation()">
 
-  <!-- Labels display -->
-  <div class="note-labels" *ngIf="note.labels && note.labels.length > 0">
-    <span class="label-chip" *ngFor="let label of note.labels">
-      {{ label }}
-    </span>
-  </div>
+    <!-- Pin button (not in trash) -->
+    @if (!isInTrash) {
+      <button
+        class="action-btn pin-btn"
+        [class.pinned]="note.isPinned"
+        (click)="onTogglePin($event)"
+        [title]="note.isPinned ? 'Unpin' : 'Pin'"
+        type="button">
+        <span class="material-icons-outlined">
+          {{ note.isPinned ? 'push_pin' : 'push_pin' }}
+        </span>
+      </button>
+    }
 
-  <div class="card-actions" (click)="$event.stopPropagation()">
-    <button class="card-action-btn" title="Remind me">
-      <span class="material-icons-outlined">add_alert</span>
-    </button>
-    <button class="card-action-btn" title="Collaborator">
-      <span class="material-icons-outlined">person_add</span>
-    </button>
+    <!-- Color picker -->
     <button
-      class="card-action-btn"
-      [class.active]="isColorPickerOpen"
+      class="action-btn"
       (click)="onToggleColorPicker($event)"
-      title="Background options">
+      title="Change color"
+      type="button">
       <span class="material-icons-outlined">palette</span>
     </button>
-    <button class="card-action-btn" title="Add image">
-      <span class="material-icons-outlined">image</span>
+
+    <!-- Menu -->
+    <button
+      class="action-btn"
+      (click)="toggleMenu($event)"
+      title="More"
+      type="button">
+      <span class="material-icons-outlined">more_vert</span>
     </button>
 
-    <!-- Label selector -->
-    <app-label-selector
-      [noteId]="note.noteId"
-      [currentLabels]="note.labels"
-      (labelsChanged)="onLabelsChanged()">
-    </app-label-selector>
-
-    <button class="card-action-btn" (click)="onArchive($event)" title="Archive">
-      <span class="material-icons-outlined">archive</span>
-    </button>
-    <button class="card-action-btn" (click)="onDelete($event)" title="Delete">
-      <span class="material-icons-outlined">delete</span>
-    </button>
-  </div>
-
-  @if (isColorPickerOpen) {
-    <div class="color-picker-popup" (click)="$event.stopPropagation()">
-      <div class="color-row">
-        @for (color of solidColors; track color.value) {
-          <button
-            class="color-option"
-            [class.selected]="this.note.color === color.value"
-            [style.background-color]="color.value"
-            [class.default-color]="color.value === 'transparent'"
-            [title]="color.name"
-            (click)="selectColor(color.value, $event)"
-            type="button">
-            @if (this.note.color === color.value) {
-              <span class="material-icons-outlined checkmark">check</span>
-            }
+    <!-- Menu Dropdown -->
+    @if (showMenu) {
+      <div class="menu-dropdown" (click)="$event.stopPropagation()">
+        @if (isInTrash) {
+          <!-- Trash Actions -->
+          <button class="menu-item" (click)="onRestore($event)" type="button">
+            <span class="material-icons-outlined">restore_from_trash</span>
+            <span>Restore</span>
+          </button>
+          <button class="menu-item delete-forever" (click)="onDelete($event)" type="button">
+            <span class="material-icons-outlined">delete_forever</span>
+            <span>Delete forever</span>
+          </button>
+        } @else {
+          <!-- Normal Actions -->
+          <button class="menu-item" (click)="onArchive($event)" type="button">
+            <span class="material-icons-outlined">archive</span>
+            <span>Archive</span>
+          </button>
+          <button class="menu-item" (click)="onDelete($event)" type="button">
+            <span class="material-icons-outlined">delete</span>
+            <span>Delete</span>
           </button>
         }
       </div>
+    }
+  </div>
+
+  <!-- Color Picker Palette -->
+  @if (isColorPickerOpen) {
+    <div class="color-picker-palette" (click)="$event.stopPropagation()">
+      @for (color of colors; track color.value) {
+        <button
+          class="color-option"
+          [style.background-color]="color.value"
+          [class.selected]="note.color === color.value"
+          (click)="onColorClick(color.value, $event)"
+          [title]="color.name"
+          type="button">
+          @if (note.color === color.value) {
+            <span class="material-icons-outlined check">check</span>
+          }
+        </button>
+      }
     </div>
   }
 </div>

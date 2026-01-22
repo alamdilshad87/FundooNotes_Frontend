@@ -1,81 +1,93 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LabelSelectorComponent } from '../label-selector/label-selector';
 
 @Component({
   selector: 'app-note-card',
   standalone: true,
-  imports: [CommonModule, LabelSelectorComponent],
+  imports: [CommonModule],
   templateUrl: './note-card.html',
   styleUrls: ['./note-card.scss']
 })
 export class NoteCardComponent {
   @Input() note: any;
   @Input() isColorPickerOpen: boolean = false;
+  @Input() isInTrash: boolean = false; // ✅ ADD THIS
 
   @Output() delete = new EventEmitter<number>();
   @Output() archive = new EventEmitter<number>();
   @Output() togglePin = new EventEmitter<number>();
   @Output() noteClick = new EventEmitter<any>();
-  @Output() updateColor = new EventEmitter<{ noteId: number; color: string }>();
+  @Output() updateColor = new EventEmitter<{noteId: number, color: string}>();
   @Output() toggleColorPicker = new EventEmitter<number>();
-  @Output() noteUpdated = new EventEmitter<void>();
+  @Output() restore = new EventEmitter<number>(); // ✅ ADD THIS
 
-  solidColors = [
-    { name: 'Default', value: 'transparent' },
-    { name: 'Coral', value: '#f28b82' },
-    { name: 'Peach', value: '#fbbc04' },
-    { name: 'Sand', value: '#fff475' },
-    { name: 'Mint', value: '#ccff90' },
-    { name: 'Sage', value: '#a7ffeb' },
-    { name: 'Fog', value: '#cbf0f8' },
-    { name: 'Storm', value: '#aecbfa' },
-    { name: 'Dusk', value: '#d7aefb' },
-    { name: 'Blossom', value: '#fdcfe8' },
-    { name: 'Clay', value: '#e6c9a8' },
-    { name: 'Chalk', value: '#e8eaed' }
+  showMenu = false;
+
+  colors = [
+    { name: 'Default', value: '#ffffff' },
+    { name: 'Red', value: '#f28b82' },
+    { name: 'Orange', value: '#fbbc04' },
+    { name: 'Yellow', value: '#fff475' },
+    { name: 'Green', value: '#ccff90' },
+    { name: 'Teal', value: '#a7ffeb' },
+    { name: 'Blue', value: '#cbf0f8' },
+    { name: 'Dark Blue', value: '#aecbfa' },
+    { name: 'Purple', value: '#d7aefb' },
+    { name: 'Pink', value: '#fdcfe8' },
+    { name: 'Brown', value: '#e6c9a8' },
+    { name: 'Gray', value: '#e8eaed' }
   ];
 
-  onNoteClick(): void {
-    this.noteClick.emit(this.note);
+  onCardClick(): void {
+    if (!this.isInTrash) { // ✅ Don't open modal in trash
+      this.noteClick.emit(this.note);
+    }
   }
 
-  onDelete(event: Event): void {
-    event.stopPropagation();
+  onDelete(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.delete.emit(this.note.noteId);
+    this.showMenu = false;
   }
 
-  onArchive(event: Event): void {
-    event.stopPropagation();
+  onArchive(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.archive.emit(this.note.noteId);
+    this.showMenu = false;
   }
 
-  onTogglePin(event: Event): void {
-    event.stopPropagation();
-    console.log('Toggling pin for note:', this.note.noteId);
+  onTogglePin(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.togglePin.emit(this.note.noteId);
+  }
+
+  // ✅ ADD THIS METHOD
+  onRestore(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.restore.emit(this.note.noteId);
+    this.showMenu = false;
+  }
+
+  toggleMenu(event: Event): void {
+    event.stopPropagation();
+    this.showMenu = !this.showMenu;
+  }
+
+  onColorClick(color: string, event: Event): void {
+    event.stopPropagation();
+    this.updateColor.emit({ noteId: this.note.noteId, color: color });
   }
 
   onToggleColorPicker(event: Event): void {
     event.stopPropagation();
     this.toggleColorPicker.emit(this.note.noteId);
-  }
-
-  selectColor(colorValue: string, event: Event): void {
-    event.stopPropagation();
-    console.log('Color selected:', colorValue, 'for note:', this.note.noteId);
-    this.updateColor.emit({ noteId: this.note.noteId, color: colorValue });
-  }
-
-  // FIXED: Return white background for transparent notes
-  getBackgroundStyle(): any {
-    const color = this.note.color || 'transparent';
-    return {
-      'background-color': color === 'transparent' ? '#fff' : color
-    };
-  }
-
-  onLabelsChanged(): void {
-    this.noteUpdated.emit();
   }
 }

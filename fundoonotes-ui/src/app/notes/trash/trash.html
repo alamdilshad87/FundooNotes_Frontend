@@ -1,42 +1,32 @@
 <div class="trash-container">
-  <div class="trash-header">
-    <p class="trash-info">Notes in trash are deleted after 7 days</p>
-  </div>
+  <h2 class="page-title">Trash</h2>
 
-  @if (isLoading) {
-    <div class="loading">
-      <p>Loading trashed notes...</p>
+  @if (notes.length > 0) {
+    <div class="notes-grid" [class.list-view]="viewMode === 'list'">
+      <app-note-card
+        *ngFor="let note of notes"
+        [note]="note"
+        [isColorPickerOpen]="openColorPickerNoteId === note.noteId"
+        [isInTrash]="true"
+        (delete)="deleteNote($event)"
+        (restore)="handleRestore($event)"
+        (toggleColorPicker)="handleColorPickerToggle($event)">
+      </app-note-card>
     </div>
   }
 
-  @if (!isLoading && trashedNotes.length === 0) {
-    <div class="empty-trash">
-      <span class="material-icons-outlined empty-icon">delete_outline</span>
+  @if (notes.length === 0 && !isLoading) {
+    <div class="empty-state">
+      <span class="material-icons-outlined" style="font-size: 120px;">
+        delete
+      </span>
       <p>No notes in Trash</p>
     </div>
   }
 
-  @if (!isLoading && trashedNotes.length > 0) {
-    <div class="notes-grid">
-      @for (note of trashedNotes; track note.noteId) {
-        <div class="trash-note-card" [style.background-color]="note.color === 'transparent' ? '#fff' : note.color">
-          <div class="note-content-area">
-            @if (note.title) {
-              <h3 class="note-title">{{ note.title }}</h3>
-            }
-            <p class="note-content">{{ note.content }}</p>
-          </div>
-
-          <div class="trash-actions">
-            <button class="action-btn" (click)="restoreNote(note.noteId)" title="Restore">
-              <span class="material-icons-outlined">restore_from_trash</span>
-            </button>
-            <button class="action-btn delete-btn" (click)="permanentDelete(note.noteId)" title="Delete forever">
-              <span class="material-icons-outlined">delete_forever</span>
-            </button>
-          </div>
-        </div>
-      }
+  @if (isLoading) {
+    <div class="loading">
+      <p>Loading trash...</p>
     </div>
   }
 </div>

@@ -6,232 +6,212 @@
   cursor: pointer;
   transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100px;
 
   &:hover {
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
                 0 1px 3px 1px rgba(60, 64, 67, 0.15);
 
-    .card-actions {
-      opacity: 1;
-    }
-
-    .pin-btn {
+    .note-actions {
       opacity: 1;
     }
   }
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-}
-
-.card-title {
-  margin: 0;
+.note-title {
   font-size: 16px;
   font-weight: 500;
   color: #202124;
+  margin: 0 0 12px 0;
   line-height: 20px;
-  flex: 1;
-  padding-right: 8px;
+  word-wrap: break-word;
+  letter-spacing: 0.00625em;
 }
 
-.pin-btn {
-  background: transparent;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
-              background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  .material-icons-outlined,
-  .material-icons {
-    font-size: 18px;
-    color: #5f6368;
-  }
-
-  &:hover {
-    background-color: rgba(95, 99, 104, 0.157);
-  }
-
-  &.pinned {
-    opacity: 1 !important;
-
-    .material-icons {
-      color: #202124;
-      font-weight: 400;
-    }
-  }
-}
-
-.card-content {
-  margin: 0;
+.note-content {
   font-size: 14px;
   line-height: 20px;
   color: #202124;
+  margin: 0 0 12px 0;
   white-space: pre-wrap;
   word-wrap: break-word;
-  margin-bottom: 12px;
+  letter-spacing: 0.01428571em;
+  flex: 1;
 }
 
-// Label chips styling
 .note-labels {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 12px;
-
-  .label-chip {
-    font-size: 12px;
-    padding: 4px 10px;
-    background: rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    color: #202124;
-    font-weight: 400;
-    line-height: 16px;
-  }
 }
 
-.card-actions {
+.label-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  font-size: 12px;
+  color: #202124;
+  font-weight: 400;
+}
+
+// ✅ ACTIONS BAR
+.note-actions {
   display: flex;
   gap: 4px;
   opacity: 0;
-  transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  align-items: center;
+  transition: opacity 150ms;
+  margin-top: auto;
+  padding-top: 4px;
+  position: relative;
 }
 
-.card-action-btn {
-  background: transparent;
-  border: none;
-  padding: 6px;
-  cursor: pointer;
+.action-btn {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 150ms;
+  padding: 0;
 
-  .material-icons-outlined {
+  &:hover {
+    background: rgba(95, 99, 104, 0.157);
+  }
+
+  span {
     font-size: 18px;
     color: #5f6368;
   }
+}
 
-  &:hover {
-    background-color: rgba(95, 99, 104, 0.157);
-  }
+.pin-btn {
+  margin-right: auto;
 
-  &.active {
-    background-color: rgba(95, 99, 104, 0.157);
+  &.pinned span {
+    color: #202124;
   }
 }
 
-// Color Picker Popup
-.color-picker-popup {
+// ✅ MENU DROPDOWN
+.menu-dropdown {
   position: absolute;
-  bottom: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ffffff;
+  bottom: 40px;
+  right: 0;
+  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-              0 5px 15px rgba(0, 0, 0, 0.15);
-  padding: 6px;
-  z-index: 100;
-  animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+              0 2px 6px 2px rgba(60, 64, 67, 0.15);
+  min-width: 160px;
+  padding: 8px 0;
+  z-index: 10;
+  animation: fadeIn 0.15s ease;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(8px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 
-.color-row {
+.menu-item {
+  width: 100%;
   display: flex;
-  gap: 3px;
-  flex-wrap: nowrap;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #202124;
+  text-align: left;
+  transition: background-color 150ms;
+
+  &:hover {
+    background: #f1f3f4;
+  }
+
+  span.material-icons-outlined {
+    font-size: 18px;
+    color: #5f6368;
+  }
+
+  &.delete-forever {
+    color: #d93025;
+
+    &:hover {
+      background: #fce8e6;
+    }
+
+    span.material-icons-outlined {
+      color: #d93025;
+    }
+  }
+}
+
+// ✅ COLOR PICKER PALETTE
+.color-picker-palette {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+              0 2px 6px 2px rgba(60, 64, 67, 0.15);
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  z-index: 10;
+  animation: fadeIn 0.15s ease;
 }
 
 .color-option {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
-  position: relative;
+  transition: border-color 150ms, transform 150ms;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
-  flex-shrink: 0;
 
   &:hover {
-    transform: scale(1.15);
+    border-color: rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
   }
 
   &.selected {
     border-color: #5f6368;
-  }
 
-  &.default-color {
-    border: 2px solid #e0e0e0;
-    background: white !important;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      width: 1px;
-      height: 100%;
-      background: #d93025;
-      transform: rotate(45deg);
+    .check {
+      font-size: 18px;
+      color: #202124;
     }
-  }
-
-  .checkmark {
-    font-size: 16px;
-    color: #000;
-    position: absolute;
-    z-index: 1;
   }
 }
 
-// Show actions on mobile by default
+// ✅ RESPONSIVE
 @media (max-width: 768px) {
-  .card-actions {
-    opacity: 1;
-  }
-
-  .pin-btn {
-    opacity: 1;
-  }
-
-  .color-picker-popup {
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    max-width: calc(100vw - 32px);
-  }
-
-  .color-row {
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 250px;
+  .note-card {
+    .note-actions {
+      opacity: 1; // Always visible on mobile
+    }
   }
 }

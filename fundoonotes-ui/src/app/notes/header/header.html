@@ -46,8 +46,14 @@
       <span class="material-icons-outlined">refresh</span>
     </button>
 
-    <button class="icon-btn" aria-label="List view">
-      <span class="material-icons-outlined">view_agenda</span>
+    <!-- ✅ VIEW MODE TOGGLE - Changes icon based on mode -->
+    <button
+      class="icon-btn"
+      (click)="toggleViewMode()"
+      [attr.aria-label]="viewMode === 'grid' ? 'List view' : 'Grid view'">
+      <span class="material-icons-outlined">
+        {{ viewMode === 'grid' ? 'view_agenda' : 'grid_view' }}
+      </span>
     </button>
 
     <button class="icon-btn" aria-label="Settings">

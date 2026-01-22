@@ -1,9 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TakeNoteComponent } from '../take-note/take-note';
 import { NoteCardComponent } from '../note-card/note-card';
 import { EditNoteModalComponent } from '../edit-note-modal/edit-note-modal';
 import { NotesService } from '../../core/services/notes';
+import { ViewModeService, ViewMode } from '../../core/services/view-mode';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +14,7 @@ import { NotesService } from '../../core/services/notes';
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   allNotes: any[] = [];
   notes: any[] = [];
   pinnedNotes: any[] = [];
@@ -20,15 +22,29 @@ export class DashboardComponent implements OnInit {
   isLoading = false;
   selectedNote: any = null;
   openColorPickerNoteId: number | null = null;
-  searchQuery: string = ''; // ✅ NEW
+  searchQuery: string = '';
+  viewMode: ViewMode = 'grid'; // ✅ NEW
+  private viewModeSubscription?: Subscription; // ✅ NEW
 
   constructor(
     private notesService: NotesService,
+    private viewModeService: ViewModeService, // ✅ NEW
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.loadNotes();
+
+    // ✅ Subscribe to view mode changes
+    this.viewModeSubscription = this.viewModeService.viewMode$.subscribe(mode => {
+      this.viewMode = mode;
+      console.log('📋 Dashboard view mode:', mode);
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.viewModeSubscription?.unsubscribe();
   }
 
   loadNotes(): void {
@@ -54,14 +70,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // ✅ NEW - Search functionality
   onSearch(query: string): void {
     console.log('🔍 Dashboard search called with:', query);
     this.searchQuery = query.toLowerCase().trim();
     this.applyFilters();
   }
 
-  // ✅ NEW - Apply search filter
   private applyFilters(): void {
     if (this.searchQuery) {
       this.notes = this.allNotes.filter(note => {

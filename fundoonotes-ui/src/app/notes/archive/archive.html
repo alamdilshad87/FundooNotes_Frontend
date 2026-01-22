@@ -1,6 +1,30 @@
 <div class="archive-container">
-  <div class="archive-header">
-  </div>
+  <h2 class="page-title">Archive</h2>
+
+  @if (notes.length > 0) {
+    <div class="notes-grid" [class.list-view]="viewMode === 'list'">
+      <app-note-card
+        *ngFor="let note of notes"
+        [note]="note"
+        [isColorPickerOpen]="openColorPickerNoteId === note.noteId"
+        (archive)="unarchiveNote($event)"
+        (delete)="deleteNote($event)"
+        (togglePin)="togglePin($event)"
+        (noteClick)="openNoteForEdit($event)"
+        (updateColor)="updateNoteColor($event)"
+        (toggleColorPicker)="handleColorPickerToggle($event)">
+      </app-note-card>
+    </div>
+  }
+
+  @if (notes.length === 0 && !isLoading) {
+    <div class="empty-state">
+      <span class="material-icons-outlined" style="font-size: 120px;">
+        archive
+      </span>
+      <p>Your archived notes appear here</p>
+    </div>
+  }
 
   @if (isLoading) {
     <div class="loading">
@@ -8,34 +32,12 @@
     </div>
   }
 
-  @if (!isLoading && archivedNotes.length === 0) {
-    <div class="empty-archive">
-      <span class="material-icons-outlined empty-icon">archive</span>
-      <p>Your archived notes will appear here</p>
-    </div>
-  }
-
-  @if (!isLoading && archivedNotes.length > 0) {
-    <div class="notes-grid">
-      @for (note of archivedNotes; track note.noteId) {
-        <div class="archive-note-card" [style.background-color]="note.color === 'transparent' ? '#fff' : note.color">
-          <div class="note-content-area">
-            @if (note.title) {
-              <h3 class="note-title">{{ note.title }}</h3>
-            }
-            <p class="note-content">{{ note.content }}</p>
-          </div>
-
-          <div class="archive-actions">
-            <button class="action-btn" (click)="unarchiveNote(note.noteId)" title="Unarchive">
-              <span class="material-icons-outlined">unarchive</span>
-            </button>
-            <button class="action-btn" (click)="deleteNote(note.noteId)" title="Delete">
-              <span class="material-icons-outlined">delete</span>
-            </button>
-          </div>
-        </div>
-      }
-    </div>
+  <!-- Edit Modal -->
+  @if (selectedNote) {
+    <app-edit-note-modal
+      [note]="selectedNote"
+      (save)="updateNote($event)"
+      (close)="closeEditModal()">
+    </app-edit-note-modal>
   }
 </div>
