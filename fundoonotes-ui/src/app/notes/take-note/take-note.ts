@@ -1,5 +1,5 @@
-import { Component, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Output, EventEmitter, ViewChild, ElementRef, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-take-note',
@@ -35,6 +35,8 @@ export class TakeNoteComponent {
     { name: 'Clay', value: '#e6c9a8' },
     { name: 'Chalk', value: '#e8eaed' }
   ];
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -135,7 +137,19 @@ export class TakeNoteComponent {
     this.showColorPicker = false;
   }
 
+  // ✅ FIX: Only apply color if NOT default white
   getBackgroundStyle(): any {
+    if (this.color === '#ffffff') {
+      return {}; // Let CSS variables handle default background
+    }
     return { 'background-color': this.color };
+  }
+
+  // ✅ HELPER: Check if dark theme is active
+  private isDarkTheme(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      return document.body.classList.contains('dark-theme');
+    }
+    return false;
   }
 }

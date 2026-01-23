@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth';
@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userEmail = '';
   viewMode: ViewMode = 'grid';
   showProfileDropdown = false;
-  showSettingsDropdown = false; // ✅ ADD THIS
+  showSettingsDropdown = false;
 
   private searchSubject = new Subject<string>();
   private viewModeSubscription?: Subscription;
@@ -86,21 +86,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.viewModeService.toggleViewMode();
   }
 
-  // ✅ ADD THIS METHOD
-  toggleSettingsDropdown(): void {
+  toggleSettingsDropdown(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.showSettingsDropdown = !this.showSettingsDropdown;
-    this.showProfileDropdown = false; // Close profile dropdown
+    this.showProfileDropdown = false;
     console.log('⚙️ Settings dropdown:', this.showSettingsDropdown);
   }
 
-  // ✅ ADD THIS METHOD
   closeSettingsDropdown(): void {
     this.showSettingsDropdown = false;
   }
 
-  toggleProfileDropdown(): void {
+  toggleProfileDropdown(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.showProfileDropdown = !this.showProfileDropdown;
-    this.showSettingsDropdown = false; // Close settings dropdown
+    this.showSettingsDropdown = false;
     console.log('🔽 Profile dropdown:', this.showProfileDropdown);
   }
 

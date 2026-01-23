@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ThemeService } from '../../../core/services/theme';
 
 @Component({
   selector: 'app-settings-dropdown',
@@ -11,7 +12,14 @@ import { CommonModule } from '@angular/common';
 export class SettingsDropdownComponent {
   @Output() close = new EventEmitter<void>();
 
-  constructor(private elementRef: ElementRef) {}
+  isDarkMode = false;
+
+  constructor(
+    private elementRef: ElementRef,
+    private themeService: ThemeService
+  ) {
+    this.isDarkMode = this.themeService.getDarkMode();
+  }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -19,6 +27,19 @@ export class SettingsDropdownComponent {
     if (!clickedInside) {
       this.close.emit();
     }
+  }
+
+  toggleDarkTheme(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.themeService.toggleDarkMode();
+    this.isDarkMode = this.themeService.getDarkMode();
+
+    // ✅ Close dropdown after toggling theme
+    setTimeout(() => {
+      this.close.emit();
+    }, 150);
   }
 
   closeDropdown(event?: Event): void {

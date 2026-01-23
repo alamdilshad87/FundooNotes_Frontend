@@ -55,10 +55,10 @@
       </span>
     </button>
 
-    <!-- ✅ SETTINGS BUTTON -->
+    <!-- ✅ SETTINGS BUTTON WITH EVENT -->
     <button
       class="icon-btn"
-      (click)="toggleSettingsDropdown()"
+      (click)="toggleSettingsDropdown($event)"
       [class.active]="showSettingsDropdown"
       aria-label="Settings">
       <span class="material-icons-outlined">settings</span>
@@ -70,7 +70,7 @@
 
     <button
       class="avatar"
-      (click)="toggleProfileDropdown()"
+      (click)="toggleProfileDropdown($event)"
       [attr.aria-label]="'Google Account: ' + userEmail">
       {{ getInitials() }}
     </button>

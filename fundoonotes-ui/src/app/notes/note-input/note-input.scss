@@ -1,18 +1,16 @@
 .note-input {
   max-width: 600px;
   margin: 32px auto;
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: var(--bg-note);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
-              0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  box-shadow: var(--shadow-sm);
   padding: 12px 16px;
   cursor: text;
   transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
-                0 4px 8px 3px rgba(60, 64, 67, 0.15);
+    box-shadow: var(--shadow-md);
   }
 
   &.expanded {
@@ -29,9 +27,11 @@
   padding: 8px 0;
   margin-bottom: 8px;
   font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  background: transparent;
+  color: var(--text-primary);
 
   &::placeholder {
-    color: #5f6368;
+    color: var(--text-secondary);
   }
 }
 
@@ -46,9 +46,11 @@ textarea {
   max-height: 200px;
   font-family: Roboto, Arial, sans-serif;
   line-height: 20px;
+  background: transparent;
+  color: var(--text-primary);
 
   &::placeholder {
-    color: #5f6368;
+    color: var(--text-secondary);
   }
 }
 
@@ -65,7 +67,6 @@ textarea {
   gap: 4px;
 }
 
-// ✅ ADD THESE STYLES FOR ICON BUTTONS
 .action-icon-btn {
   background: transparent;
   border: none;
@@ -79,18 +80,18 @@ textarea {
 
   .material-icons-outlined {
     font-size: 18px;
-    color: #5f6368;
+    color: var(--text-secondary);
   }
 
   &:hover {
-    background-color: rgba(95, 99, 104, 0.157);
+    background-color: var(--bg-hover);
   }
 }
 
 .close {
   background: transparent;
   border: none;
-  color: #202124;
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
   padding: 8px 24px;
@@ -100,6 +101,6 @@ textarea {
   font-family: 'Google Sans', Roboto, Arial, sans-serif;
 
   &:hover {
-    background-color: rgba(95, 99, 104, 0.039);
+    background-color: var(--bg-hover);
   }
 }

@@ -3,8 +3,8 @@
     <span class="item-text">Settings</span>
   </div>
 
-  <div class="settings-item">
-    <span class="item-text">Enable dark theme</span>
+  <div class="settings-item" (click)="toggleDarkTheme($event)">
+    <span class="item-text">{{ isDarkMode ? 'Disable dark theme' : 'Enable dark theme' }}</span>
   </div>
 
   <div class="settings-item">
