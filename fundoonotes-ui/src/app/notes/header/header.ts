@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth';
 import { ViewModeService, ViewMode } from '../../core/services/view-mode';
+import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown';
+import { SettingsDropdownComponent } from './settings-dropdown/settings-dropdown';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ProfileDropdownComponent, SettingsDropdownComponent],
   templateUrl: './header.html',
   styleUrls: ['./header.scss']
 })
@@ -18,15 +20,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   searchQuery = '';
   userEmail = '';
-  viewMode: ViewMode = 'grid'; // ✅ NEW
+  viewMode: ViewMode = 'grid';
+  showProfileDropdown = false;
+  showSettingsDropdown = false; // ✅ ADD THIS
+
   private searchSubject = new Subject<string>();
-  private viewModeSubscription?: Subscription; // ✅ NEW
+  private viewModeSubscription?: Subscription;
 
   constructor(
     private authService: AuthService,
-    private viewModeService: ViewModeService // ✅ NEW
+    private viewModeService: ViewModeService
   ) {
-    this.userEmail = 'user@example.com';
+    this.loadUserEmail();
 
     this.searchSubject.pipe(
       debounceTime(300)
@@ -37,7 +42,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // ✅ Subscribe to view mode changes
     this.viewModeSubscription = this.viewModeService.viewMode$.subscribe(mode => {
       this.viewMode = mode;
     });
@@ -45,6 +49,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.viewModeSubscription?.unsubscribe();
+  }
+
+  loadUserEmail(): void {
+    const token = this.authService.getToken();
+
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        this.userEmail = payload.email ||
+                        payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] ||
+                        payload.sub ||
+                        'user@example.com';
+
+        console.log('📧 User Email:', this.userEmail);
+      } catch (e) {
+        console.error('❌ Error parsing token:', e);
+        this.userEmail = 'user@example.com';
+      }
+    } else {
+      this.userEmail = 'user@example.com';
+    }
   }
 
   onSearch(): void {
@@ -56,9 +82,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.search.emit('');
   }
 
-  // ✅ NEW - Toggle view mode
   toggleViewMode(): void {
     this.viewModeService.toggleViewMode();
+  }
+
+  // ✅ ADD THIS METHOD
+  toggleSettingsDropdown(): void {
+    this.showSettingsDropdown = !this.showSettingsDropdown;
+    this.showProfileDropdown = false; // Close profile dropdown
+    console.log('⚙️ Settings dropdown:', this.showSettingsDropdown);
+  }
+
+  // ✅ ADD THIS METHOD
+  closeSettingsDropdown(): void {
+    this.showSettingsDropdown = false;
+  }
+
+  toggleProfileDropdown(): void {
+    this.showProfileDropdown = !this.showProfileDropdown;
+    this.showSettingsDropdown = false; // Close settings dropdown
+    console.log('🔽 Profile dropdown:', this.showProfileDropdown);
+  }
+
+  closeProfileDropdown(): void {
+    this.showProfileDropdown = false;
   }
 
   getInitials(): string {

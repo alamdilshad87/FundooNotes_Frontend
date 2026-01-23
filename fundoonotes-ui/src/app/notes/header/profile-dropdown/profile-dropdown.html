@@ -1,0 +1,47 @@
+<div class="profile-dropdown" (click)="$event.stopPropagation()">
+  <!-- ✅ EMAIL HEADER CENTERED -->
+  <div class="dropdown-header">
+    <div class="email-container">
+      <span class="email">{{ userEmail }}</span>
+    </div>
+    <button class="close-btn" (click)="closeDropdown($event)" type="button">
+      <span class="material-icons-outlined">close</span>
+    </button>
+  </div>
+
+  <!-- ✅ PROFILE SECTION -->
+  <div class="profile-section">
+    <div class="profile-avatar">
+      <div class="avatar-circle">{{ userInitial }}</div>
+      <button class="camera-btn" type="button" title="Add profile photo">
+        <span class="material-icons-outlined">photo_camera</span>
+      </button>
+    </div>
+    <h2 class="greeting">Hi, {{ firstName }}!</h2>
+  </div>
+
+  <!-- ✅ MANAGE ACCOUNT BUTTON -->
+  <button class="manage-account-btn" type="button">
+    Manage your Google Account
+  </button>
+
+  <!-- ✅ ACTIONS IN WHITE CONTAINER -->
+  <div class="actions-container">
+    <button class="action-item" type="button">
+      <span class="material-icons-outlined">person_add</span>
+      <span>Add account</span>
+    </button>
+    <div class="divider"></div>
+    <button class="action-item" (click)="signOut()" type="button">
+      <span class="material-icons-outlined">logout</span>
+      <span>Sign out</span>
+    </button>
+  </div>
+
+  <!-- ✅ FOOTER -->
+  <div class="dropdown-footer">
+    <a href="#" class="footer-link">Privacy Policy</a>
+    <span class="separator">•</span>
+    <a href="#" class="footer-link">Terms of Service</a>
+  </div>
+</div>

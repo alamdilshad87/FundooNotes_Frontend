@@ -1,0 +1,225 @@
+.profile-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  width: 360px;
+  background: #f0f4f9;
+  border-radius: 24px;
+  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.05),
+              0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  font-family: 'Google Sans', 'Roboto', arial, sans-serif;
+}
+
+.dropdown-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  background: #f0f4f9;
+
+  .email-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    .email {
+      font-size: 14px;
+      color: #3c4043;
+      font-weight: 400;
+      letter-spacing: 0.25px;
+    }
+  }
+
+  .close-btn {
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(60, 64, 67, 0.08);
+    }
+
+    .material-icons-outlined {
+      font-size: 20px;
+      color: #5f6368;
+    }
+  }
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 24px 16px;
+  background: #f0f4f9;
+
+  .profile-avatar {
+    position: relative;
+    margin-bottom: 12px;
+
+    .avatar-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #fbbc04;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 400;
+      color: white;
+      user-select: none;
+      font-family: 'Google Sans', 'Roboto', sans-serif;
+    }
+
+    .camera-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+                  0 1px 3px 1px rgba(60, 64, 67, 0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      .material-icons-outlined {
+        font-size: 18px;
+        color: #5f6368;
+      }
+    }
+  }
+
+  .greeting {
+    font-size: 16px;
+    font-weight: 400;
+    color: #3c4043;
+    margin: 0;
+    letter-spacing: 0;
+    font-family: 'Google Sans', 'Roboto', arial, sans-serif;
+  }
+}
+
+.manage-account-btn {
+  width: calc(100% - 48px);
+  margin: 0 24px 16px;
+  padding: 9px 24px;
+  border: 1px solid #dadce0;
+  border-radius: 20px;
+  background: white;
+  color: #1a73e8;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Google Sans', 'Roboto', arial, sans-serif;
+  letter-spacing: 0.25px;
+
+  &:hover {
+    background-color: rgba(26, 115, 232, 0.04);
+    border-color: #d2e3fc;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: rgba(26, 115, 232, 0.12);
+  }
+}
+
+.actions-container {
+  background: white;
+  margin: 0 24px 16px;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+              0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+
+  .action-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 14px;
+    color: #3c4043;
+    font-weight: 500;
+    font-family: 'Google Sans', 'Roboto', arial, sans-serif;
+
+    &:hover {
+      background-color: rgba(60, 64, 67, 0.08);
+    }
+
+    .material-icons-outlined {
+      font-size: 18px;
+      color: #5f6368;
+    }
+
+    span:last-child {
+      font-weight: 500;
+      letter-spacing: 0.25px;
+    }
+  }
+
+  .divider {
+    width: 1px;
+    height: 24px;
+    background-color: #dadce0;
+  }
+}
+
+.dropdown-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 24px 20px;
+  background: #f0f4f9;
+
+  .footer-link {
+    font-size: 12px;
+    color: #5f6368;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-family: 'Roboto', arial, sans-serif;
+    letter-spacing: 0.3px;
+
+    &:hover {
+      color: #202124;
+      text-decoration: underline;
+    }
+  }
+
+  .separator {
+    font-size: 12px;
+    color: #5f6368;
+    margin: 0 2px;
+  }
+}

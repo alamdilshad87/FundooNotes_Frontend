@@ -46,7 +46,6 @@
       <span class="material-icons-outlined">refresh</span>
     </button>
 
-    <!-- ✅ VIEW MODE TOGGLE - Changes icon based on mode -->
     <button
       class="icon-btn"
       (click)="toggleViewMode()"
@@ -56,7 +55,12 @@
       </span>
     </button>
 
-    <button class="icon-btn" aria-label="Settings">
+    <!-- ✅ SETTINGS BUTTON -->
+    <button
+      class="icon-btn"
+      (click)="toggleSettingsDropdown()"
+      [class.active]="showSettingsDropdown"
+      aria-label="Settings">
       <span class="material-icons-outlined">settings</span>
     </button>
 
@@ -64,8 +68,21 @@
       <span class="material-icons-outlined">apps</span>
     </button>
 
-    <button class="avatar" aria-label="Google Account">
+    <button
+      class="avatar"
+      (click)="toggleProfileDropdown()"
+      [attr.aria-label]="'Google Account: ' + userEmail">
       {{ getInitials() }}
     </button>
   </div>
+
+  <!-- ✅ SETTINGS DROPDOWN -->
+  @if (showSettingsDropdown) {
+    <app-settings-dropdown (close)="closeSettingsDropdown()"></app-settings-dropdown>
+  }
+
+  <!-- ✅ PROFILE DROPDOWN -->
+  @if (showProfileDropdown) {
+    <app-profile-dropdown (close)="closeProfileDropdown()"></app-profile-dropdown>
+  }
 </header>
